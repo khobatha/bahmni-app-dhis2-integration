@@ -56,6 +56,29 @@ var hasReportingPrivilege = true;
 
 $(document).ready(
 		function() {
+
+			// Activate tooltip
+			$('[data-toggle="tooltip"]').tooltip();
+			
+			// Select/Deselect checkboxes
+			var checkbox = $('table tbody input[type="checkbox"]');
+			$("#selectAll").click(function(){
+				if(this.checked){
+					checkbox.each(function(){
+						this.checked = true;                        
+					});
+				} else{
+					checkbox.each(function(){
+						this.checked = false;                        
+					});
+				} 
+			});
+			checkbox.click(function(){
+				if(!this.checked){
+					$("#selectAll").prop("checked", false);
+				}
+			});
+
 			isAuthenticated().then(isSubmitAuthorized).then(initTabs).then(
 				renderPrograms).then(renderYearlyReport).then(
 				selectApproxLatestGregorianYear).then(
@@ -133,6 +156,7 @@ function renderPrograms() {
 				var canSubmitReport = hasReportingPrivilege;
 				return getContent(isYearlyReport, canSubmitReport).then(
 						function(content) {
+							//console.log(content.programs);
 							$("#programs").html(
 									Mustache.render(template, content));
 						});
@@ -192,20 +216,20 @@ function getDHISPrograms() {
 
 function putStatus(data, index) {
 	element('comment', index).html(data.comment).html();
-	alert("[putStatus] Welcome to the putStatus function...displaying argument data.stringify()...");
-	alert(JSON.stringify(data));
-	alert("[putStatus] Welcome to the putStatus function...displaying argument data.status...");
-	alert(data.status);
+	//alert("[putStatus] Welcome to the putStatus function...displaying argument data.stringify()...");
+	//alert(JSON.stringify(data));
+	//alert("[putStatus] Welcome to the putStatus function...displaying argument data.status...");
+	//alert(data.status);
 	if (data.status == 'Success' || data.status == 'Complete') {
-		alert("[putStatus] Status is SUCCESS...updating...displaying the data");
-		alert(data.status);
+		//alert("[putStatus] Status is SUCCESS...updating...displaying the data");
+		//alert(data.status);
 		var template = $('#success-status-template').html();
 		Mustache.parse(template);
 		element('status', index).html(Mustache.render(template, data));
 		return;
 	}
-	alert("[putStatus] Status is FAILURE...updating...displaying the data");
-	alert(data.status.status);
+	//alert("[putStatus] Status is FAILURE...updating...displaying the data");
+	//alert(data.status.status);
 	var template = $('#failure-status-template').html();
 	Mustache.parse(template);
 	data.message = JSON.stringify(data.exception || data.response);
@@ -218,31 +242,28 @@ function putStatus(data, index) {
 
 function putStatusRefresh(data, index) {
 	element('comment', index).html(data.comment).html();
-	alert("[putStatus] Welcome to the putStatus function...displaying argument data.stringify()...");
-	alert(JSON.stringify(data));
-	alert("[putStatus] Welcome to the putStatus function...displaying argument data.status...");
-	alert(data.status);
+	//alert("[putStatus] Welcome to the putStatus function...displaying argument data.stringify()...");
+	//alert(JSON.stringify(data));
+	//alert("[putStatus] Welcome to the putStatus function...displaying argument data.status...");
+	//alert(data.status);
 	var reportStatus = new Object();
 	reportStatus.status = 'Failure';
 	if (data.status == 'Success' || data.comment == 'Complete') {
-		alert("[putStatus] Status is SUCCESS...updating...displaying the data");
-		alert(data.status);
+		//alert("[putStatus] Status is SUCCESS...updating...displaying the data");
+		//alert(data.status);
 		reportStatus.status = 'Success';
 		var template = $('#success-refresh-status-template').html();
 		Mustache.parse(template);
 		element('status', index).html(Mustache.render(template, reportStatus));
 		return;
 	}
-	alert("[putStatus] Status is FAILURE...updating...displaying the data");
-	alert(data.status);
+	//alert("[putStatus] Status is FAILURE...updating...displaying the data");
+	//alert(data.status);
 	var template = $('#failure-refresh-status-template').html();
 	Mustache.parse(template);
 	data.message = JSON.stringify(data.exception || data.response);
 	element('status', index).html(Mustache.render(template, reportStatus));
-	/*element('status', index).find('.status-failure').on('click', function() {
-		alert(data.message);
-		console.log(data.message);
-	});*/
+
 }
 
 function download(index) {
@@ -303,7 +324,7 @@ function submit(index, attribute) {
 	var submitTo = submitUrl;
 	//alert("[submit] Welcome to the submit function...");
 	if (attribute == true) {
-		alert("attribute == true, submitTo = submitUrlAtr");
+		//alert("attribute == true, submitTo = submitUrlAtr");
 		submitTo = submitUrlAtr;
 	}
 	$.get(submitTo, parameters).done(function(data) {
@@ -358,7 +379,7 @@ function autoSubmit(year,month,programName,comment) {
 	var submitTo = submitUrl;
 	//alert("[submit] Welcome to the submit function...");
 	if (attribute == true) {
-		alert("attribute == true, submitTo = submitUrlAtr");
+		//alert("attribute == true, submitTo = submitUrlAtr");
 		submitTo = submitUrlAtr;
 	}
 	$.get(submitTo, parameters).done(function(data) {
@@ -477,5 +498,3 @@ function getLogStatus() {
 	});
 }
 
-
-//console.log(submit())

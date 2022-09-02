@@ -15,9 +15,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,14 +36,13 @@ import org.json.JSONTokener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.possible.dhis2int.Properties;
 import com.possible.dhis2int.audit.Recordlog;
 import com.possible.dhis2int.audit.Submission;
@@ -52,6 +54,7 @@ import com.possible.dhis2int.date.ReportDateRange;
 import com.possible.dhis2int.db.DatabaseDriver;
 import com.possible.dhis2int.db.Results;
 import com.possible.dhis2int.dhis.DHISClient;
+import com.possible.dhis2int.web.Schedules;
 import com.possible.dhis2int.exception.NotAvailableException;
 
 @RestController
@@ -172,6 +175,83 @@ public class DHISIntegrator {
 				numberOfFemalesMoreThanSix);
 
 	}
+
+	@RequestMapping(path = "/load-schedules")
+	public JSONArray loadIntegrationSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException, DHISIntegratorException, Exception {
+			String sql="SELECT id, report_name, frequency, last_run, status FROM dhis2_schedules;";
+			JSONArray jsonArray=new JSONArray();
+			ArrayList<Schedules> list=new ArrayList<Schedules>();
+			Results results = new Results();
+			String type="MRSGeneric";
+			Schedules schedule;
+			ObjectMapper mapper;
+
+			try{
+				results = databaseDriver.executeQuery(sql,type);
+
+				for (List<String> row : results.getRows()) {
+					logger.info(row);
+					schedule=new Schedules();
+					
+					schedule.setId(Integer.parseInt(row.get(0)));
+					schedule.setProgName(row.get(1));
+					schedule.setFrequency(row.get(2));
+					schedule.setLastRun(row.get(3));
+					schedule.setStatus(row.get(4));
+					list.add(schedule);
+					
+				}
+				mapper = new ObjectMapper();
+				String jsonstring=mapper.writeValueAsString(list);
+				jsonArray.put(jsonstring);
+				logger.info("Inside loadIntegrationSchedules...");
+			}
+			catch(DHISIntegratorException | JSONException e){
+				//logger.info("Inside loadIntegrationSchedules...");
+				logger.error(Messages.SQL_EXECUTION_EXCEPTION,e);
+			}
+			catch(Exception e){
+				logger.error(Messages.INTERNAL_SERVER_ERROR,e);
+			}
+		
+			return jsonArray;
+
+	}
+
+	@RequestMapping(path = "/save-schedules")
+	public Results saveIntegrationSchedules(@RequestParam("programName") String progName, @RequestParam("scheduleFrequency") String schedFrequency,
+	@RequestParam("scheduleTime") String schedTime,HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException {
+			Schedules newschedule = new Schedules();
+			newschedule.setProgName(progName);
+			newschedule.setFrequency(schedFrequency);
+			newschedule.setCreatedBy("Test");
+
+		
+			LocalDate created_date = LocalDate.now(); 
+			LocalDate target_time =  LocalDate.now();
+			newschedule.setCreatedDate(created_date);
+			newschedule.setTargetTime(target_time);
+
+
+			Results results=new Results();
+			logger.info("Inside saveIntegrationSchedules...");
+			try{
+				databaseDriver.executeUpdateQuery(newschedule);
+				logger.info("Executed insert query successfully...");
+
+			}
+			catch(DHISIntegratorException | JSONException e){
+				logger.error(Messages.SQL_EXECUTION_EXCEPTION,e);
+			}
+			catch(Exception e){
+				logger.error(Messages.INTERNAL_SERVER_ERROR,e);
+			}
+
+			return results;
+	}
+
 
 	@RequestMapping(path = "/submit-to-dhis")
 	public String submitToDHIS(@RequestParam("name") String program, @RequestParam("year") Integer year,
