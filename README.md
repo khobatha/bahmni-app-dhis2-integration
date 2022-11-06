@@ -52,7 +52,7 @@ wget https://raw.githubusercontent.com/Possiblehealth/possible-config/89662e8e82
 <h2>C. Configure DHIS2 Integration App: Properties</h2>  
 <ol>
 <li>Update the properties file of the DHIS2 integration app with right configuration. NB: Use the hostname of the EMR container in the openmrs.root.url and openmrs.db.url as exemplified below.
-<ul>Navigate to the propertiles file.<pre><code>cd /etc/dhis-integration/dhis-integration.yml</code></pre></ul>
+<ul>Navigate to the propertiles file.<pre><code>nano /etc/dhis-integration/dhis-integration.yml</code></pre></ul>
 <table>
   <tr><th>Key</th><th>Description</th><th>Example</th></tr>
   <tr><td>openmrs.root.url</td><td>Url to access Openmrs service</td><td>http://0568561e1f23/openmrs/ws/rest/v1</td></tr>
