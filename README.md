@@ -21,7 +21,7 @@ wget https://raw.githubusercontent.com/Possiblehealth/possible-config/89662e8e82
 </code></pre>
 </li>
 <li>Navigate to the ssl.conf file and disable (comment out) all configuration entries (SSLCertificateFile, SSLCertificateKey, SSLCertificateChainFile) containing hiels.org.
-<pre><code>cd /etc/httpd/conf.d/ssl.conf<br></code></pre>
+<pre><code>nano /etc/httpd/conf.d/ssl.conf<br></code></pre>
 </li>
 <li>Use openssl to generate a self signed certificate, valid for 1 year, and copy it to /etc/bahmni-certs. NB: Use hostnamectl command to check the static
  hostname of the container and enter it as the Common Name (CN) when prompted for the CN by the openssl tool.
