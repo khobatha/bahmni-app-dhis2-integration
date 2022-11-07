@@ -69,17 +69,17 @@ https://[host-id]/bahmni/home/#/login?showLoginMessage
 Ex. 2: http://200.100.20.30:8888/hmistest/
 Note that the url could be at domain or ip address level (ex1) or could be at a specific path(ex2)
 </td></tr>
-  <tr><td>dhis.user</td><td>The username to access DHIS2 instance.</td><td>username</td></tr>
+  <tr><td>dhis.user</td><td>The username to access DHIS2 instance.</td><td>[username]</td></tr>
   <tr><td>dhis.password</td><td>
 The password for the DHIS2 user.
-</td><td>password</td></tr>
+</td><td>[password]</td></tr>
   <tr><td>openmrs.db.url</td><td>Mysql connection url to access "openmrs" database. Set valid user and password in the url.</td><td>jdbc:mysql://[host-id]/openmrs?user=[username]&password=[password]</td></tr>
   <tr><td>submission.audit.folder</td><td>All DHIS2 submissions are stored in this directory. Ensure the directory exists and "bahmni" user has access to it, or configure a different directory.</td><td>/dhis-integration-data</td></tr>
   <tr><td>server.port</td><td>Server config. Port for server to listen to.</td><td>8040</td></tr>
   <tr><td>server.context-path</td><td>Server config. Mapping incoming requests.</td><td>/dhis-integration/</td></tr>
   <tr><td>dhis.integrator.root.url</td><td>URL to access dhis-integration app service</td><td>http://[host-id]:8040</td></tr>
-  <tr><td>dhis.integrator.scheduler.user</td><td>Username of openmrs user with full reports privileges .e.g facility data clerk</td><td>user</td></tr>
-  <tr><td>dhis.integrator.scheduler.password</td><td>Password of openmrs user with full reports privileges.</td><td>password</td></tr>
+  <tr><td>dhis.integrator.scheduler.user</td><td>Username of openmrs user with full reports privileges .e.g facility data clerk</td><td>[user]</td></tr>
+  <tr><td>dhis.integrator.scheduler.password</td><td>Password of openmrs user with full reports privileges.</td><td>[password]</td></tr>
  </table>
 </li>
 <li>Ensure Bahmni reports service is installed and running successfully.
