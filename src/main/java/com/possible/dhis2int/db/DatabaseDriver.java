@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -20,9 +22,9 @@ import org.springframework.stereotype.Service;
 
 import com.possible.dhis2int.Properties;
 import com.possible.dhis2int.audit.Recordlog;
+import com.possible.dhis2int.scheduler.Schedule;
 import com.possible.dhis2int.web.DHISIntegratorException;
 import com.possible.dhis2int.web.Messages;
-import com.possible.dhis2int.web.Schedules;
 
 @Service
 public class DatabaseDriver {
@@ -61,7 +63,7 @@ public class DatabaseDriver {
 
 	public ResultSet executeQuery(String formattedSql) throws DHISIntegratorException {
 		Connection connection = null;
-		String type="MRSGeneric";
+		String type = "MRSGeneric";
 		try {
 
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
@@ -82,20 +84,89 @@ public class DatabaseDriver {
 		}
 	}
 
-	public void executeUpdateQuery(Schedules record) 
-	throws DHISIntegratorException {
+	public void executeCreateQuery(Schedule record)
+			throws DHISIntegratorException {
 		logger.debug("Inside executeUpdateQuery method");
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,frequency,created_by,created_date,target_time) VALUES (?, ?, ?, ?, ?)");
+					"INSERT INTO dhis2_schedules (report_name,frequency,enabled,created_by,created_date,target_time) VALUES (?, ?, ?, ?, ?, ?)");
 
 			ps.setString(1, record.getProgramName());
 			ps.setString(2, record.getFrequency());
-			ps.setString(3, record.getCreatedBy());
-			ps.setString(4, record.getCreatedDate().toString());
-			ps.setString(5, record.getTargetTime().toString());
+			ps.setBoolean(3, record.getEnabled());
+			ps.setString(4, record.getCreatedBy());
+			ps.setString(5, record.getCreatedDate().toString());
+			ps.setString(6, record.getTargetDate().toString());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException ignored) {
+				}
+			}
+		}
+	}
+
+	public void executeUpdateQuery(Integer scheduleId, Boolean enabled)
+			throws DHISIntegratorException {
+		logger.debug("Inside executeUpdateQuery method ... enable/disable schedule");
+		Integer schedule_id = scheduleId;
+		Boolean schedule_enabled = enabled;
+		Connection connection = null;
+
+		try {
+			connection = DriverManager.getConnection(properties.openmrsDBUrl);
+			PreparedStatement ps = connection.prepareStatement(
+					"UPDATE dhis2_schedules SET enabled =" + schedule_enabled + " WHERE id=" + schedule_id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException ignored) {
+				}
+			}
+		}
+	}
+
+	public void executeUpdateQuery(Integer scheduleId, LocalDate targetDate)
+			throws DHISIntegratorException {
+		LocalDateTime dateTimeNow = LocalDateTime.now();
+		logger.debug("Inside executeUpdateQuery method ... edit target date and last run");
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection(properties.openmrsDBUrl);
+			PreparedStatement ps = connection.prepareStatement(
+					"UPDATE dhis2_schedules SET target_time ='" + targetDate + "', last_run = '" + dateTimeNow
+							+ "' WHERE id=" + scheduleId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException ignored) {
+				}
+			}
+		}
+	}
+
+	public void executeDeleteQuery(Integer scheduleId)
+			throws DHISIntegratorException {
+		logger.debug("Inside executeDeleteQuery method");
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection(properties.openmrsDBUrl);
+			PreparedStatement ps = connection.prepareStatement(
+					"DELETE FROM dhis2_schedules WHERE id=" + scheduleId);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
@@ -163,7 +234,7 @@ public class DatabaseDriver {
 			log = jsonObject.toString(INDENT_FACTOR);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new DHISIntegratorException ("DB Exception occurred "+ e.getMessage(), e);
+			throw new DHISIntegratorException("DB Exception occurred " + e.getMessage(), e);
 		} catch (JSONException e) {
 			throw new DHISIntegratorException(String.format(Messages.SQL_EXECUTION_EXCEPTION), e);
 		} finally {
@@ -191,9 +262,9 @@ public class DatabaseDriver {
 					"CREATE TABLE imam(male_less_than_six int, female_less_than_six int, male_more_than_six int, female_more_than_six int)");
 			String insertImamData = new StringBuffer(
 					"INSERT INTO imam(male_less_than_six , female_less_than_six , male_more_than_six , female_more_than_six) SELECT ")
-							.append(numberOfMaleLessThanSix).append(", ").append(numberOfFemalesLessThanSix)
-							.append(", ").append(numberOfMalesMoreThanSix).append(", ")
-							.append(numberOfFemalesMoreThanSix).toString();
+					.append(numberOfMaleLessThanSix).append(", ").append(numberOfFemalesLessThanSix)
+					.append(", ").append(numberOfMalesMoreThanSix).append(", ")
+					.append(numberOfFemalesMoreThanSix).toString();
 			statement.executeUpdate(insertImamData);
 		} catch (SQLException e) {
 			throw new DHISIntegratorException(String.format("Failed to create table imam"), e);
@@ -242,10 +313,10 @@ public class DatabaseDriver {
 
 			String insertFamilyPlanningData = new StringBuffer(
 					"INSERT INTO familyPlanning(vasectomy_user, pills_user, other_user,  minilap_user, IUCD_user, implant_user, depo_user, condoms_user) SELECT ")
-							.append(numberOfVasectomyUser).append(", ").append(numberOfPillsUser).append(", ")
-							.append(numberOfOtherUser).append(", ").append(numberOfMinilipUser).append(", ")
-							.append(numberOfIUCDUser).append(", ").append(numberOfImplantUser).append(", ")
-							.append(numberOfDepoUser).append(", ").append(numberOfCondomsUser).toString();
+					.append(numberOfVasectomyUser).append(", ").append(numberOfPillsUser).append(", ")
+					.append(numberOfOtherUser).append(", ").append(numberOfMinilipUser).append(", ")
+					.append(numberOfIUCDUser).append(", ").append(numberOfImplantUser).append(", ")
+					.append(numberOfDepoUser).append(", ").append(numberOfCondomsUser).toString();
 			statement.executeUpdate(insertFamilyPlanningData);
 
 		} catch (SQLException e) {

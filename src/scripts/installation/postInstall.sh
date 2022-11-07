@@ -22,10 +22,11 @@ mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="CREATE
 																		submitted_by varchar(30) not null, 
 																		report_log varchar(4000) not null, 
 																		status varchar(30) not null,
-																		comment varchar(30) not null, 
+																		comment varchar(500) not null, 
 																		report_month integer, 
 																		report_year integer);"
 
+mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_schedules (id int not null auto_increment, report_name varchar(255), frequency varchar(255), created_by varchar(255), created_date date, target_time datetime,last_run datetime, status varchar(255), enabled boolean, primary key(id));"
 
 usermod -s /usr/sbin/nologin bahmni
 
