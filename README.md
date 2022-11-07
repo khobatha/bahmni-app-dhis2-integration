@@ -39,7 +39,10 @@ wget https://raw.githubusercontent.com/Possiblehealth/possible-config/89662e8e82
 </li>
 <li>Install the self-signed ssl certificate into the system keystore.
 <ul>Navigate to the home directory<pre><code>cd ~</code></pre></ul>
-<ul>The next step is now to import the certificate into the system keystore (cacerts). NB: You may use sudo find / -name cacerts to locate the exact path to your system keystore. Use the container static hostname as an alias. <pre><code>keytool -importcert -alias 0568561e1f23 -keystore /usr/java/jre1.8.0_131/lib/security/cacerts -storepass changeit -file dhis2_integration_app.crt</code></pre></ul>
+<ul>The next step is now to import the certificate into the system keystores (cacerts). NB: You may use sudo find / -name cacerts to locate the exact path to your system keystore. Use the container static hostname as an alias. 
+<pre><code>keytool -importcert -alias 0568561e1f23 -keystore /usr/java/jre1.8.0_131/lib/security/cacerts -storepass changeit -file dhis2_integration_app.crt</code></pre>
+<pre><code>keytool -importcert -alias 0568561e1f23 -keystore /etc/pki/java/cacerts -storepass changeit -file dhis2_integration_app.crt</code></pre>
+</ul>
 </li> 
 <li>Restart dhis-integration service to reload the new security configurations and verify that it is running.
 <pre><code>sudo systemctl restart dhis-integration</code></pre>
