@@ -77,7 +77,9 @@ The password for the DHIS2 user.
   <tr><td>submission.audit.folder</td><td>All DHIS2 submissions are stored in this directory. Ensure the directory exists and "bahmni" user has access to it, or configure a different directory.</td><td>/dhis-integration-data</td></tr>
   <tr><td>server.port</td><td>Server config. Port for server to listen to.</td><td>8040</td></tr>
   <tr><td>server.context-path</td><td>Server config. Mapping incoming requests.</td><td>/dhis-integration/</td></tr>
-  <tr><td>log4j.config.file</td><td>Server config. Properties file for logger of dhis-integration server.</td><td>log4j.properties</td></tr>
+  <tr><td>dhis.integrator.root.url</td><td>dhis.integrator.root.url</td><td>http://host-id:8040</td></tr>
+  <tr><td>dhis.integrator.scheduler.user</td><td>Username of openmrs user with full reports privileges .e.g facility data clerk</td><td>user</td></tr>
+  <tr><td>dhis.integrator.scheduler.password</td><td>Password of openmrs user with full reports privileges.</td><td>password</td></tr>
  </table>
 </li>
 <li>Ensure Bahmni reports service is installed and running successfully.
