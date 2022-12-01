@@ -37,8 +37,8 @@ jobs:
         cd target/rpm/dhis-integration/RPMS/noarch
         mv dhis-integration-1.0-1.noarch.rpm dhis-integration-1.0-1.noarch$(date +_%d%m%Y).rpm
         ls -al
-        git config --global user.email "la.mphatsi@gmail.com"
-        git config --global user.name "lmphatsi"
+        git config --global user.email "khobatha.setetemela@gmail.com"
+        git config --global user.name "khobatha"
         git init
         git branch -m master
         git add .
