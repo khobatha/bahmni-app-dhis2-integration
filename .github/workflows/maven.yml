@@ -43,5 +43,5 @@ jobs:
         git branch -m master
         git add .
         git commit -m "release dhis-integration rpm "date
-        git remote add github https://${{ secrets.DHIS_INTEGRATION_KEY }}@github.com/lmphatsi/test-dhis-integration-rpms.git
+        git remote add github https://${{ secrets.DHIS_INTEGRATION_KEY }}@https://github.com/khobatha/bahmni-app-dhis2-integration-rpms.git
         git push -f github main
