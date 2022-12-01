@@ -35,6 +35,8 @@ jobs:
     - name: push dhis-integration to other branch
       run: |
         cd target/rpm/dhis-integration/RPMS/noarch
+        mv dhis-integration-1.0-1.noarch.rpm dhis-integration-1.0-1.noarch$(date +_%d%m%Y).rpm
+        ls -al
         git config --global user.email "la.mphatsi@gmail.com"
         git config --global user.name "lmphatsi"
         git init
