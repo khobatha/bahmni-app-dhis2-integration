@@ -40,8 +40,8 @@ jobs:
         git config --global user.email "la.mphatsi@gmail.com"
         git config --global user.name "lmphatsi"
         git init
-        git branch -m main
+        git branch -m master
         git add .
-        git commit -m "release dhis-integration rpm"
+        git commit -m "release dhis-integration rpm "date
         git remote add github https://${{ secrets.DHIS_INTEGRATION_KEY }}@github.com/lmphatsi/test-dhis-integration-rpms.git
         git push -f github main
