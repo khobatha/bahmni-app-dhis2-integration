@@ -318,17 +318,20 @@ public class DHISIntegratorScheduler {
 	private void updateSchedule(Integer scheduleId, LocalDate targetDate, String status) {
 		/*
 		 * This method updates the target date and last run on successful submission to
-		 * DHIS2
+		 * DHIS2 ONLY if it's the 8th day of the month ... since the 7th day is the last day for submission.
 		 */
 		logger.info("Inside updateIntegrationSchedule...");
-		try {
-			databaseDriver.executeUpdateQuery(scheduleId, targetDate, status);
-			logger.info("Executed edit schedule query successfully...");
-
-		} catch (DHISIntegratorException | JSONException e) {
-			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
-		} catch (Exception e) {
-			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		
+		if (LocalDate.now().getDayOfMonth() > 7){ //update if it's the 8th and beyond
+			try {
+				databaseDriver.executeUpdateQuery(scheduleId, targetDate, status);
+				logger.info("Executed edit schedule query successfully...");
+	
+			} catch (DHISIntegratorException | JSONException e) {
+				logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+			} catch (Exception e) {
+				logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+			}
 		}
 	}
 
@@ -350,8 +353,9 @@ public class DHISIntegratorScheduler {
 		}
 		return true;
 	}
-
-	@Scheduled(fixedDelay = 30000)
+    
+	// schedule submission at 9am from the 1st to 8th (assuming up to date data will have been entered on the 7th - last day) of every month
+	@Scheduled(cron = "0 0 9 1-8 * *")
 	public void processSchedules() {
 		// get schedules
 		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
