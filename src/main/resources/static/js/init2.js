@@ -24,7 +24,26 @@ $(document).ready(
 			initTabs();
 			// Activate tooltip
 			//$('[data-toggle="tooltip"]').tooltip();
-			
+			//localStorage.setItem('tab_id', 'hello-world';
+			//var last_id = localStorage.getItem('tab_id');
+			/*alert('the last active tab was '+last_id);
+			if (last_id) {
+				$('ul.nav li').removeClass('current');
+				$('.tab-pane').removeClass('current');
+				$(".nav li").eq(Number(last_id.match(/\d+/)[0])-1).addClass('current');
+				$("#" + last_id).addClass('current');
+			}
+			$('ul.nav li').click(function() {
+				var tab_id = $(this).attr('href');
+				alert('cliked tab '+tab_id);
+				$('ul.nav li').removeClass('current');
+				$('.tab-pane').removeClass('current');
+
+				$(this).addClass('active');
+				$("#" + tab_id).addClass('current');
+				localStorage.setItem('tab_id', tab_id);
+			});*/
+
 			// Select/Deselect checkboxes
 			var checkbox = $('table tbody input[type="checkbox"]');
 			$("#selectAll").click(function(){

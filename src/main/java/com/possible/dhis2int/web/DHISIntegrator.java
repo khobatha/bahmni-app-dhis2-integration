@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -332,7 +333,9 @@ public class DHISIntegrator {
 				.getJSONObject(0); // TODO: why always 0 ?
 
 		JSONObject dhisConfig = getDHISConfig(name);
-		int lastDay = 30;// TODO: Generalise
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month-1, 1);
+		int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);// TODO: Generalise
 		DateTime startDate = new DateTime(year, month, 1, 0, 0);
 		DateTime endDate = new DateTime(year, month, lastDay, 0, 0);
 		ReportDateRange dateRange = new ReportDateRange(startDate, endDate);// DateConverter().getDateRange(year,
@@ -435,7 +438,11 @@ public class DHISIntegrator {
 
 		JSONObject dhisConfig = getDHISConfig(name);
 		// ReportDateRange dateRange = new DateConverter().getDateRange(year, month);
-		int lastDay = 30;// TODO: Generalise
+		//int lastDay = 30;// TODO: Generalise
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month-1, 1);
+		int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);// TODO: Generalise
+		logger.error("Last day of "+month+" is "+lastDay);
 		DateTime startDate = new DateTime(year, month, 1, 0, 0);
 		DateTime endDate = new DateTime(year, month, lastDay, 0, 0);
 		ReportDateRange dateRange = new ReportDateRange(startDate, endDate);// DateConverter().getDateRange(year,
