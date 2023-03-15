@@ -388,6 +388,14 @@ public class DHISIntegratorScheduler {
 							Integer month = currSchedule.getTargetDate().getMonthValue();
 							String comment = "DHISIntegratorScheduler submitted " + currSchedule.getProgramName()
 									+ " on " + LocalDate.now();
+
+							if(currSchedule.getProgramName().equals("PHARM-001 Pharmacy ARV Regimen")){
+								if(month == 12){
+									month = 1;
+								}else{
+									month = month + 1;
+								}
+							}		
 							String DHISIntegratorUrl = buildDHISIntegratorUrl(currSchedule.getProgramName(), month,
 									year, comment);
 							AuthResponse authResponse = authenticate(
