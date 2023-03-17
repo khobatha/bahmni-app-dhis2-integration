@@ -84,6 +84,9 @@ $(function() {
 			
 });
 
+// new function here
+
+
 //populate list of schedules from db
 function renderDHISSchedules(){
 	getDHISSchedules().then(function(data){
