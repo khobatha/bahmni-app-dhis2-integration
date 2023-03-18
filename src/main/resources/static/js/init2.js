@@ -87,7 +87,7 @@ $(function() {
 
 function addEventHandlerforInformedPushReportSchedules(){
 	// get the form and dropdown elements
-	var modal = document.getElementById("addMonthlyScheduleModal");
+	var modal = document.getElementById("addMonthlyScheduleModalBody");
 	var dropdown = document.getElementById("monthly-progname");
 
 	// add event listener to the dropdown element
