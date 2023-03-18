@@ -125,17 +125,7 @@ function addEventHandlerforInformedPushReportSchedules(){
 		if (dropdown.value === "PHARM-001 Pharmacy ARV Regimen" || dropdown.value === "PHARM-003 Dispensing Summary Report") {
 			console.log('[TRUE] Selected program is of IPT type!');
 			var content=`<div class='container' id='informed-push-reporting-periods'>
-						<h2>DHIS2 Scheduler</h2>
-						<div class='form-group'>
-							<label for='start-date'>Start Date:</label>
-							<input type='text' class='form-control' id='start-date'>
-						</div>
-						<div class="form-group">
-							<label for="submission-day">Submission Day:</label>
-							<input type="number" class="form-control" id="submission-day" min="1" max="31" value="1">
-						</div>
-						<button class="btn btn-primary" id="generate-schedule">Generate Schedule</button>
-						<div class="mt-4" id="schedule"></div>
+						<input type="text" class="datetimepicker" />
 						</div>`;
 			modal.innerHTML=content;
 		} else {
