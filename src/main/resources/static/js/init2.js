@@ -94,21 +94,25 @@ function addEventHandlerforInformedPushReportSchedules(){
 	dropdown.addEventListener("change", function() {
 		// check if the selected value is "PHARM-001 or PHARM-003"
 		if (dropdown.value === "PHARM-001 Pharmacy ARV Regimen" || dropdown.value === "PHARM-003 Dispensing Summary Report") {
-		// create a new input element
-		var input = document.createElement("input");
-		input.type = "text";
-		input.name = "otherInput";
-		input.placeholder = "Enter other value";
-		// add the input element to the form
-		modal.appendChild(input);
+			console.log('[TRUE] Selected program is of IPT type!');
+			// create a new input element
+			var input = document.createElement("input");
+			input.type = "text";
+			input.name = "otherInput";
+			input.placeholder = "Enter other value";
+			// add the input element to the form
+			modal.appendChild(input);
 		} else {
-		// remove the input element from the form, if it exists
-		var otherInput = document.getElementsByName("otherInput")[0];
-		if (otherInput) {
-			modal.removeChild(otherInput);
-		}
+			console.log('[FALSE] Selected program is not of IPT type!');
+			// remove the input element from the form, if it exists
+			var otherInput = document.getElementsByName("otherInput")[0];
+			if (otherInput) {
+				modal.removeChild(otherInput);
+			}
 		}
 	});
+	console.log('[SUCCESS] Added event handler for informed push schedule!');
+	
 
 }
 
