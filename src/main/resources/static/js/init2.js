@@ -22,29 +22,8 @@ $(document).ready(
 		function() {
 
 			initTabs();
-			// Activate tooltip
-			//$('[data-toggle="tooltip"]').tooltip();
-			//localStorage.setItem('tab_id', 'hello-world';
-			//var last_id = localStorage.getItem('tab_id');
-			/*alert('the last active tab was '+last_id);
-			if (last_id) {
-				$('ul.nav li').removeClass('current');
-				$('.tab-pane').removeClass('current');
-				$(".nav li").eq(Number(last_id.match(/\d+/)[0])-1).addClass('current');
-				$("#" + last_id).addClass('current');
-			}
-			$('ul.nav li').click(function() {
-				var tab_id = $(this).attr('href');
-				alert('cliked tab '+tab_id);
-				$('ul.nav li').removeClass('current');
-				$('.tab-pane').removeClass('current');
-
-				$(this).addClass('active');
-				$("#" + tab_id).addClass('current');
-				localStorage.setItem('tab_id', tab_id);
-			});*/
-
 			// Select/Deselect checkboxes
+			//------------------------------------------------------
 			var checkbox = $('table tbody input[type="checkbox"]');
 			$("#selectAll").click(function(){
 				if(this.checked){
@@ -62,6 +41,56 @@ $(document).ready(
 					$("#selectAll").prop("checked", false);
 				}
 			});
+			//-------------------------------------------------------------------------
+			// Initialize datepicker for start date and submission dates
+			$('#start-date').datepicker({
+				format: "yyyy-mm-dd",
+				autoclose: true
+			});
+
+			$('.submission-date').datepicker({
+				format: "yyyy-mm-dd",
+				autoclose: true
+			});
+
+			// Generate schedule when button is clicked
+			$('#generate-schedule').click(function(){
+				// Get start date value
+				var startDate = moment($('#start-date').val());
+				// Get submission day value
+				var submissionDay = $('#submission-day').val();
+
+				// Create an array to store the schedule
+				var schedule = [];
+
+				// Add the first submission date to the schedule
+				var submissionDate = moment({y: startDate.year(), M: startDate.month(), d: submissionDay});
+				schedule.push(submissionDate.format("YYYY-MM-DD"));
+
+				// Loop through each subsequent date, adding 4 weeks at a time, until the end of the reporting period in July
+				while (submissionDate.month() != 6) {
+					submissionDate = submissionDate.add(4, 'weeks');
+					schedule.push(submissionDate.format("YYYY-MM-DD"));
+				}
+
+				// Display the schedule on the page and populate the submission date pickers
+				var scheduleHtml = '<h4>Schedule:</h4><ul>';
+				for (var i = 0; i < schedule.length; i++) {
+					var datepickerHtml = '<input type="text" class="form-control submission-date" value="' + schedule[i] + '">';
+					scheduleHtml += '<li>' + datepickerHtml + '</li>';
+				}
+				scheduleHtml += '</ul>';
+				$('#schedule').html(scheduleHtml);
+
+				// Reinitialize datepickers for new submission dates
+				$('.submission-date').datepicker({
+					format: "yyyy-mm-dd",
+					autoclose: true
+				});
+			});
+
+
+			//--------------------------------------------------------------------------
 			
 			initSelects();
 			renderDHISSchedules();
@@ -87,7 +116,7 @@ $(function() {
 
 function addEventHandlerforInformedPushReportSchedules(){
 	// get the form and dropdown elements
-	var modal = document.getElementById("addMonthlyScheduleModalBody");
+	var modal = document.getElementById("informed-push-reporting-periods-container");
 	var dropdown = document.getElementById("monthly-progname");
 
 	// add event listener to the dropdown element
@@ -95,17 +124,24 @@ function addEventHandlerforInformedPushReportSchedules(){
 		// check if the selected value is "PHARM-001 or PHARM-003"
 		if (dropdown.value === "PHARM-001 Pharmacy ARV Regimen" || dropdown.value === "PHARM-003 Dispensing Summary Report") {
 			console.log('[TRUE] Selected program is of IPT type!');
-			// create a new input element
-			var input = document.createElement("input");
-			input.type = "text";
-			input.name = "otherInput";
-			input.placeholder = "Enter other value";
-			// add the input element to the form
-			modal.appendChild(input);
+			var content=`<div class='container' id='informed-push-reporting-periods'>
+						<h2>DHIS2 Scheduler</h2>
+						<div class='form-group'>
+							<label for='start-date'>Start Date:</label>
+							<input type='text' class='form-control' id='start-date'>
+						</div>
+						<div class="form-group">
+							<label for="submission-day">Submission Day:</label>
+							<input type="number" class="form-control" id="submission-day" min="1" max="31" value="1">
+						</div>
+						<button class="btn btn-primary" id="generate-schedule">Generate Schedule</button>
+						<div class="mt-4" id="schedule"></div>
+						</div>`;
+			modal.innerHTML=content;
 		} else {
 			console.log('[FALSE] Selected program is not of IPT type!');
 			// remove the input element from the form, if it exists
-			var otherInput = document.getElementsByName("otherInput")[0];
+			var otherInput = document.getElementById("informed-push-reporting-periods")[0];
 			if (otherInput) {
 				modal.removeChild(otherInput);
 			}
