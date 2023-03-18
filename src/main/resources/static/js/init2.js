@@ -126,6 +126,11 @@ function addEventHandlerforInformedPushReportSchedules(){
 			console.log('[TRUE] Selected program is of IPT type!');
 			var content=`<div class='container' id='informed-push-reporting-periods'>
 						<input type="text" class="datetimepicker" />
+						<script type="text/javascript">
+							$(".datetimepicker").each(function () {
+								$(this).datetimepicker();
+							});
+						</script>
 						</div>`;
 			modal.innerHTML=content;
 		} else {
