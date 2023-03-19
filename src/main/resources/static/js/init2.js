@@ -23,45 +23,30 @@ $(document).ready(
 
 			initTabs();
 
-			// Select/Deselect checkboxes
-			var checkbox = $('table tbody input[type="checkbox"]');
-			$("#selectAll").click(function(){
-				if(this.checked){
-					checkbox.each(function(){
-						this.checked = true;                        
-					});
-				} else{
-					checkbox.each(function(){
-						this.checked = false;                        
-					});
-				} 
-			});
-			checkbox.click(function(){
-				if(!this.checked){
-					$("#selectAll").prop("checked", false);
-				}
-			});
+			// // Select/Deselect checkboxes
+			// var checkbox = $('table tbody input[type="checkbox"]');
+			// $("#selectAll").click(function(){
+			// 	if(this.checked){
+			// 		checkbox.each(function(){
+			// 			this.checked = true;                        
+			// 		});
+			// 	} else{
+			// 		checkbox.each(function(){
+			// 			this.checked = false;                        
+			// 		});
+			// 	} 
+			// });
+			// checkbox.click(function(){
+			// 	if(!this.checked){
+			// 		$("#selectAll").prop("checked", false);
+			// 	}
+			// });
 			
 			initSelects();
 			renderDHISSchedules();
 			
 });
 
-
-// $(function() {
-  
-// 			$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-// 			  localStorage.setItem('lastTab', $(this).attr('href'));
-// 			  alert("Saved active tab id "+ $(this).attr('href'));
-// 			});
-// 			var lastTab = localStorage.getItem('lastTab');
-			
-// 			if (lastTab) {
-// 			  alert("Saved active tab id "+ lastTab);
-// 			  $('[href="' + lastTab + '"]').tab('show');
-// 			}
-			
-// });
 
 //populate list of schedules from db
 function renderDHISSchedules(){
