@@ -22,27 +22,7 @@ $(document).ready(
 		function() {
 
 			initTabs();
-
-			// // Select/Deselect checkboxes
-			// var checkbox = $('table tbody input[type="checkbox"]');
-			// $("#selectAll").click(function(){
-			// 	if(this.checked){
-			// 		checkbox.each(function(){
-			// 			this.checked = true;                        
-			// 		});
-			// 	} else{
-			// 		checkbox.each(function(){
-			// 			this.checked = false;                        
-			// 		});
-			// 	} 
-			// });
-			// checkbox.click(function(){
-			// 	if(!this.checked){
-			// 		$("#selectAll").prop("checked", false);
-			// 	}
-			// });
-			
-			initSelects();
+			initDHISProgramNameDropdowns();
 			renderDHISSchedules();
 			
 });
@@ -120,7 +100,7 @@ function disenSchedule(toggled_id){
 }
 
 //populate list of DHIS-enabled hmis programs into select element
-function initSelects(){
+function initDHISProgramNameDropdowns(){
 	var isYearlyReport = false;
 	var canSubmitReport = hasReportingPrivilege;
 	getContent(isYearlyReport, canSubmitReport).then(
