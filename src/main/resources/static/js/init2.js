@@ -41,57 +41,7 @@ $(document).ready(
 					$("#selectAll").prop("checked", false);
 				}
 			});
-			//-------------------------------------------------------------------------
-			// Initialize datepicker for start date and submission dates
-			$('#start-date').datepicker({
-				format: "yyyy-mm-dd",
-				autoclose: true
-			});
-
-			$('.submission-date').datepicker({
-				format: "yyyy-mm-dd",
-				autoclose: true
-			});
-
-			// Generate schedule when button is clicked
-			$('#generate-schedule').click(function(){
-				// Get start date value
-				var startDate = moment($('#start-date').val());
-				// Get submission day value
-				var submissionDay = $('#submission-day').val();
-
-				// Create an array to store the schedule
-				var schedule = [];
-
-				// Add the first submission date to the schedule
-				var submissionDate = moment({y: startDate.year(), M: startDate.month(), d: submissionDay});
-				schedule.push(submissionDate.format("YYYY-MM-DD"));
-
-				// Loop through each subsequent date, adding 4 weeks at a time, until the end of the reporting period in July
-				while (submissionDate.month() != 6) {
-					submissionDate = submissionDate.add(4, 'weeks');
-					schedule.push(submissionDate.format("YYYY-MM-DD"));
-				}
-
-				// Display the schedule on the page and populate the submission date pickers
-				var scheduleHtml = '<h4>Schedule:</h4><ul>';
-				for (var i = 0; i < schedule.length; i++) {
-					var datepickerHtml = '<input type="text" class="form-control submission-date" value="' + schedule[i] + '">';
-					scheduleHtml += '<li>' + datepickerHtml + '</li>';
-				}
-				scheduleHtml += '</ul>';
-				$('#schedule').html(scheduleHtml);
-
-				// Reinitialize datepickers for new submission dates
-				$('.submission-date').datepicker({
-					format: "yyyy-mm-dd",
-					autoclose: true
-				});
-			});
-
-
-			//--------------------------------------------------------------------------
-			
+						
 			initSelects();
 			renderDHISSchedules();
 			addEventHandlerforInformedPushReportSchedules();
