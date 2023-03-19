@@ -125,12 +125,18 @@ function addEventHandlerforInformedPushReportSchedules(){
 		if (dropdown.value === "PHARM-001 Pharmacy ARV Regimen" || dropdown.value === "PHARM-003 Dispensing Summary Report") {
 			console.log('[TRUE] Selected program is of IPT type!');
 			var content=`<div class='container' id='informed-push-reporting-periods'>
-						<input type="text" class="datetimepicker" />
-						<script type="text/javascript">
-							$(".datetimepicker").each(function () {
-								$(this).datetimepicker();
+							<div class="form-group">
+								<label for="start-date">Start Date:</label>
+								<input type="text" class="form-control" id="start-date">
+							</div>
+							<script type='text/javascript'>
+							$(document).ready(function(){
+								$('#start-date').datepicker({
+									format: "yyyy-mm-dd",
+									autoclose: true
+								});
 							});
-						</script>
+							</script>
 						</div>`;
 			modal.innerHTML=content;
 		} else {
