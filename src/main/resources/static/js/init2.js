@@ -28,7 +28,7 @@ $(document).ready(
 });
 
 
-//populate list of schedules from db
+//populate and render list of schedules from db
 function renderDHISSchedules(){
 	getDHISSchedules().then(function(data){
 		console.log('[render hmis program schedules]');
@@ -73,6 +73,7 @@ function renderDHISSchedules(){
 	});
 }
 
+//use checkboxes to disable/enable scheduled reports
 function disenSchedule(toggled_id){
 	var scheduleId=toggled_id;
 	var enabled = document.getElementById(toggled_id).checked ? 'true' : 'false';
@@ -131,6 +132,7 @@ function initTabs() {
 	$("#tabs").tabs();
 }
 
+//read a list of DHIS enabled programs 
 function getDHISPrograms() {
 	return $.getJSON(reportConfigUrl).then(function(reportConfigs) {
 		var DHISPrograms = [];
@@ -144,7 +146,7 @@ function getDHISPrograms() {
 	});
 }
 
-
+//read list of existing DHIS scheduless
 function getDHISSchedules() {
 	return $.get(getSchedulesUrl).done(function(data) {
 		console.log('[Get DHIS schedules]');
@@ -155,6 +157,7 @@ function getDHISSchedules() {
 	});
 }
 
+//delete checked schedules from the list
 function removeAllRowsContainingCheckedCheckbox(table) {
     for (var rowi= table.rows.length; rowi-->0;) {
         var row= table.rows[rowi];
@@ -170,6 +173,7 @@ function removeAllRowsContainingCheckedCheckbox(table) {
     }
 }
 
+//delete schedule from the database
 function deleteDHISSchedule(clicked_id){
 
 	var scheduleIds=[];
@@ -218,6 +222,7 @@ function deleteDHISSchedule(clicked_id){
 
 }
 
+//create a new schedule and add it to the db
 function createDHISSchedule(clicked_id, frequency){
 	console.log('Creating new schedule, clicked_id='+clicked_id+' frequency='+frequency);
 	var programName;
