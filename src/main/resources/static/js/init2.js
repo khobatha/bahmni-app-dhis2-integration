@@ -22,8 +22,28 @@ $(document).ready(
 		function() {
 
 			initTabs();
+			// Activate tooltip
+			//$('[data-toggle="tooltip"]').tooltip();
+			//localStorage.setItem('tab_id', 'hello-world';
+			//var last_id = localStorage.getItem('tab_id');
+			/*alert('the last active tab was '+last_id);
+			if (last_id) {
+				$('ul.nav li').removeClass('current');
+				$('.tab-pane').removeClass('current');
+				$(".nav li").eq(Number(last_id.match(/\d+/)[0])-1).addClass('current');
+				$("#" + last_id).addClass('current');
+			}
+			$('ul.nav li').click(function() {
+				var tab_id = $(this).attr('href');
+				alert('cliked tab '+tab_id);
+				$('ul.nav li').removeClass('current');
+				$('.tab-pane').removeClass('current');
+				$(this).addClass('active');
+				$("#" + tab_id).addClass('current');
+				localStorage.setItem('tab_id', tab_id);
+			});*/
+
 			// Select/Deselect checkboxes
-			//------------------------------------------------------
 			var checkbox = $('table tbody input[type="checkbox"]');
 			$("#selectAll").click(function(){
 				if(this.checked){
@@ -41,10 +61,9 @@ $(document).ready(
 					$("#selectAll").prop("checked", false);
 				}
 			});
-						
+			
 			initSelects();
 			renderDHISSchedules();
-			addEventHandlerforInformedPushReportSchedules();
 			
 		});
 
@@ -63,55 +82,6 @@ $(function() {
 			}
 			
 });
-
-function addEventHandlerforInformedPushReportSchedules(){
-	// get the form and dropdown elements
-	var modal = document.getElementById("informed-push-reporting-periods-container");
-	var dropdown = document.getElementById("monthly-progname");
-
-	// add event listener to the dropdown element
-	dropdown.addEventListener("change", function() {
-		// check if the selected value is "PHARM-001 or PHARM-003"
-		if (dropdown.value === "PHARM-001 Pharmacy ARV Regimen" || dropdown.value === "PHARM-003 Dispensing Summary Report") {
-			console.log('[TRUE] Selected program is of IPT type!');
-			var content=`<div class="container" id="informed-push-reporting-periods">
-						<div class="form-group">
-							<label class="col-sm-3 control-label">
-								Dates From :
-							</label>
-							<div class="col-md-4">
-								<div class="input-group" id='datetimepickerfrom'>
-									<div class="input-group-addon" style="background-color: gainsboro; cursor: pointer;">
-										<span>From</span>
-									</div>
-									<input id="dt_From" name="dt_From" class="form-control" />
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="input-group" id='datetimepickerTo'>
-									<div class="input-group-addon" style="background-color: gainsboro; cursor: pointer;">
-										<span>To</span>
-									</div>
-									<input id="dt_To" name="dt_To" class="form-control" />
-								</div>
-							</div>
-						</div>
-						</div>`;
-			modal.innerHTML=content;
-		} else {
-			console.log('[FALSE] Selected program is not of IPT type!');
-			// remove the input element from the form, if it exists
-			var otherInput = document.getElementById("informed-push-reporting-periods")[0];
-			if (otherInput) {
-				modal.removeChild(otherInput);
-			}
-		}
-	});
-	console.log('[SUCCESS] Added event handler for informed push schedule!');
-	
-
-}
-
 
 //populate list of schedules from db
 function renderDHISSchedules(){
@@ -452,4 +422,3 @@ function getContent(isYearlyReport, canSubmitReport) {
 		}
 	});
 }
-
