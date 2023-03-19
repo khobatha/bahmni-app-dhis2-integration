@@ -124,19 +124,28 @@ function addEventHandlerforInformedPushReportSchedules(){
 		// check if the selected value is "PHARM-001 or PHARM-003"
 		if (dropdown.value === "PHARM-001 Pharmacy ARV Regimen" || dropdown.value === "PHARM-003 Dispensing Summary Report") {
 			console.log('[TRUE] Selected program is of IPT type!');
-			var content=`<div class='container' id='informed-push-reporting-periods'>
-							<div class="form-group">
-								<label for="start-date">Start Date:</label>
-								<input type="text" class="form-control" id="start-date">
+			var content=`<div class="container" id="informed-push-reporting-periods">
+						<div class="form-group">
+							<label class="col-sm-3 control-label">
+								Dates From :
+							</label>
+							<div class="col-md-4">
+								<div class="input-group" id='datetimepickerfrom'>
+									<div class="input-group-addon" style="background-color: gainsboro; cursor: pointer;">
+										<span>From</span>
+									</div>
+									<input id="dt_From" name="dt_From" class="form-control" />
+								</div>
 							</div>
-							<script type='text/javascript'>
-							$(document).ready(function(){
-								$('#start-date').datepicker({
-									format: "yyyy-mm-dd",
-									autoclose: true
-								});
-							});
-							</script>
+							<div class="col-md-4">
+								<div class="input-group" id='datetimepickerTo'>
+									<div class="input-group-addon" style="background-color: gainsboro; cursor: pointer;">
+										<span>To</span>
+									</div>
+									<input id="dt_To" name="dt_To" class="form-control" />
+								</div>
+							</div>
+						</div>
 						</div>`;
 			modal.innerHTML=content;
 		} else {
