@@ -64,9 +64,8 @@ $(document).ready(
 			
 			initSelects();
 			renderDHISSchedules();
-			addEventHandlerforInformedPushReportSchedules();
 			
-		});
+});
 
 
 $(function() {
@@ -270,33 +269,6 @@ function deleteDHISSchedule(clicked_id){
 		
 	}).fail(function(response) {
 		console.log('[Operation deletDHISSchedule() failed]');
-	});
-
-}
-
-function addEventHandlerforInformedPushReportSchedules(){
-	// get the form and dropdown elements
-	var modal = document.getElementById("addMonthlyScheduleModal");
-	var dropdown = document.getElementById("monthly-progname");
-
-	// add event listener to the dropdown element
-	dropdown.addEventListener("change", function() {
-		// check if the selected value is "PHARM-001 or PHARM-003"
-		if (dropdown.value === "PHARM-001 Pharmacy ARV Regimen" || dropdown.value === "PHARM-003 Dispensing Summary Report") {
-		// create a new input element
-		var input = document.createElement("input");
-		input.type = "text";
-		input.name = "otherInput";
-		input.placeholder = "Enter other value";
-		// add the input element to the form
-		modal.appendChild(input);
-		} else {
-		// remove the input element from the form, if it exists
-		var otherInput = document.getElementsByName("otherInput")[0];
-		if (otherInput) {
-			modal.removeChild(otherInput);
-		}
-		}
 	});
 
 }
