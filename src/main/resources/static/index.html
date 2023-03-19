@@ -1,15 +1,23 @@
 <html>
 <head>
 <title>DHIS2 Integration App</title>
+
+<!--STYLESHEETS AND FONTS-->
 <link rel="shortcut icon" type="image/x-icon" href="/bahmni/favicon.ico">
-<link rel="stylesheet"
-	href="bower_components/nepali-date-picker/dist/nepaliDatePicker.min.css">
-<link rel="stylesheet"
-	href="bower_components/jquery-ui/themes/base/jquery-ui.min.css">
+<link rel="stylesheet" href="bower_components/nepali-date-picker/dist/nepaliDatePicker.min.css">
+<link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.min.css">
 <link rel="stylesheet" href="css/stylesheet.css">
+
+<!--LIBRARIES-->
 <script src="bower_components/jquery.min/index.js"></script>
-<script src="bower_components/mustache.min/index.js"></script>
 <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+
+<!--PLUGINS-->
+<script src="bower_components/mustache.min/index.js"></script>
+<script src="js/spinner.js"></script>
+<script src="js/initManual.js"></script>
+<script src="bower_components/nepali-date-picker/dist/jquery.nepaliDatePicker.min.js"></script>
+
 </head>
 <body>
 
@@ -83,9 +91,5 @@
 	<script id="success-refresh-status-template" type="x-tmpl-mustache">
     	<b class="status-success">{{status}}</b>
 	</script>
-	<script src="js/spinner.js"></script>
-	<script src="js/init.js"></script>
-	<script
-		src="bower_components/nepali-date-picker/dist/jquery.nepaliDatePicker.min.js"></script>
 </body>
 </html>
