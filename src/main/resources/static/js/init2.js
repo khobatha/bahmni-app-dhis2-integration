@@ -72,12 +72,12 @@ $(function() {
   
 			$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			  localStorage.setItem('lastTab', $(this).attr('href'));
-			  alert("Saved active tab id "+ $(this).attr('href'));
+			  //alert("Saved active tab id "+ $(this).attr('href'));
 			});
 			var lastTab = localStorage.getItem('lastTab');
 			
 			if (lastTab) {
-			  alert("Saved active tab id "+ lastTab);
+			  //alert("Saved active tab id "+ lastTab);
 			  $('[href="' + lastTab + '"]').tab('show');
 			}
 			
