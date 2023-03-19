@@ -213,7 +213,7 @@ function initSelects(){
 }
 
 function initTabs() {
-	//$("#tabs").tabs();
+	$("#tabs").tabs();
 }
 
 function getDHISPrograms() {
