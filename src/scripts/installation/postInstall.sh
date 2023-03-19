@@ -34,6 +34,8 @@ mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="CREATE
 
 mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_schedules (id int not null auto_increment, report_name varchar(255), frequency varchar(255), created_by varchar(255), created_date date, target_time datetime,last_run datetime, status varchar(255), enabled boolean, primary key(id));"
 
+mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_pharmacy_periods (id int not null auto_increment, dhis2_schedule_id int , period int, created_by varchar(255), created_date date, start_time datetime, end_time datetime, last_run datetime, status varchar(255), enabled boolean, primary key(id), foreign key (dhis2_schedule_id) references dhis2_schedules(id));"
+
 usermod -s /usr/sbin/nologin bahmni
 
 mkdir -p /opt/dhis-integration/var/log/
