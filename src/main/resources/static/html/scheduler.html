@@ -230,8 +230,74 @@
 						</div>
 					</div>        
 				</div>
+
+				<div class="modal fade" tabindex="-1" id="addMonthlyScheduleModal" role="dialog" aria-labelledby="gridSystemModalLabel">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title">
+									Shift Maintenance Entry</h4>
+							</div>
+							<div class="modal-body">
+								<div id="shiftotentry">
+									<label class="col-sm-3 control-label">
+										EmployeeId:
+									</label>
+									<div class="col-sm-8">
+										<input class="form-control" type="text" name="name" value=" " />
+									</div>
+									<br />
+									<div class="form-group">
+									</div>
+									<div class="form-group">
+										<label class="col-sm-3 control-label">
+											Shift Code :
+										</label>
+										<div class="col-sm-8">
+											<input class="form-control" name="txtShift" value="" maxlength="30">
+										</div>
+									</div>
+									<br />
+									<div class="form-group">
+										<label class="col-sm-3 control-label">
+											Dates From :
+										</label>
+										<div class="col-md-4">
+											<div class="input-group" id='datetimepickerfrom'>
+												<div class="input-group-addon" style="background-color: gainsboro; cursor: pointer;">
+													<span>From</span>
+												</div>
+												<input id="dt_From" name="dt_From" class="form-control" />
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="input-group" id='datetimepickerTo'>
+												<div class="input-group-addon" style="background-color: gainsboro; cursor: pointer;">
+													<span>To</span>
+												</div>
+												<input id="dt_To" name="dt_To" class="form-control" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br />
+							<br />
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default pull-left" data-dismiss="modal">
+									Close</button>
+								<button type="submit" name="sub" value="save" class="btn btn-primary-left" style="width: 90px">
+									Save</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
 				<!-- Add Monthly Schedule Modal HTML -->
-				<div id="addMonthlyScheduleModal" class="modal fade">
+				<div id="addMonthlyScheduleModalx" class="modal fade">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<form>
