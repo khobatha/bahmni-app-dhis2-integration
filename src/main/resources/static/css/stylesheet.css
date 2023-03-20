@@ -458,7 +458,7 @@ table.table .avatar {
     width: 100%;
     height: 100%;
 }
-.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+.modal .modal-header, /*.modal .modal-body,*/ .modal .modal-footer {
     padding: 20px 30px;
 }
 
@@ -478,7 +478,7 @@ table.table .avatar {
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #0f941aa1;
-    width: 60%; /* Could be more or less, depending on screen size */
+    width: 70%; /* Could be more or less, depending on screen size */
 }
 
 .modal .modal-footer {
