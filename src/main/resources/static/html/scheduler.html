@@ -90,8 +90,8 @@
 	</script>
 	<script>
 		$( function() {
-			const modal = document.getElementById("addWeeklyScheduleModal");
-			const modalContent = document.getElementById("addWeeklyScheduleModalContent");
+			const modal = document.getElementById("addMonthlyScheduleModal");
+			const modalContent = document.getElementById("addMonthlyScheduleModalContent");
 
 			function adjustModalWidth() {
 				// calculate the required width based on the content inside the modal
@@ -313,7 +313,7 @@
 				<!-- Add Monthly Schedule Modal HTML -->
 				<div id="addMonthlyScheduleModal" class="modal fade">
 					<div class="modal-dialog">
-						<div class="modal-content">
+						<div class="modal-content" id="addMonthlyScheduleModalContent">
 							<form>
 								<div class="modal-header">						
 									<h4 class="modal-title">Create monthly schedules</h4>
