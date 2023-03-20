@@ -169,3 +169,26 @@ a.header-link {
     font-size: 13px;
     margin-right: 8px;
 }
+
+/* MODAL STYLING */
+.modal {
+    display: none; /* Hide the modal by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    top: 50%;
+    left: 50%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(189, 11, 11, 0.5); /* Black with opacity */
+
+}
+
+.modal-content {
+    background-color: rgb(8, 46, 129);
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #0f941aa1;
+    width: 70%; /* Could be more or less, depending on screen size */
+}
