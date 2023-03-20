@@ -1,0 +1,53 @@
+body{
+    font-family: OpenSans, Arial, sans-serif;
+    font-size: 14px ;
+}
+*{
+    box-sizing: border-box;
+}
+
+.header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100001;
+    padding: 0 10px;
+    box-sizing: border-box;
+    background: #669999;
+    height: 60px;
+    width: 100%;
+}
+
+.section-title{
+
+    padding: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: #FFFFFF;
+    font-size: 16px;
+    clear: both;
+    background: #669999;
+    border-radius: 2px 2px 0 0;
+}
+
+.dhisWrapper{
+    width: 1200px;
+    margin: 75px auto 0;
+}
+
+.dhisContent{
+    border: 1px #ccc solid;
+    border-top: none;
+    display: flex;
+    width: 100%;
+}
+
+.programName{
+    flex: 2.5;
+    border-right: 1px #ccc solid;
+    padding: 5px 8px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
