@@ -170,6 +170,13 @@ a.header-link {
     margin-right: 8px;
 }
 
+.status-success {
+    color: #779b23;
+}
+.status-failure {
+    color: #ff4444;
+}
+
 /* TABS */
 #tabs ul li.ui-state-active {
     background: #669999; 
