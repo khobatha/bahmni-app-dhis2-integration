@@ -355,6 +355,11 @@ table.table .avatar {
 }
 
 .modal-content {
+    border-top-left-radius: calc(0.3rem - 1px);
+    border-top-right-radius: calc(0.3rem - 1px);
+    font-size: 14px;
+    left: 50px;
+    top: 150px;
     background-color: rgb(8, 46, 129);
     margin: 15% auto; /* 15% from the top and centered */
     padding: 10px;
@@ -390,6 +395,26 @@ table.table .avatar {
 .modal-header{
     background: #669999;
     color: #fff;
+}
+
+.modal textarea.form-control {
+    resize: vertical;
+}
+
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+    padding: 20px 30px;
+}
+
+.select-style select{
+    padding: 0;
+    margin: 0;
+    border: 1px solid #cbced0;
+    border-radius: 3px;
+    overflow: hidden;
+    background: #cbced0;
+    position: relative;
+    display: flex;
+    width: 100%;
 }
     
 /* SWITCH STYLING */
