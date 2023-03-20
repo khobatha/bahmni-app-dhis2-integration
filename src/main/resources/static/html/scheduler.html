@@ -31,7 +31,8 @@
 	  $( "#start-date" ).datepicker();
 	  
 	  // Generate schedule when button is clicked
-	  $('#generate-schedule').click(function(){
+	  $('#generate-schedule').click(function(event){
+		  event.preventDefault();
 		  // Get start date value
 		  var startDate = moment($('#start-date').val());
 		  if($('#start-date').val() && startDate.month()==7){
