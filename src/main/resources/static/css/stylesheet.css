@@ -440,7 +440,9 @@ table.table .avatar {
 }
 /* Modal styles */
 .modal .modal-dialog {
-    max-width: 400px;
+    /*max-width: 400px;*/
+    width: 100%;
+    height: 100%;
 }
 .modal .modal-header, .modal .modal-body, .modal .modal-footer {
     padding: 20px 30px;
@@ -452,6 +454,8 @@ table.table .avatar {
     left: 50px;
     top: 150px;
     position: absolute;
+    width: 80%;
+    max-width: 900px;
 }
 .modal .modal-footer {
     /*background: #ecf0f1;*/

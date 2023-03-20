@@ -18,15 +18,35 @@ var spinner = spinner || {};
 
 var hasReportingPrivilege = true;
 
+//
+const modal = document.getElementById("addWeeklyScheduleModal");
+const modalContent = document.getElementById("addWeeklyScheduleModalContent");
+//
+
 $(document).ready(
 		function() {
 
 			initTabs();
 			initDHISProgramNameDropdowns();
 			renderDHISSchedules();
+			addAdjustAddMonthlyScheduleModalHandler();
 			
 });
 
+
+function adjustModalWidth() {
+  // calculate the required width based on the content inside the modal
+  const requiredWidth = modalContent.scrollWidth + 20; // add some padding
+
+  // set the width of the modal's container element
+  modal.style.width = requiredWidth + "px";
+}
+
+function addAdjustAddMonthlyScheduleModalHandler(){
+	// call the adjustModalWidth function whenever the modal is shown or the content inside the modal changes
+	modal.addEventListener("show", adjustModalWidth);
+	modalContent.addEventListener("change", adjustModalWidth);
+}
 
 //populate and render list of schedules from db
 function renderDHISSchedules(){
