@@ -461,19 +461,20 @@ table.table .avatar {
 .modal .modal-header, .modal .modal-body, .modal .modal-footer {
     padding: 20px 30px;
 }
-.modal .modal-content {
+
+/*.modal .modal-content {
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
     font-size: 14px;
     left: 50px;
     top: 150px;
     /*position: absolute;*/
-    width: 80%;
+    /*width: 80%;
     max-width: 900px;
-}
+}*/
 
 .modal-content {
-    background-color: white;
+    background-color: rgb(8, 46, 129);
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #0f941aa1;
