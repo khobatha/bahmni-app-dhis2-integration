@@ -27,10 +27,65 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script>
-$( function() {
-  $( "#datepicker" ).datepicker();
-} );
-</script>
+	$( function() {
+	  $( "#start-date" ).datepicker();
+	  
+	  // Generate schedule when button is clicked
+	  $('#generate-schedule').click(function(){
+		  // Get start date value
+		  var startDate = moment($('#start-date').val());
+		  if($('#start-date').val() && startDate.month()==7){
+  
+			  // Create an array to store the schedule
+			  var schedule = [];
+  
+			  // Add the first submission date to the schedule
+			  schedule.push(startDate.format("YYYY-MM-DDTHH:mm"));
+  
+			  // Loop through each subsequent date, adding 4 weeks at a time, until the end of the reporting period in July
+			  while ( startDate.month() != 6) {
+				  console.log('------------------start--------------------');
+				  console.log(startDate.format("MMM"));
+				  console.log(startDate.format("YYYY-MM-DDTHH:mm"));
+				  console.log('-------------------end---------------------');
+				  startDate =  startDate.add(4, 'weeks');
+				  schedule.push(startDate.format("YYYY-MM-DDTHH:mm"));
+			  }
+  
+			  // Display the schedule on the page and populate the submission
+							  // Create a table to display the schedule
+			  var table = '<table><tr><th>Period</th><th>Date</th><th>Period</th><th>Date</th><th>Period</th><th>Date</th></tr>';
+  
+			  // Loop through each submission date in the schedule and add it to the table
+			  for (var i = 0; i < schedule.length; i+=3) {
+				  var submissionDate_1 = moment(schedule[i]);
+				  formattedDate_1=submissionDate_1.format('YYYY-MM-DDTHH:mm');
+				  var submissionDate_2 = moment(schedule[i+1]);
+				  formattedDate_2=submissionDate_2.format('YYYY-MM-DDTHH:mm');
+				  var submissionDate_3 = moment(schedule[i+2]);
+				  formattedDate_3=submissionDate_2.format('YYYY-MM-DDTHH:mm');
+				  if(i==12)
+					  table += '<td>' + parseInt(i+1) + '</td><td><input type="datetime-local" class="form-control" id="' + i + '" value="' + formattedDate_1 + '"></td></tr>';
+				  else{
+					  table += '<tr><td>' + parseInt(i+1) + '</td><td><input type="datetime-local" class="form-control" id="' + i + '" value="' + formattedDate_1 + '"></td>';
+					  table += '<td>' + parseInt(i+2) + '</td><td><input type="datetime-local" class="form-control" id="' + i+1 + '" value="' + formattedDate_2 + '"></td>';
+					  table += '<td>' + parseInt(i+3) + '</td><td><input type="datetime-local" class="form-control" id="' + i+2 + '" value="' + formattedDate_3 + '"></td></tr>';
+				  }
+				  
+			  }
+  
+			  table += '</table>';
+  
+			  // Add the table to the page
+			  $('#schedule').html(table);
+		  }else{
+			  console.log('The datetime value is null or empty.');
+		  }
+		  
+	  });
+	  
+	} );
+	</script>
 
 </head>
 <body>
@@ -243,13 +298,13 @@ $( function() {
 								<div class="modal-body">
 									
 									<div class="form-group">
-										<label>Name</label>
+										<label>Name:</label>
 										<!--input type="text" class="form-control" required-->
 										<select name="monthly-progname" id="monthly-progname" required>
 										</select>
 									</div>
 									<div class="form-group">
-										<label>Frequency</label>
+										<label>Frequency:</label>
 										<!--input type="text" class="form-control" required-->
 										<select name="monthly-frequency" id="monthly-frequency" required>
 											<!--option value="weekly">Weekly</option-->
@@ -257,8 +312,8 @@ $( function() {
 											<!--option value="quarterly">Quarterly</option-->
 										</select>
 									</div>
-									<div class="form-group">
-										<label>Time</label>
+									<!--div class="form-group">
+										<label>Time:</label>
 										<select name="monthly-time" id="monthly-time" required>
 											<option value="17:00">17:00</option>
 											<option value="18:00">18:00</option>
@@ -273,9 +328,14 @@ $( function() {
 											<option value="03:00">03:00</option>
 											<option value="04:00">04:00</option>
 										</select>
-									</div>	
+									</div-->	
 									<div class="form-group">
-										<p>Date: <input type="text" id="datepicker"></p>
+										<label>Reporting Periods:</label>
+										<label for="datetime-picker">Select datetime of first period:</label>
+										<input type="datetime-local" id="start-date" name="datetime-picker">
+
+										<button class="btn btn-primary" id="generate-schedule">Generate Schedule</button>
+										<div class="mt-4" id="schedule"></div>
 									</div>
 								</div>
 								<div class="modal-footer">
