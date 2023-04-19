@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.Base64Utils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,18 +84,20 @@ public class DHISIntegratorScheduler {
 			results = databaseDriver.executeQuery(sql, type);
 
 			for (List<String> row : results.getRows()) {
-				logger.info("Showing getIntegrationSChedules results...");
-				logger.info(row);
-				schedule = new Schedule();
+				//exclude pharmacy reports
+				if(!row.get(1).contains("PHARM")){
+					logger.info("Showing getIntegrationSChedules results...");
+					logger.info(row);
+					schedule = new Schedule();
 
-				schedule.setId(Integer.parseInt(row.get(0)));
-				schedule.setProgName(row.get(1));
-				schedule.setFrequency(row.get(2));
-				schedule.setEnabled(Integer.parseInt(row.get(3)) == 1 ? true : false);
-				schedule.setLastRun(row.get(4));
-				schedule.setStatus(row.get(5));
-				list.add(schedule);
-
+					schedule.setId(Integer.parseInt(row.get(0)));
+					schedule.setProgName(row.get(1));
+					schedule.setFrequency(row.get(2));
+					schedule.setEnabled(Integer.parseInt(row.get(3)) == 1 ? true : false);
+					schedule.setLastRun(row.get(4));
+					schedule.setStatus(row.get(5));
+					list.add(schedule);
+				}
 			}
 			mapper = new ObjectMapper();
 			String jsonstring = mapper.writeValueAsString(list);
@@ -109,6 +112,77 @@ public class DHISIntegratorScheduler {
 
 		return jsonArray;
 	}
+
+	@RequestMapping(path = "/get-pharm-schedules")
+	public JSONArray getIntegrationPharmSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException, DHISIntegratorException, Exception {
+		String sql = "SELECT id, report_name, frequency, enabled, last_run, status FROM dhis2_schedules;";
+		JSONArray jsonArray = new JSONArray();
+		ArrayList<PharmacySchedule> list = new ArrayList<PharmacySchedule>();
+		ArrayList<PharmacyPeriod> pharmacyPeriods = new ArrayList<PharmacyPeriod>();
+		Results results = new Results();
+		Results pharmacyPeriodResults = new Results();
+		String type = "MRSGeneric";
+		//Schedule schedule;
+		PharmacySchedule schedule;
+		ObjectMapper mapper;
+
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+
+			for (List<String> row : results.getRows()) {
+				// Grab pharmacy reports only
+				if(row.get(1).contains("PHARM")){ 
+					logger.info("Showing getIntegrationSChedules results...");
+					logger.info(row);
+					schedule = new PharmacySchedule();
+
+					schedule.setId(Integer.parseInt(row.get(0)));
+					schedule.setProgName(row.get(1));
+					schedule.setFrequency(row.get(2));
+					schedule.setEnabled(Integer.parseInt(row.get(3)) == 1 ? true : false);
+					schedule.setLastRun(row.get(4));
+					schedule.setStatus(row.get(5));
+					
+
+					//Get Periods for this schedule
+                    String periodsSql = "SELECT id, dhis2_schedule_id, period, created_by, created_date, start_time, end_time, last_run, status, enabled FROM openmrs.dhis2_pharmacy_periods WHERE dhis2_schedule_id="+schedule.getId()+";";
+		            pharmacyPeriodResults = databaseDriver.executeQuery(periodsSql, type);
+					PharmacyPeriod pharmacyPeriod = new PharmacyPeriod();
+                    for(List<String> rowList : pharmacyPeriodResults.getRows()){
+						pharmacyPeriod.setId(Integer.parseInt(rowList.get(0)));
+						pharmacyPeriod.setDhis2ScheduleId(Integer.parseInt(rowList.get(1)));
+						pharmacyPeriod.setPeriod(Integer.parseInt(rowList.get(2)));
+						pharmacyPeriod.setCreatedBy(rowList.get(3));
+						LocalDate dateNow = LocalDate.of(1995, 1, 20);
+						pharmacyPeriod.setCreatedDate(dateNow);
+						pharmacyPeriod.setStartTime(rowList.get(5));
+						pharmacyPeriod.setEndTime(rowList.get(6));
+						pharmacyPeriod.setLastRun(rowList.get(7));
+						pharmacyPeriod.setStatus(rowList.get(8));
+						pharmacyPeriod.setEnabled(Integer.parseInt(rowList.get(9)) == 1 ? true : false);
+						
+						pharmacyPeriods.add(pharmacyPeriod);
+					}
+
+                    schedule.setPeriods(pharmacyPeriods);
+					list.add(schedule);
+				}
+			}
+			mapper = new ObjectMapper();
+			String jsonstring = mapper.writeValueAsString(list);
+			jsonArray.put(jsonstring);
+			logger.info("Task loadIntegrationSchedules ran successfully...");
+		} catch (DHISIntegratorException | JSONException e) {
+			// logger.info("Inside loadIntegrationSchedules...");
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return jsonArray;
+	}
+
 
 	@RequestMapping(path = "/create-schedule")
 	public Boolean createIntegrationSchedule(@RequestParam("programName") String progName,
@@ -130,6 +204,40 @@ public class DHISIntegratorScheduler {
 		logger.info("Inside saveIntegrationSchedules...");
 		try {
 			databaseDriver.executeCreateQuery(newschedule);
+			logger.info("Executed insert query successfully...");
+
+		} catch (DHISIntegratorException | JSONException e) {
+			created = false;
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			created = false;
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return created;
+	}
+
+	@RequestMapping(path = "/create-pharm-schedule")
+	public Boolean createIntegrationPharmSchedule(@RequestParam("programName") String progName,
+			@RequestParam("scheduleFrequency") String schedFrequency,
+			@RequestParam("scheduleTime") String schedTime, 
+			@RequestBody PharmacyPeriodListRequest pharmacyPeriodListRequest,
+			HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException {
+		Boolean created = true;
+		
+		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
+		newPharmacySchedule.setProgName(progName);
+		newPharmacySchedule.setCreatedBy("Test");
+		newPharmacySchedule.setEnabled(true);
+		newPharmacySchedule.setPeriods(pharmacyPeriodListRequest.getPeriods());
+        LocalDate created_date = LocalDate.now();
+		newPharmacySchedule.setCreatedDate(created_date);
+
+
+		logger.info("Inside saveIntegrationSchedules...");
+		try {
+			databaseDriver.executeCreateQuery(newPharmacySchedule);
 			logger.info("Executed insert query successfully...");
 
 		} catch (DHISIntegratorException | JSONException e) {
@@ -192,6 +300,28 @@ public class DHISIntegratorScheduler {
 
 		return results;
 	}
+
+	@RequestMapping(path = "/delete-pharm-schedule")
+	public Results deleteIntegrationPharmSchedule(@RequestParam(value = "scheduleIds[]") String scheduleIds[],
+			HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException {
+		Results results = new Results();
+		logger.info("Inside deleteIntegrationPharmSchedules..., schedule_id_0=" + scheduleIds[0]);
+		try {
+			for (String schedule_id : scheduleIds) {
+				databaseDriver.executeDeletePharmSchedQuery(Integer.parseInt(schedule_id));
+				logger.info("Executed delete pharmacy schedule query successfully...");
+			}
+
+		} catch (DHISIntegratorException | JSONException e) {
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return results;
+	}
+
 
 	private String getAuthToken(String username, String password) {
 		Charset UTF_8 = Charset.forName("UTF-8");
