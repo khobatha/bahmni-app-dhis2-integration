@@ -233,7 +233,7 @@ function deleteDHISSchedule(clicked_id){
 function createDHISSchedule(clicked_id, frequency){
 	console.log('Creating new schedule, clicked_id='+clicked_id+' frequency='+frequency);
 	var reportName;
-	var scheduleFrequency=frequency;
+	var scheduleFrequency;//=frequency;
 	var scheduleTime;
 	var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
 	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
@@ -244,18 +244,21 @@ function createDHISSchedule(clicked_id, frequency){
 				  "<label for='checkbox1'></label>"+"</span></td>";
 
 	if(clicked_id == 'addClinicalSchedulebtn'){
-		reportName=document.getElementById('clinical-progname').value;
+		reportName=document.getElementById('clinical-report-name').value;
 		scheduleTime=document.getElementById('clinical-time').value;
+		scheduleFrequency=document.getElementById('clinical-frequency').value;
 		reportTypeName="MRSGeneric";
 	}
 	else if(clicked_id == 'addPharmacySchedulebtn'){
-		reportName=document.getElementById('pharmacy-progname').value;
+		reportName=document.getElementById('pharmacy-report-name').value;
 		scheduleTime=document.getElementById('pharmacy-time').value;
+		scheduleFrequency=document.getElementById('pharmacy-frequency').value;
 		reportTypeName="ERPGeneric";
 	}
 	else if(clicked_id == 'addLabSchedulebtn'){
-		reportName=document.getElementById('lab-progname').value;
+		reportName=document.getElementById('lab-report-name').value;
 		scheduleTime=document.getElementById('lab-time').value;
+		scheduleFrequency=document.getElementById('lab-frequency').value;
 		reportTypeName="ELISGeneric";
 	}
 
