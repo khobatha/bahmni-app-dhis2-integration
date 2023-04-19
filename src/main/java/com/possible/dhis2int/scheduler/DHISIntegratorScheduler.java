@@ -228,6 +228,8 @@ public class DHISIntegratorScheduler {
 
 			for (List<String> row : results.getRows()) {
 				newschedule.setReportId(Integer.parseInt(row.get(0)));
+				logger.info("Parsed report type ID as "+Integer.parseInt(row.get(0)));
+				logger.info("Set report type ID as "+newschedule.getReportId() );
 			}
 		} catch (DHISIntegratorException e) {
 		// logger.info("Inside loadIntegrationSchedules...");
