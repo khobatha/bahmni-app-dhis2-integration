@@ -32,7 +32,7 @@ mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="CREATE
 																		report_month integer, 
 																		report_year integer);"
 
-mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_report_type (id int not null auto_increment, name varchar(255), primary key(id));"
+mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_report_type (id int not null auto_increment, name varchar(255) unique not null, primary key(id));"
 
 mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="insert into dhis2_report_type (name)
                                                                           values
