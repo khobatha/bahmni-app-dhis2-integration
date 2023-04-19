@@ -38,7 +38,7 @@ mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="insert
                                                                           values
 																		  (MRSGeneric),
 																		  (ERPGeneric),
-																		  (ElisGeneric));"
+																		  (ELISGeneric);"
 
 mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_schedules (id int not null auto_increment, report_name varchar(255), report_id int, frequency varchar(255), created_by varchar(255), created_date date, target_time datetime,last_run datetime, status varchar(255), enabled boolean, primary key(id), foreign key (report_id) references dhis2_report_type(id));"
 
