@@ -125,12 +125,13 @@ public class DatabaseDriver {
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,enabled,created_by,created_date,target_time) VALUES (?, ?, ?, ?, ?, ?)");
+					"INSERT INTO dhis2_schedules (report_name,report_id,enabled,created_by,created_date,target_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 			ps.setString(1, record.getProgramName());
-			ps.setBoolean(2, record.getEnabled());
-			ps.setString(3, record.getCreatedBy());
-			ps.setString(4, record.getCreatedDate().toString());
+			ps.setInt(2, record.getReportId());
+			ps.setBoolean(3, record.getEnabled());
+			ps.setString(4, record.getCreatedBy());
+			ps.setString(5, record.getCreatedDate().toString());
 			//ps.setString(6, record.getTargetDate().toString());
 			ps.executeUpdate();
 
