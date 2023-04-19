@@ -186,6 +186,7 @@ public class DHISIntegratorScheduler {
 
 	@RequestMapping(path = "/create-schedule")
 	public Boolean createIntegrationSchedule(@RequestParam("programName") String progName,
+			@RequestParam("reportTypeName") String reportTypename,
 			@RequestParam("scheduleFrequency") String schedFrequency,
 			@RequestParam("scheduleTime") String schedTime, HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException {
@@ -200,6 +201,22 @@ public class DHISIntegratorScheduler {
 		LocalDate target_date = getMonthlyTargetDate(created_date);
 		newschedule.setCreatedDate(created_date);
 		newschedule.setTargetDate(target_date);
+
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = "+reportTypename+";";
+		String type = "MRSGeneric";
+		Results results = new Results();
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+
+			for (List<String> row : results.getRows()) {
+				newschedule.setReportId(Integer.parseInt(row.get(0)));
+			}
+		} catch (DHISIntegratorException e) {
+		// logger.info("Inside loadIntegrationSchedules...");
+		logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
 
 		logger.info("Inside saveIntegrationSchedules...");
 		try {
