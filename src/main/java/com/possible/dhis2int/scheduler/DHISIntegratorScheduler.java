@@ -220,7 +220,7 @@ public class DHISIntegratorScheduler {
 		newschedule.setCreatedDate(created_date);
 		newschedule.setTargetDate(target_date);
 
-		String sql = "SELECT id, name from dhis2_report_type WHERE name = "+reportTypename+";";
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypename+"';";
 		String type = "MRSGeneric";
 		Results results = new Results();
 		try {
