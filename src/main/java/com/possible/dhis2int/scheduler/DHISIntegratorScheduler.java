@@ -223,7 +223,7 @@ public class DHISIntegratorScheduler {
 
 	@RequestMapping(path = "/create-schedule")
 	public Boolean createIntegrationSchedule(@RequestParam("reportName") String reportName,
-			@RequestParam("reportTypeName") String reportTypename,
+			@RequestParam("reportTypeName") String reportTypeName,
 			@RequestParam("scheduleFrequency") String schedFrequency,
 			@RequestParam("scheduleTime") String schedTime, HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException {
@@ -239,7 +239,7 @@ public class DHISIntegratorScheduler {
 		newschedule.setCreatedDate(created_date);
 		newschedule.setTargetDate(target_date);
 
-		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypename+"';";
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypeName+"';";
 		String type = "MRSGeneric";
 		Results results = new Results();
 		try {
@@ -275,6 +275,7 @@ public class DHISIntegratorScheduler {
 
 	@RequestMapping(path = "/create-pharm-schedule")
 	public Boolean createIntegrationPharmSchedule(@RequestParam("programName") String progName,
+	        @RequestParam("reportTypeName") String reportTypeName,
 			@RequestParam("scheduleFrequency") String schedFrequency,
 			@RequestParam("scheduleTime") String schedTime, 
 			@RequestBody PharmacyPeriodListRequest pharmacyPeriodListRequest,
@@ -290,6 +291,23 @@ public class DHISIntegratorScheduler {
         LocalDate created_date = LocalDate.now();
 		newPharmacySchedule.setCreatedDate(created_date);
 
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypeName+"';";
+		String type = "MRSGeneric";
+		Results results = new Results();
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+
+			for (List<String> row : results.getRows()) {
+				newPharmacySchedule.setReportId(Integer.parseInt(row.get(0)));
+				logger.info("Parsed report type ID as "+Integer.parseInt(row.get(0)));
+				logger.info("Set report type ID as "+newPharmacySchedule.getReportId() );
+			}
+		} catch (DHISIntegratorException e) {
+		// logger.info("Inside loadIntegrationSchedules...");
+		logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
 
 		logger.info("Inside saveIntegrationSchedules...");
 		try {
