@@ -33,7 +33,7 @@ function renderDHISSchedules(){
 		console.log('[render hmis program schedules]');
 		console.log(data);
 		//alert(data);
-		var weeklySchedulesTable = document.getElementById('weekly-program-schedules');
+		var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
 		var monthlySchedulesTable = document.getElementById('monthly-program-schedules');
 		var quarterlySchedulesTable = document.getElementById('quarterly-program-schedules');
 		var schedules=JSON.parse(data);
