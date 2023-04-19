@@ -203,14 +203,14 @@ public class DHISIntegratorScheduler {
 
 
 	@RequestMapping(path = "/create-schedule")
-	public Boolean createIntegrationSchedule(@RequestParam("programName") String progName,
+	public Boolean createIntegrationSchedule(@RequestParam("reportName") String reportName,
 			@RequestParam("reportTypeName") String reportTypename,
 			@RequestParam("scheduleFrequency") String schedFrequency,
 			@RequestParam("scheduleTime") String schedTime, HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException {
 		Boolean created = true;
 		Schedule newschedule = new Schedule();
-		newschedule.setProgName(progName);
+		newschedule.setProgName(reportName);
 		newschedule.setFrequency(schedFrequency);
 		newschedule.setCreatedBy("Test");
 		newschedule.setEnabled(true);
