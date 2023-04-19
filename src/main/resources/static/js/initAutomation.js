@@ -45,7 +45,8 @@ function renderDHISSchedules(){
 							"<label for='checkbox1'></label>"+"</span></td>" +
 							'<td>' + object.programName + '</td>' +
 							'<td>' + object.lastRun + '</td>' +
-							'<td>' + object.status + '</td>';
+							'<td>' + object.status + '</td>' +
+							'<td></td>';
 			if(object.frequency=="weekly"){
 				tr.innerHTML =tempHTML+
 							"<td>"+
