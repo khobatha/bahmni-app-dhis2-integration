@@ -44,24 +44,25 @@ function renderDHISSchedules(){
 							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
 							"<label for='checkbox1'></label>"+"</span></td>" +
 							'<td>' + object.programName + '</td>' +
+							'<td>' + object.frequency + '</td>' +
 							'<td>' + object.lastRun + '</td>' +
 							'<td>' + object.status + '</td>' +
-							'<td></td>';
-			if(object.frequency=="weekly"){
+							'<td>' + object.targetDate + '</td>';
+			if(object.reportId==1){
 				tr.innerHTML =tempHTML+
 							"<td>"+
 							"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
 							"</td>";
 				clinicalSchedulesTable.appendChild(tr);
 			}
-			else if(object.frequency=="monthly"){
+			else if(object.reportId==2){
 				tr.innerHTML =tempHTML+
 							"<td>"+
 							"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
 							"</td>";
 				pharmacySchedulesTable.appendChild(tr);
 			}
-			else if(object.frequency=="quarterly"){
+			else if(object.reportId==3){
 				tr.innerHTML =tempHTML+
 							"<td>"+
 							"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
