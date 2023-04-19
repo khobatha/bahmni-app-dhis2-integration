@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.json.JSONArray;
@@ -90,13 +91,14 @@ public class DHISIntegratorScheduler {
 			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
 		}
 				
-		String sql = "SELECT id, report_name, report_id, frequency, enabled, last_run, status FROM dhis2_schedules WHERE report_id ='"+reportNameId+"';";
+		String sql = "SELECT id, report_name, report_id, frequency, enabled, last_run, target_time, status FROM dhis2_schedules WHERE report_id ='"+reportNameId+"';";
 		JSONArray jsonArray = new JSONArray();
 		ArrayList<Schedule> list = new ArrayList<Schedule>();
 		Results results = new Results();
 		//String type = "MRSGeneric";
 		Schedule schedule;
 		ObjectMapper mapper;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
 		try {
 			results = databaseDriver.executeQuery(sql, type);
@@ -113,7 +115,8 @@ public class DHISIntegratorScheduler {
 				schedule.setFrequency(row.get(3));
 				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1 ? true : false);
 				schedule.setLastRun(row.get(5));
-				schedule.setStatus(row.get(6));
+				schedule.setTargetDate(LocalDate.parse(row.get(6),formatter));
+				schedule.setStatus(row.get(7));
 				list.add(schedule);
 			}
 		
