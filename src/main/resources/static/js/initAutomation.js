@@ -34,8 +34,8 @@ function renderDHISSchedules(){
 		console.log(data);
 		//alert(data);
 		var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
-		var monthlySchedulesTable = document.getElementById('monthly-program-schedules');
-		var quarterlySchedulesTable = document.getElementById('quarterly-program-schedules');
+		var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
+		var LabSchedulesTable = document.getElementById('lab-program-schedules');
 		var schedules=JSON.parse(data);
 		schedules.forEach(function(object) {
 			console.log(object);
@@ -52,21 +52,21 @@ function renderDHISSchedules(){
 							"<td>"+
 							"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
 							"</td>";
-				weeklySchedulesTable.appendChild(tr);
+				clinicalSchedulesTable.appendChild(tr);
 			}
 			else if(object.frequency=="monthly"){
 				tr.innerHTML =tempHTML+
 							"<td>"+
 							"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
 							"</td>";
-				monthlySchedulesTable.appendChild(tr);
+				pharmacySchedulesTable.appendChild(tr);
 			}
 			else if(object.frequency=="quarterly"){
 				tr.innerHTML =tempHTML+
 							"<td>"+
 							"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
 							"</td>";
-				quarterlySchedulesTable.appendChild(tr);
+				LabSchedulesTable.appendChild(tr);
 			}
 			document.getElementById(object.id).checked= object.enabled;
 		});
@@ -232,63 +232,70 @@ function deleteDHISSchedule(clicked_id){
 //create a new schedule and add it to the db
 function createDHISSchedule(clicked_id, frequency){
 	console.log('Creating new schedule, clicked_id='+clicked_id+' frequency='+frequency);
-	var programName;
+	var reportName;
 	var scheduleFrequency=frequency;
 	var scheduleTime;
-	var weeklySchedulesTable = document.getElementById('weekly-program-schedules');
-	var monthlySchedulesTable = document.getElementById('monthly-program-schedules');
-	var quarterlySchedulesTable = document.getElementById('quarterly-program-schedules');
+	var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
+	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
+	var LabSchedulesTable = document.getElementById('lab-program-schedules');
 	var tr = document.createElement('tr');
 	var tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 				  "<input type='checkbox' class='selectSchedule' id='checkbox1' name='options[]' value='1'/>"+
 				  "<label for='checkbox1'></label>"+"</span></td>";
 
-	if(clicked_id == 'addWeeklySchedulebtn'){
-		programName=document.getElementById('weekly-progname').value;
-		scheduleTime=document.getElementById('weekly-time').value;
+	if(clicked_id == 'addClinicalSchedulebtn'){
+		reportName=document.getElementById('clinical-progname').value;
+		scheduleTime=document.getElementById('clinical-time').value;
+		reportTypeName="MRSGeneric";
 	}
-	else if(clicked_id == 'addMonthlySchedulebtn'){
-		programName=document.getElementById('monthly-progname').value;
-		scheduleTime=document.getElementById('monthly-time').value;
+	else if(clicked_id == 'addPharmacySchedulebtn'){
+		reportName=document.getElementById('pharmacy-progname').value;
+		scheduleTime=document.getElementById('pharmacy-time').value;
+		reportTypeName="ERPGeneric";
 	}
-	else if(clicked_id == 'addQuarterlySchedulebtn'){
-		programName=document.getElementById('quarterly-progname').value;
-		scheduleTime=document.getElementById('quarterly-time').value;
+	else if(clicked_id == 'addLabSchedulebtn'){
+		reportName=document.getElementById('lab-progname').value;
+		scheduleTime=document.getElementById('lab-time').value;
+		reportTypeName="ELISGeneric";
 	}
 
-	if(frequency=='weekly'){
+	if(reportTypeName="MRSGeneric"){
 		tr.innerHTML =tempHTML+
-					  '<td>' + programName + '</td>' +
+					  '<td>' + reportName + '</td>' +
 					  '<td>' + '-' + '</td>' +
 					  '<td>' + 'Ready' + '</td>'+
+					  '<td>' + '-' + '</td>'+
 					  "<td>"+
 					  "<label class='switch'><input type='checkbox' checked><span class='slider round'></span></label>"+
 					  "</td>";
-		weeklySchedulesTable.appendChild(tr);
+		clinicalSchedulesTable.appendChild(tr);
 	}
-	else if(frequency=='monthly'){
+	else if(reportTypeName="ERPGeneric"){
 		tr.innerHTML =tempHTML+
-					  '<td>' + programName + '</td>' +
+					  '<td>' + reportName + '</td>' +
 					  '<td>' + '-' + '</td>' +
 					  '<td>' + 'Ready' + '</td>'+
+					  '<td>' + '-' + '</td>'+
 					  "<td>"+
 					  "<label class='switch'><input type='checkbox' checked><span class='slider round'></span></label>"+
 					  "</td>";
-		monthlySchedulesTable.appendChild(tr);
+		pharmacySchedulesTable.appendChild(tr);
 	}
-	else if(frequency=='quarterly'){
+	else if(reportTypeName="ELISGeneric"){
 		tr.innerHTML =tempHTML+
-					  '<td>' + programName + '</td>' +
+					  '<td>' + reportName + '</td>' +
 					  '<td>' + '-' + '</td>' +
 					  '<td>' + 'Ready' + '</td>'+
+					  '<td>' + '-' + '</td>'+
 					  "<td>"+
 					  "<label class='switch'><input type='checkbox' checked><span class='slider round'></span></label>"+
 					  "</td>";
-		quarterlySchedulesTable.appendChild(tr);
+		LabSchedulesTable.appendChild(tr);
 	}
 
 	var parameters = {
-		programName : programName,
+		reportName : reportName,
+		reportTypeName: reportTypeName,
 		scheduleFrequency : scheduleFrequency,
 		scheduleTime : scheduleTime
 	};
