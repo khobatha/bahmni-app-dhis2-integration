@@ -72,11 +72,29 @@ public class DHISIntegratorScheduler {
 	@RequestMapping(path = "/get-schedules")
 	public JSONArray getIntegrationSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException, DHISIntegratorException, Exception {
-		String sql = "SELECT id, report_name, frequency, enabled, last_run, status FROM dhis2_schedules;";
+
+		String sql0 = "SELECT id, name from dhis2_report_type WHERE name = 'MRSGeneric'";
+		String type = "MRSGeneric";
+		Results results0 = new Results();
+		String reportNameId = "";
+		try {
+			results0 = databaseDriver.executeQuery(sql0, type);
+
+			for (List<String> row : results0.getRows()) {
+				reportNameId = row.get(0);
+			}
+		} catch (DHISIntegratorException e) {
+		// logger.info("Inside loadIntegrationSchedules...");
+		logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+				
+		String sql = "SELECT id, report_name, frequency, enabled, last_run, status FROM dhis2_schedules WHERE report_id ="+reportNameId+";";
 		JSONArray jsonArray = new JSONArray();
 		ArrayList<Schedule> list = new ArrayList<Schedule>();
 		Results results = new Results();
-		String type = "MRSGeneric";
+		//String type = "MRSGeneric";
 		Schedule schedule;
 		ObjectMapper mapper;
 
