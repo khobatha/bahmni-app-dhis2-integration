@@ -34,6 +34,12 @@ mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="CREATE
 
 mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_report_type (id int not null auto_increment, name varchar(255), primary key(id));"
 
+mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="insert into dhis2_report_type (name)
+                                                                          values
+																		  (MRSGeneric),
+																		  (ERPGeneric),
+																		  (ElisGeneric));"
+
 mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_schedules (id int not null auto_increment, report_name varchar(255), report_id int, frequency varchar(255), created_by varchar(255), created_date date, target_time datetime,last_run datetime, status varchar(255), enabled boolean, primary key(id), foreign key (report_id) references dhis2_report_type(id));"
 
 mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_pharmacy_periods (id int not null auto_increment, dhis2_schedule_id int , period int, created_by varchar(255), created_date date, start_time datetime, end_time datetime, last_run datetime, status varchar(255), enabled boolean, primary key(id), foreign key (dhis2_schedule_id) references dhis2_schedules(id));"
