@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class Schedule {
 	private int id;
 	private String programName;
+	private int reportId;
 	private String lastRun;
 	private String status;
 	private LocalDate created_date;
@@ -19,6 +20,14 @@ public class Schedule {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getReportId() {
+		return reportId;
+	}
+
+	public void setReportId(int reportId) {
+		this.reportId = reportId;
 	}
 
 	public String getProgramName() {
