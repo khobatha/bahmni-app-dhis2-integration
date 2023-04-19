@@ -90,7 +90,7 @@ public class DHISIntegratorScheduler {
 			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
 		}
 				
-		String sql = "SELECT id, report_name, frequency, enabled, last_run, status FROM dhis2_schedules WHERE report_id ="+reportNameId+";";
+		String sql = "SELECT id, report_name, frequency, enabled, last_run, status FROM dhis2_schedules WHERE report_id ='"+reportNameId+"'';";
 		JSONArray jsonArray = new JSONArray();
 		ArrayList<Schedule> list = new ArrayList<Schedule>();
 		Results results = new Results();
