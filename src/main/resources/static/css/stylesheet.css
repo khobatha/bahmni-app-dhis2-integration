@@ -389,6 +389,7 @@ table.table .avatar {
 }	
 .modal form label {
     font-weight: normal;
+    margin: 10px;
 }	
 
 .modal-header{
