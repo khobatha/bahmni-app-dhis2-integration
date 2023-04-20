@@ -115,7 +115,7 @@ public class DHISIntegratorScheduler {
 				schedule.setFrequency(row.get(3));
 				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1 ? true : false);
 				schedule.setLastRun(row.get(5));
-				schedule.setTargetDate(LocalDateTime.parse(row.get(6),formatter).toLocalDate());
+				schedule.setTargetDate(LocalDate.parse(row.get(6),formatter));
 				logger.info("Target date is "+LocalDate.parse(row.get(6),formatter));
 				schedule.setStatus(row.get(7));
 				list.add(schedule);
