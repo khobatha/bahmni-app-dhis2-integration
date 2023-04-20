@@ -363,7 +363,7 @@ table.table .avatar {
     margin: 15% auto; /* 15% from the top and centered */
     padding: 10px;
     /*border: 1px solid #0f941aa1;*/
-    width:800px; /*Set the width of the modal here */
+    width:700px; /*Set the width of the modal here */
 }
 
 .modal-footer{
@@ -484,6 +484,7 @@ input:checked + .slider:before {
 .datetime-row label {
     font-weight: bold;
     margin-right: 10px;
+    font-weight: bold;
   }
   
   .datetime-row input[type=datetime-local] {
@@ -501,6 +502,7 @@ input:checked + .slider:before {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
   }
   
   .datetime-row label {
@@ -518,7 +520,7 @@ input:checked + .slider:before {
   /* Adjustments for column alignment */
   .datetime-row label:first-of-type {
     flex-basis: 20%;
-    text-align: right;
+    text-align: left;
     margin-right: 10px;
   }
   
