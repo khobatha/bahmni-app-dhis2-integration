@@ -358,12 +358,12 @@ table.table .avatar {
     border-top-right-radius: calc(0.3rem - 1px);
     font-size: 14px;
     /*left: 10px;*/
-    /*top: 30px;*/
+    top: 30px;
     /*background-color: rgb(8, 46, 129);*/
-    margin: 10% auto; /* 15% from the top and centered */
+    margin: 15% auto; /* 15% from the top and centered */
     padding: 10px;
     /*border: 1px solid #0f941aa1;*/
-    /*width:70vw; /*Set the width of the modal here */
+    width:800px; /*Set the width of the modal here */
 }
 
 .modal-footer{
