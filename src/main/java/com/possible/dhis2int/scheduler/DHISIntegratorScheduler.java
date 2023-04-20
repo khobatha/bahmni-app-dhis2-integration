@@ -98,7 +98,7 @@ public class DHISIntegratorScheduler {
 		//String type = "MRSGeneric";
 		Schedule schedule;
 		ObjectMapper mapper;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
 		try {
 			results = databaseDriver.executeQuery(sql, type);
