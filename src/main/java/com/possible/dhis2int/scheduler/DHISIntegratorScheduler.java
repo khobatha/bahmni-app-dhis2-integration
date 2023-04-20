@@ -115,7 +115,7 @@ public class DHISIntegratorScheduler {
 				schedule.setFrequency(row.get(3));
 				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1 ? true : false);
 				schedule.setLastRun(row.get(5));
-				schedule.setTargetDate(LocalDate.parse(row.get(6),formatter));
+				schedule.setTargetDate(LocalDate.parse(row.get(6),formatter).toString());
 				logger.info("Target date is "+LocalDate.parse(row.get(6),formatter));
 				schedule.setStatus(row.get(7));
 				list.add(schedule);
@@ -239,7 +239,7 @@ public class DHISIntegratorScheduler {
 		newschedule.setEnabled(true);
 
 		LocalDate created_date = LocalDate.now();
-		LocalDate target_date = getMonthlyTargetDate(created_date);
+		String target_date = getMonthlyTargetDate(created_date).toString();
 		newschedule.setCreatedDate(created_date);
 		newschedule.setTargetDate(target_date);
 
