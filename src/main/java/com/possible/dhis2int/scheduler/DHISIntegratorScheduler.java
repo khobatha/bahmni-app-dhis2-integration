@@ -486,7 +486,9 @@ public class DHISIntegratorScheduler {
 	}
 
 	private Boolean isDue(Schedule schedule) {
-		return schedule.getTargetDate().isBefore(LocalDate.now());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime scheduleTargetDate = LocalDateTime.parse(schedule.getTargetDate(), formatter);
+		return scheduleTargetDate.toLocalDate().isBefore(LocalDate.now());
 	}
 
 	private ArrayList<Schedule> getIntegrationSchedules()
@@ -509,7 +511,7 @@ public class DHISIntegratorScheduler {
 				schedule.setFrequency(row.get(2));
 				schedule.setLastRun(row.get(3));
 				schedule.setStatus(row.get(4));
-				schedule.setTargetDate(LocalDate.parse(row.get(5).substring(0, 10)));
+				schedule.setTargetDate(LocalDate.parse(row.get(5).substring(0, 10)).toString());
 				list.add(schedule);
 
 			}
@@ -596,8 +598,10 @@ public class DHISIntegratorScheduler {
 							// send report
 							logger.info("The following report is due " + currSchedule.getProgramName());
 							// extract period
-							Integer year = currSchedule.getTargetDate().getYear();
-							Integer month = currSchedule.getTargetDate().getMonthValue();
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        					LocalDateTime dateTime = LocalDateTime.parse(currSchedule.getTargetDate(), formatter);
+							Integer year = dateTime.getYear();
+							Integer month = dateTime.getMonthValue();
 							String comment = "DHISIntegratorScheduler submitted " + currSchedule.getProgramName()
 									+ " on " + LocalDate.now();
 
