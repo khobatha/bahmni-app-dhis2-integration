@@ -357,9 +357,9 @@ table.table .avatar {
 .modal-content {
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
-    font-size: 14px;
-    left: 50px;
-    top: 50px;
+    font-size: 12px;
+    left: 10px;
+    top: 30px;
     background-color: rgb(8, 46, 129);
     margin: 15% auto; /* 15% from the top and centered */
     padding: 10px;
