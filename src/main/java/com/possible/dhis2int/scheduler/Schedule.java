@@ -9,7 +9,7 @@ public class Schedule {
 	private String lastRun;
 	private String status;
 	private LocalDate created_date;
-	private LocalDate target_date;
+	private String target_date;
 	private String created_by;
 	private String frequency;
 	private Boolean enabled;
@@ -78,11 +78,11 @@ public class Schedule {
 		this.created_date = created_date;
 	}
 
-	public LocalDate getTargetDate() {
+	public String getTargetDate() {
 		return target_date;
 	}
 
-	public void setTargetDate(LocalDate target_date) {
+	public void setTargetDate(String target_date) {
 		this.target_date = target_date;
 	}
 
