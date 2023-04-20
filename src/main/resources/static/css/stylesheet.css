@@ -366,13 +366,13 @@ table.table .avatar {
     /*width:70vw; /*Set the width of the modal here */
 }
 
-.modal .modal-footer{
+.modal-footer{
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 0 0 3px 3px;
 }
-.modal .modal-title {
+.modal-title {
     display: inline-block;
     font-family: Arial,Helvetica,sans-serif;
     font-size: 20;
