@@ -478,3 +478,50 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+
+/* PHARMACY DATETIME PICKERS TABLE*/
+.datetime-row label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .datetime-row input[type=datetime-local] {
+    width: 45%;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Datetime Row */
+  .datetime-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .datetime-row label {
+    font-weight: bold;
+  }
+  
+  .datetime-row input[type=datetime-local] {
+    width: 45%;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Adjustments for column alignment */
+  .datetime-row label:first-of-type {
+    flex-basis: 20%;
+    text-align: right;
+    margin-right: 10px;
+  }
+  
+  .datetime-row input[type=datetime-local] {
+    flex-basis: 45%;
+  }

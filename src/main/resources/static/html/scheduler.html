@@ -46,11 +46,11 @@
 	<div class="dhisWrapper">
 		<div id="tabs">
 			<ul id="scheduler-tabs" class="nav nav-tabs">
-				<li class="nav-item"><a href="#tab-weekly" class="nav-link active" data-toggle="tab">Clinical</a></li>
-				<li class="nav-item"><a href="#tab-monthly" class="nav-link" data-toggle="tab">Pharmacy</a></li>
-				<li class="nav-item"><a href="#tab-quarterly" class="nav-link" data-toggle="tab">Laboratory</a></li>
+				<li class="nav-item"><a href="#tab-clinical" class="nav-link active" data-toggle="tab">Clinical</a></li>
+				<li class="nav-item"><a href="#tab-pharmacy" class="nav-link" data-toggle="tab">Pharmacy</a></li>
+				<li class="nav-item"><a href="#tab-lab" class="nav-link" data-toggle="tab">Laboratory</a></li>
 			</ul>
-			<div id="tab-weekly" class="tab-pane fade show active">
+			<div id="tab-clinical" class="tab-pane fade show active">
 					<div class="container-xl">
 						<div class="table-responsive">
 							<div class="table-wrapper">
@@ -193,8 +193,8 @@
 					</div>
 
 			</div>
-			<!-- List Monthly Schedules HTML -->
-			<div id="tab-monthly" class="tab-pane fade">
+			<!-- List Pharmacy Schedules HTML -->
+			<div id="tab-pharmacy" class="tab-pane fade">
 				<div class="container-xl">
 					<div class="table-responsive">
 						<div class="table-wrapper">
@@ -204,8 +204,8 @@
 										<h2>Scheduled Pharmacy Reports</h2>
 									</div>
 									<div class="col-sm-6">
-										<a href="#addMonthlyScheduleModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>New</span></a>
-										<a href="#deleteMonthlyScheduleModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+										<a href="#addPharmacyScheduleModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>New</span></a>
+										<a href="#deletePharmacyScheduleModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 									</div>
 								</div>
 							</div>
@@ -229,13 +229,13 @@
 						</div>
 					</div>        
 				</div>
-				<!-- Add Monthly Schedule Modal HTML -->
-				<div id="addMonthlyScheduleModal" class="modal fade">
+				<!-- Add Pharmacy Schedule Modal HTML -->
+				<div id="addPharmacyScheduleModal" class="modal fade">
 					<div class="modal-dialog">
-						<div class="modal-content" id="addMonthlyScheduleModalContent">
+						<div class="modal-content" id="addPharmacyScheduleModalContent">
 							<form>
 								<div class="modal-header">						
-									<h4 class="modal-title">Create monthly schedules</h4>
+									<h4 class="modal-title">Create pharmacy schedules</h4>
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								</div>
 								<div class="modal-body">	
@@ -245,37 +245,54 @@
 										<select name="pharmacy-report-name" id="pharmacy-report-name" required>
 										</select>
 									</div>
-									<div class="form-group">
+									<!--div class="form-group">
 										<label>Frequency</label>
-										<!--input type="text" class="form-control" required-->
-										<select name="monthly-frequency" id="monthly-frequency" required>
+										<input type="text" class="form-control" required>
+										<select name="pharmacy-frequency" id="pharmacy-frequency" required>
 											<option selected value="monthly">Monthly</option>
 										</select>
-									</div>
+									</div-->
 									<div class="form-group">
 										<label>Reporting Periods:</label>
-										<label for="datetime-picker">Select first period:</label>
-										<input type="datetime-local" id="start-date" name="datetime-picker">
-
-										<button class="btn btn-primary" id="generate-schedule">Generate Schedule</button>
-										<div class="mt-4" id="schedule"></div>
+										<div class="datetime-row">
+											<label for="datetime1-1">Label 1:</label>
+											<label for="datetime1-1">Start Time:</label>
+											<input type="datetime-local" id="datetime1-1" name="datetime1-1">
+											<label for="datetime1-2">End Time:</label>
+											<input type="datetime-local" id="datetime1-2" name="datetime1-2">
+										  </div>
+										  <div class="datetime-row">
+											<label for="datetime2-1">Label 2:</label>
+											<label for="datetime2-1">Start Time:</label>
+											<input type="datetime-local" id="datetime2-1" name="datetime2-1">
+											<label for="datetime2-2">End Time:</label>
+											<input type="datetime-local" id="datetime2-2" name="datetime2-2">
+										  </div>
+										  <!-- Repeat for rows 3-12 -->
+										  <div class="datetime-row">
+											<label for="datetime12-1">Label 12:</label>
+											<label for="datetime12-1">Start Time:</label>
+											<input type="datetime-local" id="datetime12-1" name="datetime12-1">
+											<label for="datetime12-2">End Time:</label>
+											<input type="datetime-local" id="datetime12-2" name="datetime12-2">
+										  </div>
 									</div>
 								</div>
 								<div class="modal-footer">
 									<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-									<input type="button" class="btn btn-success" value="Save" id="addPharmacySchedulebtn" onclick="createDHISSchedule(this.id, document.getElementById('monthly-frequency').value)">
+									<input type="button" class="btn btn-success" value="Save" id="addPharmacySchedulebtn" onclick="createDHISSchedule(this.id, document.getElementById('pharmacy-frequency').value)">
 								</div>
 							</form>
 						</div>
 					</div>
 				</div>
-				<!-- Edit Monthly Schedules Modal HTML -->
-				<div id="editMonthlyScheduleModal" class="modal fade">
+				<!-- Edit Pharmacy Schedules Modal HTML -->
+				<div id="editPharmacyScheduleModal" class="modal fade">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<form>
 								<div class="modal-header">						
-									<h4 class="modal-title">Edit monthly schedules</h4>
+									<h4 class="modal-title">Edit pharmacy schedules</h4>
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								</div>
 								<div class="modal-body">					
@@ -304,13 +321,13 @@
 						</div>
 					</div>
 				</div>
-				<!-- Delete Monthly Schedules Modal HTML -->
-				<div id="deleteMonthlyScheduleModal" class="modal fade">
+				<!-- Delete Pharmacy Schedules Modal HTML -->
+				<div id="deletePharmacyScheduleModal" class="modal fade">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<form>
 								<div class="modal-header">						
-									<h4 class="modal-title">Delete monthly schedules</h4>
+									<h4 class="modal-title">Delete pharmacy schedules</h4>
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								</div>
 								<div class="modal-body">					
@@ -319,7 +336,7 @@
 								</div>
 								<div class="modal-footer">
 									<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-									<input type="submit" class="btn btn-danger" value="Delete" id="deleteMonthlySchedulebtn" onclick="deleteDHISSchedule(this.id)">
+									<input type="submit" class="btn btn-danger" value="Delete" id="deletePharmacySchedulebtn" onclick="deleteDHISSchedule(this.id)">
 								</div>
 							</form>
 						</div>
@@ -328,8 +345,8 @@
 
 
 			</div>
-			<!-- List Quarterly Schedules HTML -->
-			<div id="tab-quarterly" class="tab-quarterly tab-pane fade">
+			<!-- List Lab Schedules HTML -->
+			<div id="tab-lab" class="tab-lab tab-pane fade">
 				<div class="container-xl">
 					<div class="table-responsive">
 						<div class="table-wrapper">
@@ -339,8 +356,8 @@
 										<h2>Scheduled Laboratory Reports</h2>
 									</div>
 									<div class="col-sm-6">
-										<a href="#addQuarterlyScheduleModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>New</span></a>
-										<a href="#deleteQuarterlyScheduleModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+										<a href="#addLabScheduleModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>New</span></a>
+										<a href="#deleteLabScheduleModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 									</div>
 								</div>
 							</div>
@@ -364,13 +381,13 @@
 						</div>
 					</div>        
 				</div>
-				<!-- Add Quarterly Schedules Modal HTML -->
-				<div id="addQuarterlyScheduleModal" class="modal fade">
+				<!-- Add Lab Schedules Modal HTML -->
+				<div id="addLabScheduleModal" class="modal fade">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<form>
 								<div class="modal-header">						
-									<h4 class="modal-title">Create quarterly schedules</h4>
+									<h4 class="modal-title">Create lab schedules</h4>
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								</div>
 								<div class="modal-body">					
@@ -383,15 +400,15 @@
 									<div class="form-group">
 										<label>Frequency</label>
 										<!--input type="text" class="form-control" required-->
-										<select name="quarterly-frequency" id="quarterly-frequency" required>
-											<!--option value="weekly">Weekly</option>
-											<option value="monthly">Monthly</option!-->
+										<select name="lab-frequency" id="lab-frequency" required>
+											<option value="weekly">Weekly</option>
+											<option value="monthly">Monthly</option>
 											<option selected value="quarterly">Quarterly</option>
 										</select>
 									</div>
 									<div class="form-group">
 										<label>Time</label>
-										<select name="quarterly-time" id="quarterly-time" required>
+										<select name="lab-time" id="lab-time" required>
 											<option value="17:00">17:00</option>
 											<option value="18:00">18:00</option>
 											<option value="19:00">19:00</option>
@@ -409,19 +426,19 @@
 								</div>
 								<div class="modal-footer">
 									<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-									<input type="button" class="btn btn-success" value="Save" id="addLabSchedulebtn" onclick="createDHISSchedule(this.id, document.getElementById('quarterly-frequency').value)">
+									<input type="button" class="btn btn-success" value="Save" id="addLabSchedulebtn" onclick="createDHISSchedule(this.id, document.getElementById('lab-frequency').value)">
 								</div>
 							</form>
 						</div>
 					</div>
 				</div>
-				<!-- Edit Quarterly Schedules Modal HTML -->
-				<div id="editQuarterlyScheduleModal" class="modal fade">
+				<!-- Edit Lab Schedules Modal HTML -->
+				<div id="editLabScheduleModal" class="modal fade">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<form>
 								<div class="modal-header">						
-									<h4 class="modal-title">Edit quarterly schedules</h4>
+									<h4 class="modal-title">Edit lab schedules</h4>
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								</div>
 								<div class="modal-body">					
@@ -450,13 +467,13 @@
 						</div>
 					</div>
 				</div>
-				<!-- Delete Quarterly Schedules Modal HTML -->
-				<div id="deleteQuarterlyScheduleModal" class="modal fade">
+				<!-- Delete Lab Schedules Modal HTML -->
+				<div id="deleteLabScheduleModal" class="modal fade">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<form>
 								<div class="modal-header">						
-									<h4 class="modal-title">Delete quarterly schedules</h4>
+									<h4 class="modal-title">Delete lab schedules</h4>
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								</div>
 								<div class="modal-body">					
@@ -465,7 +482,7 @@
 								</div>
 								<div class="modal-footer">
 									<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-									<input type="submit" class="btn btn-danger" value="Delete" id="deleteQuarterlySchedulebtn" onclick="deleteDHISSchedule(this.id)">
+									<input type="submit" class="btn btn-danger" value="Delete" id="deleteLabSchedulebtn" onclick="deleteDHISSchedule(this.id)">
 								</div>
 							</form>
 						</div>
