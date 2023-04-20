@@ -40,10 +40,6 @@ function renderDHISSchedules(){
 		schedules.forEach(function(object) {
 			console.log(object);
 			var tr = document.createElement('tr');
-			//const datetimeObj = JSON.parse(object.targetDate);
-			//const datetimeString = datetimeObj.datetime;
-			//const datetime = new Date(datetimeString);
-			//const localizedDatetime = datetime.toLocaleString();
 			var tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
 							"<label for='checkbox1'></label>"+"</span></td>" +
