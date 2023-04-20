@@ -98,7 +98,7 @@ public class DHISIntegratorScheduler {
 		//String type = "MRSGeneric";
 		Schedule schedule;
 		ObjectMapper mapper;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
 
 		try {
 			results = databaseDriver.executeQuery(sql, type);
@@ -115,7 +115,7 @@ public class DHISIntegratorScheduler {
 				schedule.setFrequency(row.get(3));
 				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1 ? true : false);
 				schedule.setLastRun(row.get(5));
-				schedule.setTargetDate(LocalDate.parse(row.get(6),formatter));
+				schedule.setTargetDate(LocalDateTime.parse(row.get(6),formatter).toLocalDate());
 				logger.info("Target date is "+LocalDate.parse(row.get(6),formatter));
 				schedule.setStatus(row.get(7));
 				list.add(schedule);
