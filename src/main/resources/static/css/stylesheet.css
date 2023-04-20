@@ -364,7 +364,6 @@ table.table .avatar {
     margin: 15% auto; /* 15% from the top and centered */
     padding: 10px;
     border: 1px solid #0f941aa1;
-    width: 800px; /* Could be more or less, depending on screen size */
 }
 
 .modal .modal-footer{
