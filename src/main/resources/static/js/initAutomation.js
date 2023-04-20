@@ -47,7 +47,7 @@ function renderDHISSchedules(){
 							'<td>' + object.frequency + '</td>' +
 							'<td>' + object.lastRun + '</td>' +
 							'<td>' + object.status + '</td>' +
-							'<td></td>';
+							'<td>' + object.targetDate + '</td>';
 			if(object.reportId==1){
 				tr.innerHTML =tempHTML+
 							"<td>"+
