@@ -343,7 +343,7 @@ table.table .avatar {
 .modal {
     display: none; /* Hide the modal by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 9999; /* Sit on top */
     top: 0;/* old: 50% */
     left: 0; /* old: 30% */
     width: 100%;
