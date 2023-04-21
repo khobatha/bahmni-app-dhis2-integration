@@ -270,6 +270,7 @@ function createDHISSchedule(clicked_id, frequency){
 	var scheduleTime;
 	var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
 	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
+	var isCustomReportingPeriods=document.getElementById('is-custom-monthly-reporting-periods-checkbox');
 	var LabSchedulesTable = document.getElementById('lab-program-schedules');
 	var tr = document.createElement('tr');
 	var tempHTML ="<td>"+"<span class='custom-checkbox'>"+
@@ -283,10 +284,15 @@ function createDHISSchedule(clicked_id, frequency){
 		reportTypeName="MRSGeneric";
 	}
 	else if(clicked_id == 'addPharmacySchedulebtn'){
-		reportName=document.getElementById('pharmacy-report-name').value;
-		scheduleTime=document.getElementById('pharmacy-time').value;
-		scheduleFrequency=document.getElementById('pharmacy-frequency').value;
-		reportTypeName="ERPGeneric";
+		if(!isCustomReportingPeriods.checked){
+			reportName=document.getElementById('pharmacy-report-name').value;
+			scheduleTime=document.getElementById('pharmacy-time').value;
+			scheduleFrequency=document.getElementById('pharmacy-frequency').value;
+			reportTypeName="ERPGeneric";
+		}else{
+
+
+		}
 	}
 	else if(clicked_id == 'addLabSchedulebtn'){
 		reportName=document.getElementById('lab-report-name').value;
