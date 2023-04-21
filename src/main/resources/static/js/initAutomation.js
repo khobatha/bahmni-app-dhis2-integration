@@ -47,7 +47,7 @@ function addPharmScheduleFrequencyEventListener(){
 function addCustomPeriodCheckboxEventListener(){
 // if the custom monthly reporting periods checkbox is selected, display the custom monthly reporting periods
 // entry table
-		var checkbox = document.getElementById("is-custom-monthly-reporting-periods");
+		var checkbox = document.getElementById("is-custom-monthly-reporting-periods-checkbox");
 		var div = document.getElementById("custom-monthly-reporting-periods-entry-table");
 	
 		checkbox.addEventListener("change", function() {
