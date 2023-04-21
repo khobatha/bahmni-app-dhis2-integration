@@ -96,12 +96,12 @@
 									</div>
 									<div class="modal-body">					
 										<div class="form-group">
-											<label>Name</label>
+											<label>Name:</label>
 											<select name="clinical-report-name" id="clinical-report-name" required>
 											</select>
 										</div>
 										<div class="form-group">
-											<label>Frequency</label>
+											<label>Frequency:</label>
 											<!--input type="text" class="form-control" required-->
 											<select name="clinical-frequency" id="clinical-frequency" required>
 												<option selected value="weekly">Weekly</option>
@@ -110,21 +110,8 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label>Time</label>
-											<select name="clinical-time" id="clinical-time" required>
-												<option value="17:00">17:00</option>
-												<option value="18:00">18:00</option>
-												<option value="19:00">19:00</option>
-												<option value="20:00">20:00</option>
-												<option value="21:00">21:00</option>
-												<option value="22:00">22:00</option>
-												<option value="23:00">23:00</option>
-												<option value="00:00">00:00</option>
-												<option value="01:00">01:00</option>
-												<option value="02:00">02:00</option>
-												<option value="03:00">03:00</option>
-												<option value="04:00">04:00</option>
-											</select>
+											<label>Time:</label>
+											<input type="time" id="clinical-time" name="clinical-time" value="09:00" required>
 										</div>				
 									</div>
 									<div class="modal-footer">
@@ -240,13 +227,13 @@
 								</div>
 								<div class="modal-body">	
 									<div class="form-group">
-										<label>Name</label>
+										<label>Name:</label>
 										<!--input type="text" class="form-control" required-->
 										<select name="pharmacy-report-name" id="pharmacy-report-name" required>
 										</select>
 									</div>
 									<div class="form-group">
-										<label>Frequency</label>
+										<label>Frequency:</label>
 										<select name="pharmacy-frequency" id="pharmacy-frequency" required>
 											<option selected value="weekly">Weekly</option>
 											<option selected value="monthly">Monthly</option>
@@ -340,6 +327,10 @@
 										  </div>
 										  </div>
 									</div>
+									<div class="form-group">
+										<label>Time:</label>
+										<input type="time" id="pharmacy-time" name="pharmacy-time" value="09:00" required>
+									</div>	
 								</div>
 								<div class="modal-footer">
 									<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -455,13 +446,13 @@
 								</div>
 								<div class="modal-body">					
 									<div class="form-group">
-										<label>Name</label>
+										<label>Name:</label>
 										<!--input type="text" class="form-control" required-->
 										<select name="lab-report-name" id="lab-report-name" required>
 										</select>
 									</div>
 									<div class="form-group">
-										<label>Frequency</label>
+										<label>Frequency:</label>
 										<!--input type="text" class="form-control" required-->
 										<select name="lab-frequency" id="lab-frequency" required>
 											<option value="weekly">Weekly</option>
@@ -470,21 +461,8 @@
 										</select>
 									</div>
 									<div class="form-group">
-										<label>Time</label>
-										<select name="lab-time" id="lab-time" required>
-											<option value="17:00">17:00</option>
-											<option value="18:00">18:00</option>
-											<option value="19:00">19:00</option>
-											<option value="20:00">20:00</option>
-											<option value="21:00">21:00</option>
-											<option value="22:00">22:00</option>
-											<option value="23:00">23:00</option>
-											<option value="00:00">00:00</option>
-											<option value="01:00">01:00</option>
-											<option value="02:00">02:00</option>
-											<option value="03:00">03:00</option>
-											<option value="04:00">04:00</option>
-										</select>
+										<label>Time:</label>
+										<input type="time" id="lab-time" name="lab-time" value="09:00" required>
 									</div>				
 								</div>
 								<div class="modal-footer">
