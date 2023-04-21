@@ -25,6 +25,7 @@ $(document).ready(
 			initDHISProgramNameDropdowns();
 			renderDHISSchedules();
 			addPharmScheduleFrequencyEventListener();
+			addCustomPeriodCheckboxEventListener();
 			
 });
 
@@ -32,7 +33,7 @@ function addPharmScheduleFrequencyEventListener(){
 // if monthly frequency selected for a pharmacy report, display checkbox for determining if report has
 // custom monthly periods or not
 	var select = document.getElementById("pharmacy-frequency");
-	var checkbox = document.getElementById("isCustomMonthlyReportingPeriods");
+	var checkbox = document.getElementById("is-custom-monthly-reporting-periods");
 
 	select.addEventListener("change", function() {
 	if (select.value === "monthly") {
@@ -42,6 +43,21 @@ function addPharmScheduleFrequencyEventListener(){
 	}
 	});
 }
+
+function addCustomPeriodCheckboxEventListener(){
+// if the custom monthly reporting periods checkbox is selected, display the custom monthly reporting periods
+// entry table
+		var checkbox = document.getElementById("is-custom-monthly-reporting-periods");
+		var div = document.getElementById("custom-monthly-reporting-periods-entry-table");
+	
+		checkbox.addEventListener("change", function() {
+		if (checkbox.checked) {
+			div.style.display = "block";
+		} else {
+			div.style.display = "none";
+		}
+		});
+	}
 
 //populate and render list of schedules from db
 function renderDHISSchedules(){
