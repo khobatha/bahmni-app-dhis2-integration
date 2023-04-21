@@ -245,13 +245,18 @@
 										<select name="pharmacy-report-name" id="pharmacy-report-name" required>
 										</select>
 									</div>
-									<!--div class="form-group">
+									<div class="form-group">
 										<label>Frequency</label>
 										<input type="text" class="form-control" required>
 										<select name="pharmacy-frequency" id="pharmacy-frequency" required>
+											<option selected value="weekly">Weekly</option>
 											<option selected value="monthly">Monthly</option>
+											<option selected value="quarterly">Quarterly</option>
 										</select>
-									</div-->
+									</div>
+									<div id="isCustomMonthlyReportingPeriods" style="display:none;">
+										<input type="checkbox" name="myCheckbox" value="checkbox"> Custom Reporting Periods?
+									</div>
 									<div class="form-group">
 										<label>Reporting Periods:</label>
 										<div class="datetime-row">

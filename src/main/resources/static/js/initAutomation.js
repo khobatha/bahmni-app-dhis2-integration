@@ -24,8 +24,24 @@ $(document).ready(
 			initTabs();
 			initDHISProgramNameDropdowns();
 			renderDHISSchedules();
+			addPharmScheduleFrequencyEventListener();
 			
 });
+
+function addPharmScheduleFrequencyEventListener(){
+// if monthly frequency selected for a pharmacy report, display checkbox for determining if report has
+// custom monthly periods or not
+	var select = document.getElementById("pharmacy-frequency");
+	var checkbox = document.getElementById("isCustomMonthlyReportingPeriods");
+
+	select.addEventListener("change", function() {
+	if (select.value === "monthly") {
+		checkbox.style.display = "block";
+	} else {
+		checkbox.style.display = "none";
+	}
+	});
+}
 
 //populate and render list of schedules from db
 function renderDHISSchedules(){
