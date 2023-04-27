@@ -3,6 +3,7 @@ var downloadUrl = '/dhis-integration/download?name=NAME&year=YEAR&month=MONTH&is
 var submitUrl = '/dhis-integration/submit-to-dhis';
 var getSchedulesUrl = '/dhis-integration/get-schedules';
 var createScheduleUrl = '/dhis-integration/create-schedule';
+var createPharmScheduleUrl = '/dhis-integration/create-pharm-schedule';
 var deleteScheduleUrl='/dhis-integration/delete-schedule';
 var disenScheduleUrl='/dhis-integration/disable-enable-schedule';
 var submitUrlAtr = '/dhis-integration/submit-to-dhis-atr';
@@ -265,6 +266,9 @@ function deleteDHISSchedule(clicked_id){
 //create a new schedule and add it to the db
 function createDHISSchedule(clicked_id, frequency){
 	console.log('Creating new schedule, clicked_id='+clicked_id+' frequency='+frequency);
+	var parameters=[];
+	var submitTo;
+	var pharmReportingPeriods=[];
 	var reportName;
 	var scheduleFrequency;//=frequency;
 	var scheduleTime;
@@ -284,13 +288,21 @@ function createDHISSchedule(clicked_id, frequency){
 		reportTypeName="MRSGeneric";
 	}
 	else if(clicked_id == 'addPharmacySchedulebtn'){
-		if(!isCustomReportingPeriods.checked){
-			reportName=document.getElementById('pharmacy-report-name').value;
-			scheduleTime=document.getElementById('pharmacy-time').value;
-			scheduleFrequency=document.getElementById('pharmacy-frequency').value;
-			reportTypeName="ERPGeneric";
-		}else{
-
+		reportName=document.getElementById('pharmacy-report-name').value;
+		scheduleTime=document.getElementById('pharmacy-time').value;
+		scheduleFrequency=document.getElementById('pharmacy-frequency').value;
+		reportTypeName="ERPGeneric";
+		if(isCustomReportingPeriods.checked){
+		// if this pharmacy report has custom reporting periods, read them
+			for (let i = 1; i <= 12; i++) {
+				let startDatetimePicker = document.getElementById(`reporting_period${i}-start`);
+				let endDatetimePicker = document.getElementById(`reporting_period${i}-end`);
+				
+				let startDatetime = startDatetimePicker.value;
+				let endDatetime = endDatetimePicker.value;
+				
+				pharmReportingPeriods.push({start: startDatetime, end: endDatetime});
+			}
 
 		}
 	}
@@ -335,14 +347,24 @@ function createDHISSchedule(clicked_id, frequency){
 		LabSchedulesTable.appendChild(tr);
 	}
 
-	var parameters = {
-		reportName : reportName,
-		reportTypeName: reportTypeName,
-		scheduleFrequency : scheduleFrequency,
-		scheduleTime : scheduleTime
-	};
-
-	var submitTo = createScheduleUrl;
+	if(isCustomReportingPeriods.checked){
+		submitTo=createPharmScheduleUrl;
+		parameters = {
+			reportName : reportName,
+			reportTypeName: reportTypeName,
+			scheduleFrequency : scheduleFrequency,
+			scheduleTime : scheduleTime,
+			PharmacyPeriodListRequest:pharmReportingPeriods
+		};
+	}else{
+		submitTo=createScheduleUrl;
+		parameters = {
+			reportName : reportName,
+			reportTypeName: reportTypeName,
+			scheduleFrequency : scheduleFrequency,
+			scheduleTime : scheduleTime
+		};
+	}
 	return $.get(submitTo,parameters).done(function(data) {
 		//data = JSON.stringify(data);
 		console.log('[Server result for submitNewSchedule()]');
