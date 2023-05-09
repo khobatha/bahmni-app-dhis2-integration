@@ -270,6 +270,7 @@ function createDHISSchedule(clicked_id, frequency){
 	var submitTo;
 	var pharmReportingPeriods=[];
 	var reportName;
+	var reportTypeName;
 	var scheduleFrequency;//=frequency;
 	var scheduleTime;
 	var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
@@ -317,6 +318,7 @@ function createDHISSchedule(clicked_id, frequency){
 		reportTypeName="ELISGeneric";
 	}
 
+	//alert('[ReportTypeName is ]'+reportTypeName);
 	if(reportTypeName="MRSGeneric"){
 		alert('[Added to clinical schedule table.]');
 		tr.innerHTML =tempHTML+
