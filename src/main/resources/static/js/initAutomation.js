@@ -1,7 +1,7 @@
 var reportConfigUrl = '/bahmni_config/openmrs/apps/reports/reports.json';
 var downloadUrl = '/dhis-integration/download?name=NAME&year=YEAR&month=MONTH&isImam=IS_IMAM&isFamily=IS_FAMILY';
 var submitUrl = '/dhis-integration/submit-to-dhis';
-var getSchedulesUrl = '/dhis-integration/get-schedules';
+var getClinicalSchedulesUrl = '/dhis-integration/get-schedules';
 var getPharmSchedulesUrl = '/dhis-integration/get-pharm-schedules';
 var createScheduleUrl = '/dhis-integration/create-schedule';
 var createPharmScheduleUrl = '/dhis-integration/create-pharm-schedule';
@@ -25,7 +25,7 @@ $(document).ready(
 
 			initTabs();
 			initDHISProgramNameDropdowns();
-			renderDHISSchedules(getSchedulesUrl);
+			renderDHISSchedules(getClinicalSchedulesUrl);
 			renderDHISSchedules(getPharmSchedulesUrl);
 			addPharmScheduleFrequencyEventListener();
 			addCustomPeriodCheckboxEventListener();
