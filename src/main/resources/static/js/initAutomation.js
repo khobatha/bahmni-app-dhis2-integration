@@ -406,7 +406,10 @@ function createDHISSchedule(clicked_id, frequency){
 		}
 	});*/
 	
-	return $.get(submitTo,parameters).done(function(data) {
+	return $.post(submitTo, parameters, function(response) {
+		console.log('Received response:', response);
+	  });
+	/*$.get(submitTo,parameters).done(function(data) {
 		//data = JSON.stringify(data);
 		console.log('[Server result for submitNewSchedule()]');
 		console.log("URL:"+submitTo);
@@ -421,7 +424,7 @@ function createDHISSchedule(clicked_id, frequency){
 		
 	}).fail(function(response) {
 		console.log('[Operation submitNewSchedule() failed]');
-	});
+	});*/
 
 }
 
