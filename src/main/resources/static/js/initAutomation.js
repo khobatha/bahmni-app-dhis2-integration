@@ -391,7 +391,7 @@ function createDHISSchedule(clicked_id, frequency){
 		console.log(error)
 	});*/
 	
-	$.ajax({
+	/*$.ajax({
 		url: submitTo,
 		type: "POST",
 		data: JSON.stringify(parameters),
@@ -404,9 +404,9 @@ function createDHISSchedule(clicked_id, frequency){
 		error: function(xhr, status, error) {
 			console.error("[Operation submitNewSchedule() failed]", error);
 		}
-	});
+	});*/
 	
-	/*$.get(submitTo,parameters).done(function(data) {
+	return $.get(submitTo,parameters).done(function(data) {
 		//data = JSON.stringify(data);
 		console.log('[Server result for submitNewSchedule()]');
 		console.log("URL:"+submitTo);
@@ -421,7 +421,7 @@ function createDHISSchedule(clicked_id, frequency){
 		
 	}).fail(function(response) {
 		console.log('[Operation submitNewSchedule() failed]');
-	});*/
+	});
 
 }
 
