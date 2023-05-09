@@ -2,6 +2,7 @@ var reportConfigUrl = '/bahmni_config/openmrs/apps/reports/reports.json';
 var downloadUrl = '/dhis-integration/download?name=NAME&year=YEAR&month=MONTH&isImam=IS_IMAM&isFamily=IS_FAMILY';
 var submitUrl = '/dhis-integration/submit-to-dhis';
 var getSchedulesUrl = '/dhis-integration/get-schedules';
+var getPharmSchedulesUrl = '/dhis-integration/get-pharm-schedules';
 var createScheduleUrl = '/dhis-integration/create-schedule';
 var createPharmScheduleUrl = '/dhis-integration/create-pharm-schedule';
 var deleteScheduleUrl='/dhis-integration/delete-schedule';
@@ -24,7 +25,8 @@ $(document).ready(
 
 			initTabs();
 			initDHISProgramNameDropdowns();
-			renderDHISSchedules();
+			renderDHISSchedules(getSchedulesUrl);
+			renderDHISSchedules(getPharmSchedulesUrl);
 			addPharmScheduleFrequencyEventListener();
 			addCustomPeriodCheckboxEventListener();
 			
@@ -61,8 +63,8 @@ function addCustomPeriodCheckboxEventListener(){
 	}
 
 //populate and render list of schedules from db
-function renderDHISSchedules(){
-	getDHISSchedules().then(function(data){
+function renderDHISSchedules(url){
+	getDHISSchedules(url).then(function(data){
 		console.log('[render hmis program schedules]');
 		console.log(data);
 		//alert(data);
@@ -188,8 +190,8 @@ function getDHISPrograms() {
 }
 
 //read list of existing DHIS scheduless
-function getDHISSchedules() {
-	return $.get(getSchedulesUrl).done(function(data) {
+function getDHISSchedules(url) {
+	return $.get(url).done(function(data) {
 		console.log('[Get DHIS schedules]');
 		//console.log(data);
 		
