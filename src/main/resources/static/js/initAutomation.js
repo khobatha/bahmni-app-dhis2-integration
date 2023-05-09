@@ -318,6 +318,7 @@ function createDHISSchedule(clicked_id, frequency){
 	}
 
 	if(reportTypeName="MRSGeneric"){
+		alert('[Added to clinical schedule table.]');
 		tr.innerHTML =tempHTML+
 					  '<td>' + reportName + '</td>' +
 					  '<td>' + '-' + '</td>' +
@@ -329,6 +330,7 @@ function createDHISSchedule(clicked_id, frequency){
 		clinicalSchedulesTable.appendChild(tr);
 	}
 	else if(reportTypeName="ERPGeneric"){
+		alert('[Added to pharmacy schedule table.]');
 		tr.innerHTML =tempHTML+
 					  '<td>' + reportName + '</td>' +
 					  '<td>' + '-' + '</td>' +
@@ -340,6 +342,7 @@ function createDHISSchedule(clicked_id, frequency){
 		pharmacySchedulesTable.appendChild(tr);
 	}
 	else if(reportTypeName="ELISGeneric"){
+		alert('[Added to lab schedule table.]');
 		tr.innerHTML =tempHTML+
 					  '<td>' + reportName + '</td>' +
 					  '<td>' + '-' + '</td>' +
