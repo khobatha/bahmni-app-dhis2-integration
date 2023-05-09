@@ -282,14 +282,14 @@ function createDHISSchedule(clicked_id, frequency){
 				  "<label for='checkbox1'></label>"+"</span></td>";
 
 	if(clicked_id == 'addClinicalSchedulebtn'){
-		console.log('[Creating a clinical schedule.]');
+		alert('[Creating a clinical schedule.]');
 		reportName=document.getElementById('clinical-report-name').value;
 		scheduleTime=document.getElementById('clinical-time').value;
 		scheduleFrequency=document.getElementById('clinical-frequency').value;
 		reportTypeName="MRSGeneric";
 	}
 	else if(clicked_id == 'addPharmacySchedulebtn'){
-		console.log('[Creating a pharmacy schedule.]');
+		alert('[Creating a pharmacy schedule.]');
 		reportName=document.getElementById('pharmacy-report-name').value;
 		scheduleTime=document.getElementById('pharmacy-time').value;
 		scheduleFrequency=document.getElementById('pharmacy-frequency').value;
@@ -310,7 +310,7 @@ function createDHISSchedule(clicked_id, frequency){
 		}
 	}
 	else if(clicked_id == 'addLabSchedulebtn'){
-		console.log('[Creating a lab schedule.]');
+		alert('[Creating a lab schedule.]');
 		reportName=document.getElementById('lab-report-name').value;
 		scheduleTime=document.getElementById('lab-time').value;
 		scheduleFrequency=document.getElementById('lab-frequency').value;
