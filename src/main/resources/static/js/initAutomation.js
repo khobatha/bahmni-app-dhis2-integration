@@ -325,7 +325,8 @@ function createDHISSchedule(clicked_id, frequency){
 		//alert('[Added to clinical schedule table.]');
 		tr.innerHTML =tempHTML+
 					  '<td>' + reportName + '</td>' +
-					  '<td>' + '-' + '</td>' +
+					  '<td>' + frequency + '</td>' +
+					  '<td>' + '-' + '</td>'+
 					  '<td>' + 'Ready' + '</td>'+
 					  '<td>' + '-' + '</td>'+
 					  "<td>"+
@@ -336,47 +337,57 @@ function createDHISSchedule(clicked_id, frequency){
 	else if(reportTypeName=="ERPGeneric"){
 		//alert('[Added to pharmacy schedule table.]');
 		tr.innerHTML =tempHTML+
-					  '<td>' + reportName + '</td>' +
-					  '<td>' + '-' + '</td>' +
-					  '<td>' + 'Ready' + '</td>'+
-					  '<td>' + '-' + '</td>'+
-					  "<td>"+
-					  "<label class='switch'><input type='checkbox' checked><span class='slider round'></span></label>"+
-					  "</td>";
+						'<td>' + reportName + '</td>' +
+						'<td>' + frequency + '</td>' +
+						'<td>' + '-' + '</td>'+
+						'<td>' + 'Ready' + '</td>'+
+						'<td>' + '-' + '</td>'+
+						"<td>"+
+						"<label class='switch'><input type='checkbox' checked><span class='slider round'></span></label>"+
+						"</td>";
 		pharmacySchedulesTable.appendChild(tr);
 	}
 	else if(reportTypeName=="ELISGeneric"){
 		//alert('[Added to lab schedule table.]');
 		tr.innerHTML =tempHTML+
-					  '<td>' + reportName + '</td>' +
-					  '<td>' + '-' + '</td>' +
-					  '<td>' + 'Ready' + '</td>'+
-					  '<td>' + '-' + '</td>'+
-					  "<td>"+
-					  "<label class='switch'><input type='checkbox' checked><span class='slider round'></span></label>"+
-					  "</td>";
+						'<td>' + reportName + '</td>' +
+						'<td>' + frequency + '</td>' +
+						'<td>' + '-' + '</td>'+
+						'<td>' + 'Ready' + '</td>'+
+						'<td>' + '-' + '</td>'+
+						"<td>"+
+						"<label class='switch'><input type='checkbox' checked><span class='slider round'></span></label>"+
+						"</td>";
 		LabSchedulesTable.appendChild(tr);
 	}
-
-	if(isCustomReportingPeriods.checked){
+	parameters = {
+		reportName : reportName,
+		reportTypeName: reportTypeName,
+		scheduleFrequency : scheduleFrequency,
+		scheduleTime : scheduleTime
+	};
+	if(isCustomReportingPeriods.checked || reportTypeName=="ERPGeneric"){
 		submitTo=createPharmScheduleUrl;
-		parameters = {
-			reportName : reportName,
-			reportTypeName: reportTypeName,
-			scheduleFrequency : scheduleFrequency,
-			scheduleTime : scheduleTime,
-			PharmacyPeriodListRequest:pharmReportingPeriods
-		};
+		
 	}else{
 		submitTo=createScheduleUrl;
-		parameters = {
-			reportName : reportName,
-			reportTypeName: reportTypeName,
-			scheduleFrequency : scheduleFrequency,
-			scheduleTime : scheduleTime
-		};
 	}
-	return $.get(submitTo,parameters).done(function(data) {
+	return $.ajax({
+		url: submitTo,
+		type: "POST",
+		data: parameters,
+		body: pharmReportingPeriods,
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		success: function(response) {
+			console.log("[Operation submitNewSchedule() successful]", response);
+		},
+		error: function(xhr, status, error) {
+			console.error("[Operation submitNewSchedule() failed]", error);
+		}
+	});
+	
+	/*$.get(submitTo,parameters).done(function(data) {
 		//data = JSON.stringify(data);
 		console.log('[Server result for submitNewSchedule()]');
 		console.log("URL:"+submitTo);
@@ -391,7 +402,7 @@ function createDHISSchedule(clicked_id, frequency){
 		
 	}).fail(function(response) {
 		console.log('[Operation submitNewSchedule() failed]');
-	});
+	});*/
 
 }
 
