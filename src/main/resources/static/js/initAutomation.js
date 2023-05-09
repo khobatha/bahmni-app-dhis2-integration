@@ -373,7 +373,8 @@ function createDHISSchedule(clicked_id, frequency){
 	}else{
 		submitTo=createScheduleUrl;
 	}
-	return fetch(submitTo, {
+	
+	fetch(submitTo, {
 		method: 'post',
 		body: JSON.stringify(parameters),
 		headers: {
