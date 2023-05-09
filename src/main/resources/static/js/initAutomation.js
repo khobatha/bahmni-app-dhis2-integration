@@ -375,8 +375,7 @@ function createDHISSchedule(clicked_id, frequency){
 	}
 	return fetch(submitTo, {
 		method: 'post',
-		data: JSON.stringify(parameters),
-		body: JSON.stringify(pharmReportingPeriods),
+		body: JSON.stringify(parameters),
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
