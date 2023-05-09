@@ -318,7 +318,7 @@ function createDHISSchedule(clicked_id, frequency){
 		reportTypeName="ELISGeneric";
 	}
 
-	//alert('[ReportTypeName is ]'+reportTypeName);
+	alert('[ReportTypeName is ]'+reportTypeName);
 	if(reportTypeName="MRSGeneric"){
 		alert('[Added to clinical schedule table.]');
 		tr.innerHTML =tempHTML+
