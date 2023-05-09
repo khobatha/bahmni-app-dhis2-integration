@@ -374,7 +374,7 @@ function createDHISSchedule(clicked_id, frequency){
 		submitTo=createScheduleUrl;
 	}
 	
-	fetch(submitTo, {
+	/*fetch(submitTo, {
 		method: 'post',
 		body: JSON.stringify(parameters),
 		headers: {
@@ -389,22 +389,22 @@ function createDHISSchedule(clicked_id, frequency){
 		}
 	}).catch((error) => {
 		console.log(error)
-	});
+	});*/
 	
-	/*$.ajax({
+	$.ajax({
 		url: submitTo,
 		type: "POST",
 		data: JSON.stringify(parameters),
 		//body: JSON.stringify(pharmReportingPeriods),
-		contentType: "application/json; charset=utf-8",
-		dataType: "json",
+		//contentType: "application/json; charset=utf-8",
+		//dataType: "json",
 		success: function(response) {
 			console.log("[Operation submitNewSchedule() successful]", response);
 		},
 		error: function(xhr, status, error) {
 			console.error("[Operation submitNewSchedule() failed]", error);
 		}
-	});*/
+	});
 	
 	/*$.get(submitTo,parameters).done(function(data) {
 		//data = JSON.stringify(data);
