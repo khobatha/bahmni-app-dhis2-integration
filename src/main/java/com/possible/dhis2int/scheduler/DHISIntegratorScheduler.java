@@ -288,7 +288,7 @@ public class DHISIntegratorScheduler {
 			HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException {
 		Boolean created = true;
-		
+		logger.info("[Creating new pharmacy schedule ...]");
 		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
 		newPharmacySchedule.setProgName(progName);
 		newPharmacySchedule.setCreatedBy("Test");
