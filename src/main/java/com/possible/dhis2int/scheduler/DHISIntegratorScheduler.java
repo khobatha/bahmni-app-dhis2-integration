@@ -156,7 +156,7 @@ public class DHISIntegratorScheduler {
 			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
 		}
 		
-		String sql = "SELECT id, report_name, report_id, frequency, enabled, last_run, status FROM dhis2_schedules WHERE report_id ='"+reportNameId+"';";
+		String sql = "SELECT id, report_name, report_id, frequency, enabled, last_run, target_time, status FROM dhis2_schedules WHERE report_id ='"+reportNameId+"';";
 		JSONArray jsonArray = new JSONArray();
 		ArrayList<PharmacySchedule> list = new ArrayList<PharmacySchedule>();
 		ArrayList<PharmacyPeriod> pharmacyPeriods = new ArrayList<PharmacyPeriod>();
@@ -182,7 +182,8 @@ public class DHISIntegratorScheduler {
 				schedule.setFrequency(row.get(3));
 				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1 ? true : false);
 				schedule.setLastRun(row.get(5));
-				schedule.setStatus(row.get(6));
+				schedule.setTargetDate(row.get(6));
+				schedule.setStatus(row.get(7));
 					
 
 				//Get Periods for this schedule
