@@ -368,6 +368,7 @@ function createDHISSchedule(clicked_id, frequency){
 	};
 	if(isCustomReportingPeriods.checked || reportTypeName=="ERPGeneric"){
 		submitTo=createPharmScheduleUrl;
+		console.log("[Posting new multi-period pharm schedule. Periods are ]", pharmReportingPeriods);
 		
 	}else{
 		submitTo=createScheduleUrl;
@@ -375,8 +376,8 @@ function createDHISSchedule(clicked_id, frequency){
 	return $.ajax({
 		url: submitTo,
 		type: "POST",
-		data: parameters,
-		body: pharmReportingPeriods,
+		data: JSON.stringify(parameters),
+		body: JSON.stringify(pharmReportingPeriods),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
 		success: function(response) {
