@@ -283,14 +283,14 @@ function createDHISSchedule(clicked_id, frequency){
 				  "<label for='checkbox1'></label>"+"</span></td>";
 
 	if(clicked_id == 'addClinicalSchedulebtn'){
-		alert('[Creating a clinical schedule.]');
+		//alert('[Creating a clinical schedule.]');
 		reportName=document.getElementById('clinical-report-name').value;
 		scheduleTime=document.getElementById('clinical-time').value;
 		scheduleFrequency=document.getElementById('clinical-frequency').value;
 		reportTypeName="MRSGeneric";
 	}
 	else if(clicked_id == 'addPharmacySchedulebtn'){
-		alert('[Creating a pharmacy schedule.]');
+		//alert('[Creating a pharmacy schedule.]');
 		reportName=document.getElementById('pharmacy-report-name').value;
 		scheduleTime=document.getElementById('pharmacy-time').value;
 		scheduleFrequency=document.getElementById('pharmacy-frequency').value;
@@ -311,16 +311,16 @@ function createDHISSchedule(clicked_id, frequency){
 		}
 	}
 	else if(clicked_id == 'addLabSchedulebtn'){
-		alert('[Creating a lab schedule.]');
+		//alert('[Creating a lab schedule.]');
 		reportName=document.getElementById('lab-report-name').value;
 		scheduleTime=document.getElementById('lab-time').value;
 		scheduleFrequency=document.getElementById('lab-frequency').value;
 		reportTypeName="ELISGeneric";
 	}
 
-	alert('[ReportTypeName is ]'+reportTypeName);
+	//alert('[ReportTypeName is ]'+reportTypeName);
 	if(reportTypeName=="MRSGeneric"){
-		alert('[Added to clinical schedule table.]');
+		//alert('[Added to clinical schedule table.]');
 		tr.innerHTML =tempHTML+
 					  '<td>' + reportName + '</td>' +
 					  '<td>' + '-' + '</td>' +
@@ -332,7 +332,7 @@ function createDHISSchedule(clicked_id, frequency){
 		clinicalSchedulesTable.appendChild(tr);
 	}
 	else if(reportTypeName=="ERPGeneric"){
-		alert('[Added to pharmacy schedule table.]');
+		//alert('[Added to pharmacy schedule table.]');
 		tr.innerHTML =tempHTML+
 					  '<td>' + reportName + '</td>' +
 					  '<td>' + '-' + '</td>' +
@@ -344,7 +344,7 @@ function createDHISSchedule(clicked_id, frequency){
 		pharmacySchedulesTable.appendChild(tr);
 	}
 	else if(reportTypeName=="ELISGeneric"){
-		alert('[Added to lab schedule table.]');
+		//alert('[Added to lab schedule table.]');
 		tr.innerHTML =tempHTML+
 					  '<td>' + reportName + '</td>' +
 					  '<td>' + '-' + '</td>' +
