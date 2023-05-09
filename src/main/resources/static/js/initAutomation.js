@@ -302,6 +302,7 @@ function createDHISSchedule(clicked_id, frequency){
 				let endDatetime = endDatetimePicker.value;
 				
 				pharmReportingPeriods.push({start: startDatetime, end: endDatetime});
+				
 			}
 
 		}
