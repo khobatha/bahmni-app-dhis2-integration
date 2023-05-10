@@ -419,9 +419,11 @@ function createDHISSchedule(clicked_id, frequency){
 	console.error('Error:', xhr.statusText);
 	};
 
-	if(reportTypeName=="ERPGeneric")
+	if(reportTypeName=="ERPGeneric"){
 		// Send the request
-		xhr.send(JSON.stringify(body));
+		console.log("[Posting new multi-period pharm schedule. Periods are ]"+ JSON.stringify(pharmReportingPeriods));
+		xhr.send(body);
+	}
 	else	
 		xhr.send();
 
