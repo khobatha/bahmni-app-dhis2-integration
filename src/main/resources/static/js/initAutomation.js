@@ -395,15 +395,18 @@ function createDHISSchedule(clicked_id, frequency){
 	params.append('scheduleFrequency',scheduleFrequency);
 	params.append('scheduleTime',scheduleTime);
 
-	// Define the request body
-	const body = pharmReportingPeriods;
+	
 
 	// Create the AJAX request
 	const xhr = new XMLHttpRequest();
-	if(reportTypeName=="ERPGeneric")
+	if(reportTypeName=="ERPGeneric"){
 		xhr.open('POST', `/dhis-integration/create-pharm-schedule?${params.toString()}`);
+		// Define the request body
+		const body = pharmReportingPeriods;
+	}
 	else
-	xhr.open('POST', `/dhis-integration/create-schedule?${params.toString()}`);
+		xhr.open('POST', `/dhis-integration/create-schedule?${params.toString()}`);
+	
 	xhr.setRequestHeader('Content-Type', 'application/json');
 
 	xhr.onload = function() {
@@ -416,8 +419,11 @@ function createDHISSchedule(clicked_id, frequency){
 	console.error('Error:', xhr.statusText);
 	};
 
-	// Send the request
-	xhr.send(JSON.stringify(body));
+	if(reportTypeName=="ERPGeneric")
+		// Send the request
+		xhr.send(JSON.stringify(body));
+	else	
+		xhr.send();
 
 	
 	/*fetch(submitTo, {
