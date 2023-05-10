@@ -399,10 +399,10 @@ function createDHISSchedule(clicked_id, frequency){
 
 	// Create the AJAX request
 	const xhr = new XMLHttpRequest();
+	const body = pharmReportingPeriods;
 	if(reportTypeName=="ERPGeneric"){
 		xhr.open('POST', `/dhis-integration/create-pharm-schedule?${params.toString()}`);
 		// Define the request body
-		const body = pharmReportingPeriods;
 	}
 	else
 		xhr.open('POST', `/dhis-integration/create-schedule?${params.toString()}`);
