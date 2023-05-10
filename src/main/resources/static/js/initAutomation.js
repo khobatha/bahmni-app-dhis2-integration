@@ -390,10 +390,10 @@ function createDHISSchedule(clicked_id, frequency){
 
 	// Define the request parameters
 	const params = new URLSearchParams();
-	params.append(reportName,reportName);
-	params.append(reportTypeName,reportTypeName);
-	params.append(scheduleFrequency,scheduleFrequency);
-	params.append(scheduleTime,scheduleTime);
+	params.append('reportName',reportName);
+	params.append('reportTypeName',reportTypeName);
+	params.append('scheduleFrequency',scheduleFrequency);
+	params.append('scheduleTime',scheduleTime);
 
 	// Define the request body
 	const body = pharmReportingPeriods;
