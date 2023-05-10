@@ -280,7 +280,7 @@ public class DHISIntegratorScheduler {
 	}
 
 	@RequestMapping(path = "/create-pharm-schedule")
-	public Boolean createIntegrationPharmSchedule(@RequestParam("programName") String progName,
+	public Boolean createIntegrationPharmSchedule(@RequestParam("reportName") String progName,
 	        @RequestParam("reportTypeName") String reportTypeName,
 			@RequestParam("scheduleFrequency") String schedFrequency,
 			@RequestParam("scheduleTime") String schedTime, 
