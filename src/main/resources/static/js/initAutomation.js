@@ -360,19 +360,65 @@ function createDHISSchedule(clicked_id, frequency){
 						"</td>";
 		LabSchedulesTable.appendChild(tr);
 	}
-	parameters = {
-		reportName : reportName,
-		reportTypeName: reportTypeName,
-		scheduleFrequency : scheduleFrequency,
-		scheduleTime : scheduleTime
-	};
+	
+	/*
 	if(isCustomReportingPeriods.checked || reportTypeName=="ERPGeneric"){
 		submitTo=createPharmScheduleUrl;
+		parameters = {
+			reportName : reportName,
+			reportTypeName: reportTypeName,
+			scheduleFrequency : scheduleFrequency,
+			scheduleTime : scheduleTime
+		};
 		console.log("[Posting new multi-period pharm schedule. Periods are ]"+ JSON.stringify(pharmReportingPeriods));
+		/*return $.post(submitTo, parameters, function(response) {
+			console.log('Received response:', response);
+		  });*/
 		
-	}else{
+	/*}else{
 		submitTo=createScheduleUrl;
+		parameters = {
+			reportName : reportName,
+			reportTypeName: reportTypeName,
+			scheduleFrequency : scheduleFrequency,
+			scheduleTime : scheduleTime
+		};
+		/*return $.post(submitTo, parameters, function(response) {
+			console.log('Received response:', response);
+		  });*/
+	//}
+
+	// Define the request parameters
+	const params = new URLSearchParams();
+	params.append(reportName,reportName);
+	params.append(reportTypeName,reportTypeName);
+	params.append(scheduleFrequency,scheduleFrequency);
+	params.append(scheduleTime,scheduleTime);
+
+	// Define the request body
+	const body = pharmReportingPeriods;
+
+	// Create the AJAX request
+	const xhr = new XMLHttpRequest();
+	if(reportTypeName=="ERPGeneric")
+		xhr.open('POST', `/dhis-integration/create-pharm-schedule?${params.toString()}`);
+	else
+	xhr.open('POST', `/dhis-integration/create-schedule?${params.toString()}`);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+
+	xhr.onload = function() {
+	if (xhr.status === 200) {
+		console.log(xhr.responseText);
 	}
+	};
+
+	xhr.onerror = function() {
+	console.error('Error:', xhr.statusText);
+	};
+
+	// Send the request
+	xhr.send(JSON.stringify(body));
+
 	
 	/*fetch(submitTo, {
 		method: 'post',
@@ -406,9 +452,7 @@ function createDHISSchedule(clicked_id, frequency){
 		}
 	});*/
 	
-	return $.post(submitTo, parameters, function(response) {
-		console.log('Received response:', response);
-	  });
+	
 	/*$.get(submitTo,parameters).done(function(data) {
 		//data = JSON.stringify(data);
 		console.log('[Server result for submitNewSchedule()]');
