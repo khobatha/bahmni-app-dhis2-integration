@@ -140,6 +140,7 @@ public class DatabaseDriver {
 			
 			if (generatedKeys.next()) {
     			int scheduleId = generatedKeys.getInt(1);
+				logger.info("ID of the recent schedule insert is "+scheduleId);
 
 				//Now insert in periods table
 				for (PharmacyPeriod period : record.getPeriods()){
@@ -156,6 +157,10 @@ public class DatabaseDriver {
 
 					ps1.executeUpdate();
 				}
+			}
+			else{
+				logger.info("Failed to retrieve ID of recently inserted schedule...");
+
 			}
             
 		} catch (SQLException e) {
