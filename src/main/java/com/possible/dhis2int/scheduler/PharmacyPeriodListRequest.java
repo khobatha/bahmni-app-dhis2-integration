@@ -3,13 +3,13 @@ package com.possible.dhis2int.scheduler;
 import java.util.List;
 
 public class PharmacyPeriodListRequest {
-    private List<PharmacyPeriod> periods;
+    private List<PharmacyPeriodReq> periods;
 
-    public List<PharmacyPeriod> getPeriods() {
+    public List<PharmacyPeriodReq> getPeriods() {
         return periods;
     }
 
-    public void setPeriods(List<PharmacyPeriod> periods) {
+    public void setPeriods(List<PharmacyPeriodReq> periods) {
         this.periods = periods;
     }
 }
