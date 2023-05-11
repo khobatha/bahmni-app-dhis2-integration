@@ -247,9 +247,10 @@ public class DHISIntegratorScheduler {
 		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypeName+"';";
 		String type = "MRSGeneric";
 		Results results = new Results();
+		logger.info("Inside create clinical schedules...");
 		try {
 			results = databaseDriver.executeQuery(sql, type);
-
+			logger.info("Trying to find the report type ID...");
 			for (List<String> row : results.getRows()) {
 				newschedule.setReportId(Integer.parseInt(row.get(0)));
 				logger.info("Parameter report type name as "+reportTypeName);
@@ -257,9 +258,10 @@ public class DHISIntegratorScheduler {
 				logger.info("Set report type ID as "+newschedule.getReportId() );
 			}
 		} catch (DHISIntegratorException e) {
-		// logger.info("Inside loadIntegrationSchedules...");
-		logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+			logger.info("Failed to find the report type ID...");
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
 		} catch (Exception e) {
+			logger.info("Failed to find the report type ID...");
 			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
 		}
 
@@ -280,7 +282,7 @@ public class DHISIntegratorScheduler {
 	}
 
 	@RequestMapping(path = "/create-pharm-schedule")
-	public Boolean createIntegrationPharmSchedule(@RequestParam("reportName") String progName,
+	public Boolean createIntegrationPharmSchedule(@RequestParam("reportName") String reportName,
 	        @RequestParam("reportTypeName") String reportTypeName,
 			@RequestParam("scheduleFrequency") String schedFrequency,
 			@RequestParam("scheduleTime") String schedTime, 
@@ -290,7 +292,7 @@ public class DHISIntegratorScheduler {
 		Boolean created = true;
 		logger.info("[Creating new pharmacy schedule ...]");
 		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
-		newPharmacySchedule.setProgName(progName);
+		newPharmacySchedule.setProgName(reportName);
 		newPharmacySchedule.setCreatedBy("Test");
 		newPharmacySchedule.setEnabled(true);
 		newPharmacySchedule.setPeriods(pharmacyPeriodListRequest.getPeriods());
