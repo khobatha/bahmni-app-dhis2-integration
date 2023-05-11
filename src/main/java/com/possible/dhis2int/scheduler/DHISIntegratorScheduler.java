@@ -295,6 +295,9 @@ public class DHISIntegratorScheduler {
 		newPharmacySchedule.setProgName(reportName);
 		newPharmacySchedule.setCreatedBy("Test");
 		newPharmacySchedule.setEnabled(true);
+		logger.info("[Extracting periods from the request body ...]");
+		logger.info("[Number of provided periods is ...]"+pharmacyPeriodListRequest.getPeriods().size());
+		//logger.info("[The start date of first period is ...]"+pharmacyPeriodListRequest.getPeriods()[0].);
 		newPharmacySchedule.setPeriods(pharmacyPeriodListRequest.getPeriods());
         LocalDate created_date = LocalDate.now();
 		newPharmacySchedule.setCreatedDate(created_date);
