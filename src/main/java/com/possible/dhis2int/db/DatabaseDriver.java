@@ -125,7 +125,7 @@ public class DatabaseDriver {
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,report_id,enabled,created_by,created_date,target_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
+					"INSERT INTO dhis2_schedules (report_name,report_id,enabled,created_by,created_date) VALUES (?, ?, ?, ?, ?)");
 
 			ps.setString(1, record.getProgramName());
 			ps.setInt(2, record.getReportId());
@@ -144,7 +144,7 @@ public class DatabaseDriver {
 				//Now insert in periods table
 				for (PharmacyPeriod period : record.getPeriods()){
 					PreparedStatement ps1 = connection.prepareStatement(
-						"INSERT INTO dhis2_pharmacy_periods (dhis2_schedule_id, period, enabled,created_by,created_date,target_time, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)");
+						"INSERT INTO dhis2_pharmacy_periods (dhis2_schedule_id, period, enabled,created_by,created_date,start_time, end_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 					ps1.setInt(1, scheduleId);	
 					ps1.setInt(2, period.getPeriod());
