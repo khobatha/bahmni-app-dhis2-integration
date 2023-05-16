@@ -36,6 +36,7 @@ import com.possible.dhis2int.web.DHISIntegrator;
 import com.possible.dhis2int.web.DHISIntegratorException;
 import com.possible.dhis2int.web.Messages;
 import com.possible.dhis2int.scheduler.Schedule;
+import com.possible.dhis2int.scheduler.PharmacyPeriodReq;
 
 import org.apache.log4j.Logger;
 import org.apache.tomcat.jni.Local;
@@ -57,7 +58,7 @@ import javax.servlet.http.HttpServletResponse;
 @EnableScheduling
 @ConditionalOnProperty(name = "scheduling.enabled", matchIfMissing = true)
 @RestController
-public class DHISIntegratorScheduler<PharmacyPeriodReq> {
+public class DHISIntegratorScheduler {
 
 	private final DatabaseDriver databaseDriver;
 	private final Logger logger = getLogger(DHISIntegratorScheduler.class);
@@ -292,16 +293,15 @@ public class DHISIntegratorScheduler<PharmacyPeriodReq> {
 			throws IOException, JSONException {
 		Boolean created = true;
 		logger.info("[Creating new pharmacy schedule ...]");
-		ObjectMapper mapper;
+		ObjectMapper mapper=new ObjectMapper();
 		List<PharmacyPeriodReq> periods=mapper.readValue(pharmacyPeriodListRequest, new TypeReference<List<PharmacyPeriodReq>>() {});
 		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
 		newPharmacySchedule.setProgName(reportName);
 		newPharmacySchedule.setCreatedBy("Test");
 		newPharmacySchedule.setEnabled(true);
 		logger.info("[Extracting periods from the request body ...]");
-		logger.info("[Number of provided periods is ...]"+pharmacyPeriodListRequest.getPeriods().size());
-		//logger.info("[The start date of first period is ...]"+pharmacyPeriodListRequest.getPeriods()[0].);
-		newPharmacySchedule.setPeriods(pharmacyPeriodListRequest.getPeriods());
+		logger.info("[Request body argument - periods string is ...]"+pharmacyPeriodListRequest);
+		//newPharmacySchedule.setPeriods(pharmacyPeriodListRequest.getPeriods());
         LocalDate created_date = LocalDate.now();
 		newPharmacySchedule.setCreatedDate(created_date);
 
