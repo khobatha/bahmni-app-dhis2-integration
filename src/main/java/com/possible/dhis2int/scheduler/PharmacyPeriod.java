@@ -34,6 +34,10 @@ public class PharmacyPeriod {
         return period;
     }
 
+    public boolean getEnabled(){
+        return enabled;
+    }
+
     public void setPeriod(int period) {
         this.period = period;
     }

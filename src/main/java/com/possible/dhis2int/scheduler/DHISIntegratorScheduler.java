@@ -314,10 +314,11 @@ public class DHISIntegratorScheduler {
 			temp.setStartTime(pharmacyPeriod.getStart());
 			temp.setEndTime(pharmacyPeriod.getEnd());
 			temp.setCreatedBy(newPharmacySchedule.getCreatedBy());
-			logger.info("[New schedule created by value is ...]"+newPharmacySchedule.getCreatedBy());
+			logger.info("[New schedule created by value is ...]"+temp.getCreatedBy());
 			temp.setCreatedDate(newPharmacySchedule.getCreatedDate());
-			logger.info("[New schedule created date value is ...]"+newPharmacySchedule.getCreatedDate());
+			logger.info("[New schedule created date value is ...]"+temp.getCreatedDate());
 			temp.setEnabled(true);
+			logger.info("[New schedule enabled value is ...]"+temp.getEnabled());
 			temp.setPeriod(count);
 			count++;
 			pharmacyPeriods.add(temp);
