@@ -314,7 +314,7 @@ public class DHISIntegratorScheduler {
 			temp.setEndTime(pharmacyPeriod.getEnd());
 			temp.setCreatedBy(newPharmacySchedule.getCreatedBy());
 			temp.setCreatedDate(newPharmacySchedule.getCreatedDate());
-			temp.setEnabled(newPharmacySchedule.getEnabled());
+			temp.setEnabled(true);
 			temp.setPeriod(count);
 			count++;
 			pharmacyPeriods.add(temp);
