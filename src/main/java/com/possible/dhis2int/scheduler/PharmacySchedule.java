@@ -49,6 +49,7 @@ public class PharmacySchedule extends Schedule {
     public String getCreatedBy() {
         return createdBy;
     }
+    
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
@@ -81,6 +82,11 @@ public class PharmacySchedule extends Schedule {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public Boolean getEnabled(){
+        return enabled;
+    }
+
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
