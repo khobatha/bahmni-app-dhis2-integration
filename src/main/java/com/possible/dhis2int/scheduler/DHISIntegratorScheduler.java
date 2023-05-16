@@ -286,11 +286,13 @@ public class DHISIntegratorScheduler {
 	        @RequestParam("reportTypeName") String reportTypeName,
 			@RequestParam("scheduleFrequency") String schedFrequency,
 			@RequestParam("scheduleTime") String schedTime, 
-			@RequestBody PharmacyPeriodListRequest pharmacyPeriodListRequest,
+			@RequestBody String pharmacyPeriodListRequest,
 			HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException {
 		Boolean created = true;
 		logger.info("[Creating new pharmacy schedule ...]");
+		ObjectMapper mapper;
+		List<PharmacyPeriodReq> periods=mapper.readValue(pharmacyPeriodListRequest, new TypeReference<List<PharmacyPeriodReq>>() {});
 		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
 		newPharmacySchedule.setProgName(reportName);
 		newPharmacySchedule.setCreatedBy("Test");
