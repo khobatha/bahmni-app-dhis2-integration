@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.possible.dhis2int.Properties;
 import com.possible.dhis2int.audit.Recordlog;
 import com.possible.dhis2int.scheduler.PharmacyPeriod;
+import com.possible.dhis2int.scheduler.PharmacyPeriodReq;
 import com.possible.dhis2int.scheduler.PharmacySchedule;
 import com.possible.dhis2int.scheduler.Schedule;
 import com.possible.dhis2int.web.DHISIntegratorException;
