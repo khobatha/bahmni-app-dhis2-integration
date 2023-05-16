@@ -295,6 +295,7 @@ public class DHISIntegratorScheduler {
 		logger.info("[Creating new pharmacy schedule ...]");
 		ObjectMapper mapper=new ObjectMapper();
 		List<PharmacyPeriodReq> periods=mapper.readValue(pharmacyPeriodListRequest, new TypeReference<List<PharmacyPeriodReq>>() {});
+		
 		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
 		newPharmacySchedule.setProgName(reportName);
 		newPharmacySchedule.setCreatedBy("Test");
@@ -313,7 +314,9 @@ public class DHISIntegratorScheduler {
 			temp.setStartTime(pharmacyPeriod.getStart());
 			temp.setEndTime(pharmacyPeriod.getEnd());
 			temp.setCreatedBy(newPharmacySchedule.getCreatedBy());
+			logger.info("[New schedule created by value is ...]"+newPharmacySchedule.getCreatedBy());
 			temp.setCreatedDate(newPharmacySchedule.getCreatedDate());
+			logger.info("[New schedule created date value is ...]"+newPharmacySchedule.getCreatedDate());
 			temp.setEnabled(true);
 			temp.setPeriod(count);
 			count++;
