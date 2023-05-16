@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.possible.dhis2int.Properties;
 import com.possible.dhis2int.db.DatabaseDriver;
@@ -56,7 +57,7 @@ import javax.servlet.http.HttpServletResponse;
 @EnableScheduling
 @ConditionalOnProperty(name = "scheduling.enabled", matchIfMissing = true)
 @RestController
-public class DHISIntegratorScheduler {
+public class DHISIntegratorScheduler<PharmacyPeriodReq> {
 
 	private final DatabaseDriver databaseDriver;
 	private final Logger logger = getLogger(DHISIntegratorScheduler.class);
