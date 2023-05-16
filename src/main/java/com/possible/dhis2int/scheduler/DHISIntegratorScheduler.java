@@ -299,6 +299,8 @@ public class DHISIntegratorScheduler {
 		newPharmacySchedule.setProgName(reportName);
 		newPharmacySchedule.setCreatedBy("Test");
 		newPharmacySchedule.setEnabled(true);
+		LocalDate created_date = LocalDate.now();
+		newPharmacySchedule.setCreatedDate(created_date);
 		logger.info("[Extracting periods from the request body ...]");
 		logger.info("[Request body argument - periods string is ...]"+pharmacyPeriodListRequest);
 		logger.info("[Start date of first deserialised period object is ...]"+periods.get(0).getStart());
@@ -317,10 +319,8 @@ public class DHISIntegratorScheduler {
 			count++;
 			pharmacyPeriods.add(temp);
 		}
-		
+
 		newPharmacySchedule.setPeriods(pharmacyPeriods);
-        LocalDate created_date = LocalDate.now();
-		newPharmacySchedule.setCreatedDate(created_date);
 
 		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypeName+"';";
 		String type = "MRSGeneric";
