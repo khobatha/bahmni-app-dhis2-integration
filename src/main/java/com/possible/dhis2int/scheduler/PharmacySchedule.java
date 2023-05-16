@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class PharmacySchedule extends Schedule {
-    private List <PharmacyPeriodReq> periods;
+    private List <PharmacyPeriod> periods;
     private int id;
     private int dhis2ScheduleId;
     private int period;
@@ -14,11 +14,11 @@ public class PharmacySchedule extends Schedule {
     private String status;
     private boolean enabled;
 
-    public List<PharmacyPeriodReq> getPeriods() {
+    public List<PharmacyPeriod> getPeriods() {
         return periods;
     }
 
-    public void setPeriods(List<PharmacyPeriodReq> periods) {
+    public void setPeriods(List<PharmacyPeriod> periods) {
         this.periods = periods;
     }
 

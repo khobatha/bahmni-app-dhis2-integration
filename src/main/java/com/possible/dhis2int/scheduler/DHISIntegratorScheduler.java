@@ -302,7 +302,23 @@ public class DHISIntegratorScheduler {
 		logger.info("[Extracting periods from the request body ...]");
 		logger.info("[Request body argument - periods string is ...]"+pharmacyPeriodListRequest);
 		logger.info("[Start date of first deserialised period object is ...]"+periods.get(0).getStart());
-		newPharmacySchedule.setPeriods(periods);
+		
+		// convert from type PharmacyPeriodReq to PharmacyPeriod
+		List <PharmacyPeriod> pharmacyPeriods=new ArrayList <>();
+		int count=0;
+		for (PharmacyPeriodReq pharmacyPeriod : periods) {
+			PharmacyPeriod temp=new PharmacyPeriod();
+			temp.setStartTime(pharmacyPeriod.getStart());
+			temp.setEndTime(pharmacyPeriod.getEnd());
+			temp.setCreatedBy(newPharmacySchedule.getCreatedBy());
+			temp.setCreatedDate(newPharmacySchedule.getCreatedDate());
+			temp.setEnabled(newPharmacySchedule.getEnabled());
+			temp.setPeriod(count);
+			count++;
+			pharmacyPeriods.add(temp);
+		}
+		
+		newPharmacySchedule.setPeriods(pharmacyPeriods);
         LocalDate created_date = LocalDate.now();
 		newPharmacySchedule.setCreatedDate(created_date);
 
