@@ -126,7 +126,7 @@ public class DatabaseDriver {
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date) VALUES (?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
+					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date) VALUES (?, ?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, record.getProgramName());
 			ps.setInt(2, record.getReportId());
