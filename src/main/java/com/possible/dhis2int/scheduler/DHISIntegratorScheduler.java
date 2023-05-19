@@ -240,6 +240,7 @@ public class DHISIntegratorScheduler {
 		newschedule.setFrequency(schedFrequency);
 		newschedule.setCreatedBy("Test");
 		newschedule.setEnabled(true);
+		newschedule.setStatus("Ready");
 
 		LocalDate created_date = LocalDate.now();
 		String target_date = getMonthlyTargetDate(created_date).toString();
@@ -301,6 +302,7 @@ public class DHISIntegratorScheduler {
 		newPharmacySchedule.setFrequency(schedFrequency);
 		newPharmacySchedule.setCreatedBy("Test");
 		newPharmacySchedule.setEnabled(true);
+		newPharmacySchedule.setStatus("Ready");
 		LocalDate created_date = LocalDate.now();
 		newPharmacySchedule.setCreatedDate(created_date);
 		logger.info("[Extracting periods from the request body ...]");
@@ -321,6 +323,7 @@ public class DHISIntegratorScheduler {
 			temp.setEnabled(true);
 			logger.info("[New schedule enabled value is ...]"+temp.getEnabled());
 			temp.setPeriod(count);
+			temp.setStatus("Ready");
 			count++;
 			pharmacyPeriods.add(temp);
 		}

@@ -97,7 +97,7 @@ public class DatabaseDriver {
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date,target_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
+					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date,target_time,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
 			ps.setString(1, record.getProgramName());
 			ps.setInt(2, record.getReportId());
@@ -106,6 +106,7 @@ public class DatabaseDriver {
 			ps.setString(5, record.getCreatedBy());
 			ps.setString(6, record.getCreatedDate().toString());
 			ps.setString(7, record.getTargetDate().toString());
+			ps.setString(8, record.getStatus());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
@@ -126,7 +127,7 @@ public class DatabaseDriver {
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date) VALUES (?, ?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
+					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date, status) VALUES (?, ?, ?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, record.getProgramName());
 			ps.setInt(2, record.getReportId());
@@ -135,6 +136,7 @@ public class DatabaseDriver {
 			ps.setString(5, record.getCreatedBy());
 			ps.setString(6, record.getCreatedDate().toString());
 			//ps.setString(6, record.getTargetDate().toString());
+			ps.setString(7, record.getStatus());
 			ps.executeUpdate();
 
 			//Get id of schedule just inserted
@@ -147,7 +149,7 @@ public class DatabaseDriver {
 				//Now insert in periods table
 				for (PharmacyPeriod period : record.getPeriods()){
 					PreparedStatement ps1 = connection.prepareStatement(
-						"INSERT INTO dhis2_pharmacy_periods (dhis2_schedule_id, period, enabled,created_by,created_date,start_time, end_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
+						"INSERT INTO dhis2_pharmacy_periods (dhis2_schedule_id, period, enabled,created_by,created_date,start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
 					ps1.setInt(1, scheduleId);	
 					ps1.setInt(2, period.getPeriod());
@@ -156,6 +158,7 @@ public class DatabaseDriver {
 					ps1.setString(5, period.getCreatedDate().toString());
 					ps1.setString(6, period.getStartTime());
 					ps1.setString(7, period.getEndTime());
+					ps1.setString(8, period.getStatus());
 
 					ps1.executeUpdate();
 				}
