@@ -399,7 +399,7 @@ function createDHISSchedule(clicked_id, frequency){
 
 	// Create the AJAX request
 	const xhr = new XMLHttpRequest();
-	const body = pharmReportingPeriods;
+	const body = JSON.stringify(pharmReportingPeriods);
 	if(reportTypeName=="ERPGeneric"){
 		//xhr.open('POST', `/dhis-integration/create-pharm-schedule`);
 		// Define the request body
@@ -423,7 +423,8 @@ function createDHISSchedule(clicked_id, frequency){
 	if(reportTypeName=="ERPGeneric"){
 		// Send the request
 		console.log("[Posting new multi-period pharm schedule. Periods are ]"+ JSON.stringify(pharmReportingPeriods));
-		xhr.send();
+		
+		xhr.send(body);
 	}
 	else	
 		xhr.send();
