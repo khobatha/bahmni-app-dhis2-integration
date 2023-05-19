@@ -298,6 +298,7 @@ public class DHISIntegratorScheduler {
 		
 		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
 		newPharmacySchedule.setProgName(reportName);
+		newPharmacySchedule.setFrequency(schedFrequency);
 		newPharmacySchedule.setCreatedBy("Test");
 		newPharmacySchedule.setEnabled(true);
 		LocalDate created_date = LocalDate.now();
