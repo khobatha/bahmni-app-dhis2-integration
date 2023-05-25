@@ -1,6 +1,8 @@
 package com.possible.dhis2int.scheduler;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PharmacySchedule extends Schedule {
@@ -13,9 +15,24 @@ public class PharmacySchedule extends Schedule {
     private String lastRun;
     private String status;
     private boolean enabled;
+    private String target_date;
 
     public List<PharmacyPeriod> getPeriods() {
         return periods;
+    }
+
+    public void setTargetDateInit(){
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        LocalDate currentDate = LocalDate.now();
+        int currYear = currentDate.getYear();
+        int currMonth = currentDate.getMonthValue();
+        int currDay = currentDate.getDayOfMonth();
+        for(int i=0;i<periods.size();i++){
+            LocalDateTime dateTime = LocalDateTime.parse(periods.get(i).getStartTime(), formatter);
+            if(currYear==dateTime.getYear() && currMonth==dateTime.getMonthValue() && currDay < dateTime.getDayOfMonth()){
+                this.target_date=periods.get(i).getStartTime();
+            }
+        }
     }
 
     public void setPeriods(List<PharmacyPeriod> periods) {
