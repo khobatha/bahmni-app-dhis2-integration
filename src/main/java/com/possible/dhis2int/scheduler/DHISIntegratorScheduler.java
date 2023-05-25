@@ -303,6 +303,7 @@ public class DHISIntegratorScheduler {
 		newPharmacySchedule.setCreatedBy("Test");
 		newPharmacySchedule.setEnabled(true);
 		newPharmacySchedule.setStatus("Ready");
+		newPharmacySchedule.setTargetDateInit();
 		LocalDate created_date = LocalDate.now();
 		newPharmacySchedule.setCreatedDate(created_date);
 		logger.info("[Extracting periods from the request body ...]");

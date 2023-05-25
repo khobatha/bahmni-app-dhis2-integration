@@ -396,13 +396,9 @@ function createDHISSchedule(clicked_id, frequency){
 	params.append('scheduleTime',scheduleTime);
 
 	
-
-	// Create the AJAX request
 	const xhr = new XMLHttpRequest();
 	const body = JSON.stringify(pharmReportingPeriods);
 	if(reportTypeName=="ERPGeneric" && isCustomReportingPeriods.checked){
-		//xhr.open('POST', `/dhis-integration/create-pharm-schedule`);
-		// Define the request body
 		xhr.open('POST', `/dhis-integration/create-pharm-schedule?${params.toString()}`);
 	}
 	else
