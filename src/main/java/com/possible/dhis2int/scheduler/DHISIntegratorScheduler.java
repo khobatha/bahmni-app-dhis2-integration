@@ -314,7 +314,7 @@ public class DHISIntegratorScheduler {
 		List <PharmacyPeriod> pharmacyPeriods=new ArrayList <>();
 		int count=0;
 		for (PharmacyPeriodReq pharmacyPeriod : periods) {
-			if(pharmacyPeriod.getStart()!=null ){
+			if(!pharmacyPeriod.getStart().isEmpty()){
 				PharmacyPeriod temp=new PharmacyPeriod();
 				temp.setStartTime(pharmacyPeriod.getStart());
 				temp.setEndTime(pharmacyPeriod.getEnd());
