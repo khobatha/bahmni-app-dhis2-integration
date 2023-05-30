@@ -127,7 +127,7 @@ public class DatabaseDriver {
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date, status) VALUES (?, ?, ?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
+					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date,target_time,status) VALUES (?, ?, ?, ?, ?, ?,?, ?)",Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, record.getProgramName());
 			ps.setInt(2, record.getReportId());
@@ -135,8 +135,8 @@ public class DatabaseDriver {
 			ps.setBoolean(4, record.getEnabled());
 			ps.setString(5, record.getCreatedBy());
 			ps.setString(6, record.getCreatedDate().toString());
-			//ps.setString(6, record.getTargetDate().toString());
-			ps.setString(7, record.getStatus());
+			ps.setString(7, record.getTargetDate().toString());
+			ps.setString(8, record.getStatus());
 			ps.executeUpdate();
 
 			//Get id of schedule just inserted
