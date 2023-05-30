@@ -31,11 +31,21 @@ public class PharmacySchedule extends Schedule {
         int currYear = currentDate.getYear();
         int currMonth = currentDate.getMonthValue();
         int currDay = currentDate.getDayOfMonth();
+        Boolean found=false;
         for(int i=0;i<periods.size();i++){
             LocalDate period = LocalDate.parse(periods.get(i).getStartTime(), formatter);
-            if(!periods.get(i).getStartTime().isEmpty() && currYear==period.getYear() && currMonth==period.getMonthValue() && currDay < period.getDayOfMonth()){
-                targetDate=periods.get(i).getStartTime();
-                logger.info("[Found the next date in line ...]"+period.format(formatter));
+            if(!periods.get(i).getStartTime().isEmpty() && !found){ 
+                if(currYear==period.getYear()){
+                    if(currMonth==period.getMonthValue() && currDay<period.getDayOfMonth()){
+                        targetDate=periods.get(i).getStartTime();
+                        logger.info("[Found the next date in line ...]"+period.format(formatter));
+                        found=true;
+                    }else if(currMonth==period.getMonthValue()-1){
+                        targetDate=periods.get(i).getStartTime();
+                        logger.info("[Found the next date in line ...]"+period.format(formatter));
+                        found=true;
+                    }
+                }
             }
         }
     }
