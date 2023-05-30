@@ -335,6 +335,7 @@ public class DHISIntegratorScheduler {
 
 		newPharmacySchedule.setPeriods(pharmacyPeriods);
 		logger.info("[Start date of first period of new schedule is...]"+newPharmacySchedule.getPeriods().get(0).getStartTime());
+		logger.info("[Number of periods for the new schedule is...]"+newPharmacySchedule.getPeriods().size());
 		newPharmacySchedule.setTargetDateInit();
 		logger.info("[Target date of new schedule set...as...]"+newPharmacySchedule.getTargetDate());
 
