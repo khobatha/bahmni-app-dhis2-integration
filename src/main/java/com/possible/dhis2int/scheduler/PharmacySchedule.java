@@ -5,7 +5,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import static org.apache.log4j.Logger.getLogger;
+
 public class PharmacySchedule extends Schedule {
+    private final Logger logger = getLogger(PharmacySchedule.class);
     private List <PharmacyPeriod> periods;
     private int id;
     private int dhis2ScheduleId;
@@ -31,6 +35,7 @@ public class PharmacySchedule extends Schedule {
             LocalDate period = LocalDate.parse(periods.get(i).getStartTime(), formatter);
             if(currYear==period.getYear() && currMonth==period.getMonthValue() && currDay < period.getDayOfMonth()){
                 this.target_date=periods.get(i).getStartTime();
+                logger.info("[Found the next date in line ...]"+period.format(formatter));
             }
         }
     }

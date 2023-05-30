@@ -317,6 +317,7 @@ public class DHISIntegratorScheduler {
 			if(!pharmacyPeriod.getStart().isEmpty()){
 				PharmacyPeriod temp=new PharmacyPeriod();
 				temp.setStartTime(pharmacyPeriod.getStart());
+				logger.info("[New schedule start date value is ...]"+temp.getStartTime());
 				temp.setEndTime(pharmacyPeriod.getEnd());
 				temp.setCreatedBy(newPharmacySchedule.getCreatedBy());
 				logger.info("[New schedule created by value is ...]"+temp.getCreatedBy());
