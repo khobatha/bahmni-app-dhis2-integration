@@ -33,7 +33,7 @@ public class PharmacySchedule extends Schedule {
         int currDay = currentDate.getDayOfMonth();
         for(int i=0;i<periods.size();i++){
             LocalDate period = LocalDate.parse(periods.get(i).getStartTime(), formatter);
-            if(currYear==period.getYear() && currMonth==period.getMonthValue() && currDay < period.getDayOfMonth()){
+            if(!periods.get(i).getStartTime().isEmpty() && currYear==period.getYear() && currMonth==period.getMonthValue() && currDay < period.getDayOfMonth()){
                 this.target_date=periods.get(i).getStartTime();
                 logger.info("[Found the next date in line ...]"+period.format(formatter));
             }
