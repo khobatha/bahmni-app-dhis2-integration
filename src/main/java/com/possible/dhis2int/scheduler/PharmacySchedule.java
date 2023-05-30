@@ -22,14 +22,14 @@ public class PharmacySchedule extends Schedule {
     }
 
     public void setTargetDateInit(){
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         LocalDate currentDate = LocalDate.now();
         int currYear = currentDate.getYear();
         int currMonth = currentDate.getMonthValue();
         int currDay = currentDate.getDayOfMonth();
         for(int i=0;i<periods.size();i++){
-            LocalDateTime dateTime = LocalDateTime.parse(periods.get(i).getStartTime(), formatter);
-            if(currYear==dateTime.getYear() && currMonth==dateTime.getMonthValue() && currDay < dateTime.getDayOfMonth()){
+            LocalDate period = LocalDate.parse(periods.get(i).getStartTime(), formatter);
+            if(currYear==period.getYear() && currMonth==period.getMonthValue() && currDay < period.getDayOfMonth()){
                 this.target_date=periods.get(i).getStartTime();
             }
         }
