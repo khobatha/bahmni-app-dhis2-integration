@@ -19,7 +19,7 @@ public class PharmacySchedule extends Schedule {
     private String lastRun;
     private String status;
     private boolean enabled;
-    private String target_date;
+    private String targetDate;
 
     public List<PharmacyPeriod> getPeriods() {
         return periods;
@@ -34,12 +34,15 @@ public class PharmacySchedule extends Schedule {
         for(int i=0;i<periods.size();i++){
             LocalDate period = LocalDate.parse(periods.get(i).getStartTime(), formatter);
             if(!periods.get(i).getStartTime().isEmpty() && currYear==period.getYear() && currMonth==period.getMonthValue() && currDay < period.getDayOfMonth()){
-                this.target_date=periods.get(i).getStartTime();
+                targetDate=periods.get(i).getStartTime();
                 logger.info("[Found the next date in line ...]"+period.format(formatter));
             }
         }
     }
 
+    public String getTargetDate(){
+        return this.targetDate;
+    }
     public void setPeriods(List<PharmacyPeriod> periods) {
         this.periods = periods;
     }
