@@ -314,25 +314,28 @@ public class DHISIntegratorScheduler {
 		List <PharmacyPeriod> pharmacyPeriods=new ArrayList <>();
 		int count=0;
 		for (PharmacyPeriodReq pharmacyPeriod : periods) {
-			PharmacyPeriod temp=new PharmacyPeriod();
-			temp.setStartTime(pharmacyPeriod.getStart());
-			temp.setEndTime(pharmacyPeriod.getEnd());
-			temp.setCreatedBy(newPharmacySchedule.getCreatedBy());
-			logger.info("[New schedule created by value is ...]"+temp.getCreatedBy());
-			temp.setCreatedDate(newPharmacySchedule.getCreatedDate());
-			logger.info("[New schedule created date value is ...]"+temp.getCreatedDate());
-			temp.setEnabled(true);
-			logger.info("[New schedule enabled value is ...]"+temp.getEnabled());
-			temp.setPeriod(count);
-			temp.setStatus("Ready");
-			count++;
-			pharmacyPeriods.add(temp);
+			if(pharmacyPeriod.getStart()!=null ){
+				PharmacyPeriod temp=new PharmacyPeriod();
+				temp.setStartTime(pharmacyPeriod.getStart());
+				temp.setEndTime(pharmacyPeriod.getEnd());
+				temp.setCreatedBy(newPharmacySchedule.getCreatedBy());
+				logger.info("[New schedule created by value is ...]"+temp.getCreatedBy());
+				temp.setCreatedDate(newPharmacySchedule.getCreatedDate());
+				logger.info("[New schedule created date value is ...]"+temp.getCreatedDate());
+				temp.setEnabled(true);
+				logger.info("[New schedule enabled value is ...]"+temp.getEnabled());
+				temp.setPeriod(count);
+				temp.setStatus("Ready");
+				count++;
+				pharmacyPeriods.add(temp);
+			}
+			
 		}
 
 		newPharmacySchedule.setPeriods(pharmacyPeriods);
 		newPharmacySchedule.setTargetDateInit();
 		logger.info("[Target date of new schedule set...as...]"+newPharmacySchedule.getTargetDate());
-		
+
 		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypeName+"';";
 		String type = "MRSGeneric";
 		Results results = new Results();
