@@ -40,7 +40,7 @@ public class PharmacySchedule extends Schedule {
                         targetDate=periods.get(i).getStartTime();
                         logger.info("[Found the next date in line ...]"+period.format(formatter));
                         found=true;
-                    }else if(currMonth==period.getMonthValue()-1){
+                    }else if(currMonth<period.getMonthValue()){
                         targetDate=periods.get(i).getStartTime();
                         logger.info("[Found the next date in line ...]"+period.format(formatter));
                         found=true;
