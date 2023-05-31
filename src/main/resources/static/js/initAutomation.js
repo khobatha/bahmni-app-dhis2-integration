@@ -66,6 +66,7 @@ function addCustomPeriodCheckboxEventListener(){
 function renderDHISSchedules(url){
 	getDHISSchedules(url).then(function(data){
 		console.log('[render hmis program schedules]');
+		console.log('[url ]'+url);
 		console.log(data);
 		//alert(data);
 		var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
