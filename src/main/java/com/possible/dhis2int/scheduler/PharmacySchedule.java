@@ -25,6 +25,9 @@ public class PharmacySchedule extends Schedule {
         return periods;
     }
 
+    public void setTargetDate(String date){
+        targetDate=date;
+    }
     public void setTargetDateInit(){
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         LocalDate currentDate = LocalDate.now();
