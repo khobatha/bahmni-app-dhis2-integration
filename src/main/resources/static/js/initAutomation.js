@@ -512,6 +512,7 @@ function showFeedbackMessage(message, type, modalName) {
 function closeModal(modalName){
 	var modal = document.getElementById(modalName);
 	modal.style.display = 'none';
+	location.reload();
 }
 
 function element(name, index) {
