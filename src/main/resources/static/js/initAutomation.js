@@ -271,6 +271,7 @@ function createDHISSchedule(clicked_id, frequency){
 	console.log('Creating new schedule, clicked_id='+clicked_id+' frequency='+frequency);
 	var parameters=[];
 	var submitTo;
+	var modalName;
 	var pharmReportingPeriods=[];
 	var reportName;
 	var reportTypeName;
@@ -291,6 +292,7 @@ function createDHISSchedule(clicked_id, frequency){
 		scheduleTime=document.getElementById('clinical-time').value;
 		scheduleFrequency=document.getElementById('clinical-frequency').value;
 		reportTypeName="MRSGeneric";
+		modalName ='addClinicalScheduleModal';
 	}
 	else if(clicked_id == 'addPharmacySchedulebtn'){
 		//alert('[Creating a pharmacy schedule.]');
@@ -298,6 +300,7 @@ function createDHISSchedule(clicked_id, frequency){
 		scheduleTime=document.getElementById('pharmacy-time').value;
 		scheduleFrequency=document.getElementById('pharmacy-frequency').value;
 		reportTypeName="ERPGeneric";
+		modalName ='addPharmacyScheduleModal';
 		if(isCustomReportingPeriods.checked){
 		// if this pharmacy report has custom reporting periods, read them
 			for (let i = 1; i <= 12; i++) {
@@ -319,6 +322,7 @@ function createDHISSchedule(clicked_id, frequency){
 		scheduleTime=document.getElementById('lab-time').value;
 		scheduleFrequency=document.getElementById('lab-frequency').value;
 		reportTypeName="ELISGeneric";
+		modalName ='addLabScheduleModal';
 	}
 
 	//alert('[ReportTypeName is ]'+reportTypeName);
@@ -425,7 +429,9 @@ function createDHISSchedule(clicked_id, frequency){
 	}
 	else	
 		xhr.send();
-
+	
+	var modal = document.getElementById(modalName);
+	modal.style.display = 'none';
 	
 	/*fetch(submitTo, {
 		method: 'post',
