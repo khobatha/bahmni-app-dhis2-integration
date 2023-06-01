@@ -416,6 +416,25 @@ table.table .avatar {
     display: flex;
     width: 100%;
 }
+
+/* CSS for success feedback */
+.feedback-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border: 1px solid #d6e9c6;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* CSS for failure feedback */
+  .feedback-failure {
+    background-color: #f2dede;
+    color: #a94442;
+    border: 1px solid #ebccd1;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
     
 /* SWITCH STYLING */
 .switch {
