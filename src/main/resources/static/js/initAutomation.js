@@ -492,25 +492,28 @@ function createDHISSchedule(clicked_id, frequency){
 
 }
 
-function showFeedbackMessage(message, type, modalName) {
-	var modal = document.getElementById(modalName);
+function showFeedbackMessage(message, type, modalID) {
+	var modal = document.getElementById(modalID);
 	// Create a new feedback message element
 	const feedbackElement = document.createElement('div');
 	feedbackElement.className = `feedback-${type}`;
 	feedbackElement.textContent = message;
-  
-	// Insert the feedback message into the modal
-	modal.appendChild(feedbackElement);
+	
+	// Get a reference to the form element within the modal
+	const form = modal.querySelector('form');
+
+	// Insert the feedback message into the modal form
+	form.appendChild(feedbackElement);
   
 	// Close the modal after a certain duration (e.g., 3 seconds)
 	setTimeout(function() {
-	  closeModal(modalName);
+	  closeModal(modalID);
 	  feedbackElement.remove();
 	}, 3000);
   }
 
-function closeModal(modalName){
-	var modal = document.getElementById(modalName);
+function closeModal(modalID){
+	var modal = document.getElementById(modalID);
 	modal.style.display = 'none';
 	location.reload();
 }
