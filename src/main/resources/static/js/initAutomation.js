@@ -414,11 +414,13 @@ function createDHISSchedule(clicked_id, frequency){
 	xhr.onload = function() {
 	if (xhr.status === 200) {
 		console.log(xhr.responseText);
+		showFeedbackMessage('New schedule created successfully!', 'success', modalName);
 	}
 	};
 
 	xhr.onerror = function() {
-	console.error('Error:', xhr.statusText);
+		console.error('Error:', xhr.statusText);
+		showFeedbackMessage('Error creating new schedule!', 'failure', modalName);
 	};
 
 	if(reportTypeName=="ERPGeneric" && isCustomReportingPeriods.checked){
@@ -430,9 +432,7 @@ function createDHISSchedule(clicked_id, frequency){
 	else	
 		xhr.send();
 	
-	var modal = document.getElementById(modalName);
-	modal.style.display = 'none';
-	
+	//closeModal(modalName);	
 	/*fetch(submitTo, {
 		method: 'post',
 		body: JSON.stringify(parameters),
@@ -485,6 +485,27 @@ function createDHISSchedule(clicked_id, frequency){
 
 }
 
+function showFeedbackMessage(message, type, modalName) {
+	var modal = document.getElementById(modalName);
+	// Create a new feedback message element
+	const feedbackElement = document.createElement('div');
+	feedbackElement.className = `feedback-${type}`;
+	feedbackElement.textContent = message;
+  
+	// Insert the feedback message into the modal
+	modal.appendChild(feedbackElement);
+  
+	// Close the modal after a certain duration (e.g., 3 seconds)
+	setTimeout(function() {
+	  closeModal(modalName);
+	  feedbackElement.remove();
+	}, 3000);
+  }
+
+function closeModal(modalName){
+	var modal = document.getElementById(modalName);
+	modal.style.display = 'none';
+}
 
 function element(name, index) {
 	var id = name + '-' + index;
