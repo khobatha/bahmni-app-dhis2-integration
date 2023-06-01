@@ -365,33 +365,6 @@ function createDHISSchedule(clicked_id, frequency){
 						"</td>";
 		LabSchedulesTable.appendChild(tr);
 	}
-	
-	/*
-	if(isCustomReportingPeriods.checked || reportTypeName=="ERPGeneric"){
-		submitTo=createPharmScheduleUrl;
-		parameters = {
-			reportName : reportName,
-			reportTypeName: reportTypeName,
-			scheduleFrequency : scheduleFrequency,
-			scheduleTime : scheduleTime
-		};
-		console.log("[Posting new multi-period pharm schedule. Periods are ]"+ JSON.stringify(pharmReportingPeriods));
-		/*return $.post(submitTo, parameters, function(response) {
-			console.log('Received response:', response);
-		  });*/
-		
-	/*}else{
-		submitTo=createScheduleUrl;
-		parameters = {
-			reportName : reportName,
-			reportTypeName: reportTypeName,
-			scheduleFrequency : scheduleFrequency,
-			scheduleTime : scheduleTime
-		};
-		/*return $.post(submitTo, parameters, function(response) {
-			console.log('Received response:', response);
-		  });*/
-	//}
 
 	// Define the request parameters
 	const params = new URLSearchParams();
