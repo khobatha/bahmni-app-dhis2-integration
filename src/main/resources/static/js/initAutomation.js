@@ -414,7 +414,14 @@ function createDHISSchedule(clicked_id, frequency){
 	xhr.onload = function() {
 	if (xhr.status === 200) {
 		console.log(xhr.responseText);
-		showFeedbackMessage('New schedule created successfully!', 'success', modalName);
+		if(xhr.responseText=="true"){
+			console.log('New schedule created successfully!');
+			showFeedbackMessage('New schedule created successfully!', 'success', modalName);
+		}
+		else if(xhr.responseText=="false"){
+			console.log('Error creating new schedule!');
+			showFeedbackMessage('Error creating new schedule!', 'failure', modalName);
+		}
 	}
 	};
 
