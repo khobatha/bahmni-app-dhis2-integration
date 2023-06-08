@@ -609,7 +609,7 @@ public class DHISIntegratorScheduler {
 	}
     
 	// schedule submission at 9am from the 1st to 8th (assuming up to date data will have been entered on the 7th - last day) of every month
-	@Scheduled(cron = "0 0 9 1-8 * *")
+	@Scheduled(cron = "0 0 7 1-8 * *")
 	public void processSchedules() {
 		// get schedules
 		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
