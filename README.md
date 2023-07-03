@@ -74,6 +74,7 @@ Note that the url could be at domain or ip address level (ex1) or could be at a 
 The password for the DHIS2 user.
 </td><td>[password]</td></tr>
   <tr><td>openmrs.db.url</td><td>Mysql connection url to access "openmrs" database. Set valid user and password in the url.</td><td>jdbc:mysql://[host-id]/openmrs?user=[username]&password=[password]</td></tr>
+ <tr><td>odoo.db.url</td><td>Postgresql connection url to access "odoo" database. Set valid container ip, user and password in the url.</td><td>jdbc:postgresql://[erp-container-ip]/odoo?user=[username]&password=[password]</td></tr>
   <tr><td>submission.audit.folder</td><td>All DHIS2 submissions are stored in this directory. Ensure the directory exists and "bahmni" user has access to it, or configure a different directory.</td><td>/dhis-integration-data</td></tr>
   <tr><td>server.port</td><td>Server config. Port for server to listen to.</td><td>8040</td></tr>
   <tr><td>server.context-path</td><td>Server config. Mapping incoming requests.</td><td>/dhis-integration/</td></tr>
