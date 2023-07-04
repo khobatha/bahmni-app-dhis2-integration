@@ -50,18 +50,18 @@ function initPharmSchedulePeriodDatePickers(){
 		startDatetime.setMonth(periodMonths[i]); //e.g August
 		if(periodMonths[i] >=11){// e.g Dec 2023
 			endOfYear=true;
-			incrementedYearEndDateValue = new Date(endDatetime.setFullYear(endDatetime.getFullYear() + 1)); // move to next year
-			incrementedYearEndDateValue.setMonth(periodMonths[i+1]);// i.e Jan 2024
+			//incrementedYearEndDateValue = new Date(endDatetime.setFullYear(endDatetime.getFullYear() + 1)); // move to next year
+			//incrementedYearEndDateValue.setMonth(periodMonths[i+1]);// i.e Jan 2024
 		}
 		else{
 			endDatetime.setMonth(periodMonths[i+1]);
 		}
 		//console.log(startDatetime);
 		//console.log(endOfYear?incrementedYearEndDateValue:endDatetime);
-		startDatetimePicker.value= startDatetime.toISOString().slice(0, 16);
-		console.log(startDatetimePicker.value);
-		endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
-		console.log(endDatetimePicker.value);
+		//startDatetimePicker.value= startDatetime.toISOString().slice(0, 16);
+		//console.log(startDatetimePicker.value);
+		//endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
+		//console.log(endDatetimePicker.value);
 	}
 
 }
