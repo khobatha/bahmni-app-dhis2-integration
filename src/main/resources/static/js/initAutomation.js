@@ -56,9 +56,19 @@ function initPharmSchedulePeriodDatePickers(){
 			setEndYear=true;
 		}
 		let startDate=`${startYear}-${String(startMonth).padStart(2, "0")}-${String(startDay).padStart(2, "0")}`;
+		let minStartDate=startDate;
+		let endDay=startMonth==2?29:31;
+		let maxStartDate=`${startYear}-${String(startMonth).padStart(2, "0")}-${String(endDay).padStart(2, "0")}`;
 		let endDate=`${endYear}-${String(endMonth).padStart(2, "0")}-${String(startDay).padStart(2, "0")}`;
+		let minEndDate=enDate;
+		endDay=endMonth==2?29:31;
+		let maxEndDate=`${endYear}-${String(endMonth).padStart(2, "0")}-${String(endDay).padStart(2, "0")}`;
 		startDatetimePicker.value= startDate;
+		startDatetimePicker.minDate= minStartDate;
+		startDatetimePicker.maxDate= maxStartDate;
 		endDatetimePicker.value= endDate;
+		endDatetimePicker.minDate=minEndDate;
+		endDatetimePicker.maxDate=maxEndDate;
 		console.log(endDate);
 		console.log(startDate);
 	}
