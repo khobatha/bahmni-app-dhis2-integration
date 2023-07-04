@@ -39,7 +39,7 @@ function initPharmSchedulePeriodDatePickers(){
 	let endOfYear=false;
 	let currentDatetime = new Date();
 	currentDatetime.setHours(0, 0, 0, 0);
-	let currentDate = new Date(currentDatetime.getFullYear(),currentDatetime.getMonth(),currentDatetime.getDate());
+	let currentDate = new Date(currentDatetime.getMonth(),currentDatetime.getDate(),currentDatetime.getFullYear());
 	let incrementedYearEndDateValue=currentDate;
 	for (let i = 0; i < 12; i++) {
 		let startDatetimePicker = document.getElementById(`reporting_period${i+1}-start`);
