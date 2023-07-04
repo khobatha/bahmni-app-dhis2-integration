@@ -35,7 +35,7 @@ $(document).ready(
 
 function initPharmSchedulePeriodDatePickers(){
 
-	let periodMonths= [7,8,9,10,11,0,1,2,3,4,5,6,7];
+	let periodMonths= [8,9,10,11,12,1,2,3,4,5,6,7,8];
 	let currentDate = new Date();
 	let currentYear=currentDate.getFullYear();
 	let endYear=currentYear;
