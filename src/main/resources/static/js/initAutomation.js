@@ -41,6 +41,7 @@ function initPharmSchedulePeriodDatePickers(){
 	let endYear=currentYear;
 	let startYear=currentYear;
 	let startDay=1;
+	let setEndYear=false;
 	for (let i = 0; i < 12; i++) {
 		let startDatetimePicker = document.getElementById(`reporting_period${i+1}-start`);
 		let endDatetimePicker = document.getElementById(`reporting_period${i+1}-end`);
@@ -50,8 +51,9 @@ function initPharmSchedulePeriodDatePickers(){
 		if(i ==4){
 			endYear=endYear+1;
 		}
-		else if(i>4){
+		else if(i>4 && !setEndYear){
 			startYear=startYear+1;
+			setEndYear=true;
 		}
 		let startDate=`${startYear}-${String(startMonth).padStart(2, "0")}-${String(startDay).padStart(2, "0")}`;
 		let endDate=`${endYear}-${String(endMonth).padStart(2, "0")}-${String(startDay).padStart(2, "0")}`;
