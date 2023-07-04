@@ -58,7 +58,7 @@ function initPharmSchedulePeriodDatePickers(){
 		}
 		//console.log(startDatetime);
 		//console.log(endOfYear?incrementedYearEndDateValue:endDatetime);
-		startDatetimePicker.value= startDatetime.toISOString().slice(0, 16);
+		startDatetimePicker.value= startDatetime.toLocaleString("en-US", { timeZone: "UTC" });
 		console.log(startDatetimePicker.value);
 		//endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
 		//console.log(endDatetimePicker.value);
