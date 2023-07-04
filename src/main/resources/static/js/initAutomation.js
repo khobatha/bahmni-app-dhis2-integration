@@ -39,7 +39,7 @@ function initPharmSchedulePeriodDatePickers(){
 	let endOfYear=false;
 	let currentDatetime = new Date();
 	currentDatetime.setHours(0, 0, 0, 0);
-	let currentDate = new Date(currentDatetime.getMonth(),currentDatetime.getDate(),currentDatetime.getFullYear());
+	let currentDate = new Date(currentDatetime.getFullYear(),currentDatetime.getMonth(),currentDatetime.getDate());
 	let incrementedYearEndDateValue=currentDate;
 	for (let i = 0; i < 12; i++) {
 		let startDatetimePicker = document.getElementById(`reporting_period${i+1}-start`);
@@ -47,22 +47,22 @@ function initPharmSchedulePeriodDatePickers(){
 		
 		//console.log(startDatetimePicker.value);
 		//console.log(endDatetimePicker.value);
-		const startDatetime = currentDate;//new Date(startDatetimePicker.value);
-		const endDatetime = currentDate;//new Date(endDatetimePicker.value);
-		startDatetime.setMonth(periodMonths[i]); //e.g August
+		const startDate = currentDate;//new Date(startDatetimePicker.value);
+		const endDate = currentDate;//new Date(endDatetimePicker.value);
+		startDate.setMonth(periodMonths[i]); //e.g August
 		if(periodMonths[i] >=11){// e.g Dec 2023
 			endOfYear=true;
 			//incrementedYearEndDateValue = new Date(endDatetime.setFullYear(endDatetime.getFullYear() + 1)); // move to next year
 			//incrementedYearEndDateValue.setMonth(periodMonths[i+1]);// i.e Jan 2024
 		}
 		else{
-			endDatetime.setMonth(periodMonths[i+1]);
+			endDate.setMonth(periodMonths[i+1]);
 		}
 		//console.log(startDatetime);
 		//console.log(endOfYear?incrementedYearEndDateValue:endDatetime);
 		startDatetimePicker.value= "2023-07-04";//startDatetime.toLocaleString("en-US", { timeZone: "UTC" });
 		console.log(`reporting_period${i+1}-start`+startDatetimePicker.value);
-		console.log(startDatetime.toLocaleString("en-US", { timeZone: "UTC" }))
+		console.log(startDate.toLocaleString("en-US", { timeZone: "UTC" }))
 		//endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
 		//console.log(endDatetimePicker.value);
 	}
