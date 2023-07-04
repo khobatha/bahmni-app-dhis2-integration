@@ -60,7 +60,7 @@ function initPharmSchedulePeriodDatePickers(){
 		}
 		//console.log(startDatetime);
 		//console.log(endOfYear?incrementedYearEndDateValue:endDatetime);
-		startDatetimePicker.value= startDatetime.toLocaleString("en-US", { timeZone: "UTC" });
+		startDatetimePicker.value= "7/5/2023";//startDatetime.toLocaleString("en-US", { timeZone: "UTC" });
 		console.log(`reporting_period${i+1}-start`+startDatetimePicker.value);
 		console.log(startDatetime.toLocaleString("en-US", { timeZone: "UTC" }))
 		//endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
