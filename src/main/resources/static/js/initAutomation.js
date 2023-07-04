@@ -27,10 +27,38 @@ $(document).ready(
 			initDHISProgramNameDropdowns();
 			renderDHISSchedules(getClinicalSchedulesUrl);
 			renderDHISSchedules(getPharmSchedulesUrl);
+			initPharmSchedulePeriodDatePickers();
 			addPharmScheduleFrequencyEventListener();
 			addCustomPeriodCheckboxEventListener();
 			
 });
+
+function initPharmSchedulePeriodDatePickers(){
+
+	let periodMonths= [7,8,9,10,11,0,1,2,3,4,5,6];
+	let endOfYear=false;
+	for (let i = 0; i < 12; i++) {
+		let startDatetimePicker = document.getElementById(`reporting_period${i+1}-start`);
+		let endDatetimePicker = document.getElementById(`reporting_period${i+1}-end`);
+		
+		const startDatetime = new Date(startDatetimePicker.value);
+		const endDatetime = new Date(endDatetimePicker.value);
+		startDatetime.setMonth(periodMonths[i]); //e.g August
+		if(periodMonths[i]==11){// e.g Dec 2023
+			endOfYear=true;
+			const incrementedYearEndDateValue = new Date(endDatetime.setFullYear(endDatetime.getFullYear() + 1)); // move to next year
+			incrementedYearEndDateValue.setMonth(periodMonths[i]+1);// i.e Jan 2024
+		}
+		else{
+			endDatetime.setMonth(periodMonths[i]+1);
+		}
+		startDatetimePicker.value= startDatetime.toISOString().slice(0, 16);
+		endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
+		
+	}
+
+}
+
 
 function addPharmScheduleFrequencyEventListener(){
 // if monthly frequency selected for a pharmacy report, display checkbox for determining if report has
