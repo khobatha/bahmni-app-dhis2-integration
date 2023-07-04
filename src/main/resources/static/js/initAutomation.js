@@ -35,36 +35,30 @@ $(document).ready(
 
 function initPharmSchedulePeriodDatePickers(){
 
-	let periodMonths= [7,8,9,10,11,0,1,2,3,4,5,6];
-	let endOfYear=false;
-	let currentDatetime = new Date();
-	currentDatetime.setHours(0, 0, 0, 0);
-	let currentDate = new Date(currentDatetime.getFullYear(),currentDatetime.getMonth(),currentDatetime.getDate());
-	let incrementedYearEndDateValue=currentDate;
+	let periodMonths= [7,8,9,10,11,0,1,2,3,4,5,6,7];
+	let currentDate = new Date();
+	let currentYear=currentDate.getFullYear();
+	let endYear=currentYear;
+	let startYear=currentYear;
+	let startDate=1;
 	for (let i = 0; i < 12; i++) {
 		let startDatetimePicker = document.getElementById(`reporting_period${i+1}-start`);
 		let endDatetimePicker = document.getElementById(`reporting_period${i+1}-end`);
 		
-		//console.log(startDatetimePicker.value);
-		//console.log(endDatetimePicker.value);
-		const startDate = currentDate;//new Date(startDatetimePicker.value);
-		const endDate = currentDate;//new Date(endDatetimePicker.value);
-		startDate.setMonth(periodMonths[i]); //e.g August
-		if(periodMonths[i] >=11){// e.g Dec 2023
-			endOfYear=true;
-			//incrementedYearEndDateValue = new Date(endDatetime.setFullYear(endDatetime.getFullYear() + 1)); // move to next year
-			//incrementedYearEndDateValue.setMonth(periodMonths[i+1]);// i.e Jan 2024
+		let startMonth=periodMonths[i] ;
+		let endMonth=periodMonths[i+1];
+		if(i ==4){
+			endYear=endYear+1;
 		}
-		else{
-			endDate.setMonth(periodMonths[i+1]);
+		else if(i>4){
+			startYear=startYear+1;
 		}
-		//console.log(startDatetime);
-		//console.log(endOfYear?incrementedYearEndDateValue:endDatetime);
-		startDatetimePicker.value= "2023-07-04";//startDatetime.toLocaleString("en-US", { timeZone: "UTC" });
-		console.log(`reporting_period${i+1}-start`+startDatetimePicker.value);
-		console.log(startDate.toLocaleString("en-US", { timeZone: "UTC" }))
-		//endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
-		//console.log(endDatetimePicker.value);
+		let startDate=`${startYear}-${String(startMonth).padStart(2, "0")}-${String(startDate).padStart(2, "0")}`;
+		let endDate=`${endYear}-${String(endMonth).padStart(2, "0")}-${String(startDate).padStart(2, "0")}`;
+		startDatetimePicker.value= startDate;
+		endDatetimePicker.value= endDate;
+		console.log(endDate);
+		console.log(startDate);
 	}
 
 }
