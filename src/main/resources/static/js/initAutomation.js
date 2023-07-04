@@ -47,10 +47,10 @@ function initPharmSchedulePeriodDatePickers(){
 		if(periodMonths[i] >=11){// e.g Dec 2023
 			endOfYear=true;
 			const incrementedYearEndDateValue = new Date(endDatetime.setFullYear(endDatetime.getFullYear() + 1)); // move to next year
-			incrementedYearEndDateValue.setMonth(periodMonths[i]+1);// i.e Jan 2024
+			incrementedYearEndDateValue.setMonth(periodMonths[i+1]);// i.e Jan 2024
 		}
 		else{
-			endDatetime.setMonth(periodMonths[i]+1);
+			endDatetime.setMonth(periodMonths[i+1]);
 		}
 		startDatetimePicker.value= startDatetime.toISOString().slice(0, 16);
 		console.log(`reporting_period${i+1}-start`+ startDatetimePicker.value);
