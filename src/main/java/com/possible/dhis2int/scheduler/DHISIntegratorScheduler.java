@@ -292,7 +292,7 @@ public class DHISIntegratorScheduler {
 			@RequestBody String pharmacyPeriodListRequest,
 			HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException {
-		Boolean created = true;
+		Boolean created = false;
 		logger.info("[Creating new pharmacy schedule ...]");
 		ObjectMapper mapper=new ObjectMapper();
 		List<PharmacyPeriodReq> periods=mapper.readValue(pharmacyPeriodListRequest, new TypeReference<List<PharmacyPeriodReq>>() {});
@@ -351,8 +351,8 @@ public class DHISIntegratorScheduler {
 				logger.info("Set report type ID as "+newPharmacySchedule.getReportId() );
 			}
 		} catch (DHISIntegratorException e) {
-		// logger.info("Inside loadIntegrationSchedules...");
-		logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+			// logger.info("Inside loadIntegrationSchedules...");
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
 		} catch (Exception e) {
 			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
 		}
@@ -361,12 +361,11 @@ public class DHISIntegratorScheduler {
 		try {
 			databaseDriver.executeCreateQuery(newPharmacySchedule);
 			logger.info("Executed insert query successfully...");
+			created = true;
 
 		} catch (DHISIntegratorException | JSONException e) {
-			created = false;
 			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
 		} catch (Exception e) {
-			created = false;
 			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
 		}
 
