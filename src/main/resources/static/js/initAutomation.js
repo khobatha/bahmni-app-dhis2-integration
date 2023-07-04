@@ -38,6 +38,7 @@ function initPharmSchedulePeriodDatePickers(){
 	let periodMonths= [7,8,9,10,11,0,1,2,3,4,5,6];
 	let endOfYear=false;
 	let currentDatetime = new Date();
+	let incrementedYearEndDateValue=currentDatetime;
 	for (let i = 0; i < 12; i++) {
 		let startDatetimePicker = document.getElementById(`reporting_period${i+1}-start`);
 		let endDatetimePicker = document.getElementById(`reporting_period${i+1}-end`);
@@ -49,7 +50,7 @@ function initPharmSchedulePeriodDatePickers(){
 		startDatetime.setMonth(periodMonths[i]); //e.g August
 		if(periodMonths[i] >=11){// e.g Dec 2023
 			endOfYear=true;
-			const incrementedYearEndDateValue = new Date(endDatetime.setFullYear(endDatetime.getFullYear() + 1)); // move to next year
+			incrementedYearEndDateValue = new Date(endDatetime.setFullYear(endDatetime.getFullYear() + 1)); // move to next year
 			incrementedYearEndDateValue.setMonth(periodMonths[i+1]);// i.e Jan 2024
 		}
 		else{
@@ -58,9 +59,9 @@ function initPharmSchedulePeriodDatePickers(){
 		//console.log(startDatetime);
 		//console.log(endOfYear?incrementedYearEndDateValue:endDatetime);
 		startDatetimePicker.value= startDatetime.toISOString().slice(0, 16);
-		console.log(`reporting_period${i+1}-start`+ startDatetimePicker.value);
+		console.log(startDatetimePicker.value);
 		endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
-		console.log(`reporting_period${i+1}-end`+ endDatetimePicker.value);
+		console.log(endDatetimePicker.value);
 	}
 
 }
