@@ -38,15 +38,16 @@ function initPharmSchedulePeriodDatePickers(){
 	let periodMonths= [7,8,9,10,11,0,1,2,3,4,5,6];
 	let endOfYear=false;
 	let currentDatetime = new Date();
-	let incrementedYearEndDateValue=currentDatetime;
+	let currentDate = new Date(currentDatetime.getFullYear(),currentDatetime.getMonth(),currentDatetime.getDate());
+	let incrementedYearEndDateValue=currentDate;
 	for (let i = 0; i < 12; i++) {
 		let startDatetimePicker = document.getElementById(`reporting_period${i+1}-start`);
 		let endDatetimePicker = document.getElementById(`reporting_period${i+1}-end`);
 		
 		//console.log(startDatetimePicker.value);
 		//console.log(endDatetimePicker.value);
-		const startDatetime = currentDatetime;//new Date(startDatetimePicker.value);
-		const endDatetime = currentDatetime;//new Date(endDatetimePicker.value);
+		const startDatetime = currentDate;//new Date(startDatetimePicker.value);
+		const endDatetime = currentDate;//new Date(endDatetimePicker.value);
 		startDatetime.setMonth(periodMonths[i]); //e.g August
 		if(periodMonths[i] >=11){// e.g Dec 2023
 			endOfYear=true;
