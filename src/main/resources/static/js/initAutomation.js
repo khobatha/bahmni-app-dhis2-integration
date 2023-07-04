@@ -158,16 +158,18 @@ function initDHISProgramNameDropdowns(){
 					pharmacy_dropdown.prop('selectedIndex', 0);
 					lab_dropdown.prop('selectedIndex', 0);
 					$.each(content.programs, function (key, entry) {
-						console.log('Report type is '+ entry.config.reports[0].type);
-						if(entry.config!=null){
-							if(entry.config.reports[0].type=="MRSGeneric"){
-								clinical_dropdown.append($('<option></option>').attr('value', entry.name).text(entry.name));
-							}
-							else if(entry.config.reports[0].type=="ERPGeneric"){
-								pharmacy_dropdown.append($('<option></option>').attr('value', entry.name).text(entry.name));
-							}
-							else if(entry.config.reports[0].type=="LISGeneric"){
-								lab_dropdown.append($('<option></option>').attr('value', entry.name).text(entry.name));
+						//console.log('Report type is '+ entry.config.reports[0].type);
+						if(entry.hasOwnProperty("config")){
+							if(entry.config.hasOwnProperty("reports")){
+								if(entry.config.reports[0].type=="MRSGeneric"){
+									clinical_dropdown.append($('<option></option>').attr('value', entry.name).text(entry.name));
+								}
+								else if(entry.config.reports[0].type=="ERPGeneric"){
+									pharmacy_dropdown.append($('<option></option>').attr('value', entry.name).text(entry.name));
+								}
+								else if(entry.config.reports[0].type=="LISGeneric"){
+									lab_dropdown.append($('<option></option>').attr('value', entry.name).text(entry.name));
+								}
 							}
 						}
 					});
