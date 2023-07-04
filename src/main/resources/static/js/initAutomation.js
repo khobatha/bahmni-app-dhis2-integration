@@ -52,10 +52,12 @@ function initPharmSchedulePeriodDatePickers(){
 		else{
 			endDatetime.setMonth(periodMonths[i+1]);
 		}
-		startDatetimePicker.value= startDatetime.toISOString().slice(0, 16);
-		console.log(`reporting_period${i+1}-start`+ startDatetimePicker.value);
-		endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
-		console.log(`reporting_period${i+1}-end`+ endDatetimePicker.value);
+		console.log(startDatetime);
+		console.log(endOfYear?incrementedYearEndDateValue:endDatetime);
+		//startDatetimePicker.value= startDatetime.toISOString().slice(0, 16);
+		//console.log(`reporting_period${i+1}-start`+ startDatetimePicker.value);
+		//endDatetimePicker.value= endOfYear?incrementedYearEndDateValue.toISOString().slice(0, 16) :endDatetime.toISOString().slice(0, 16);
+		//console.log(`reporting_period${i+1}-end`+ endDatetimePicker.value);
 	}
 
 }
