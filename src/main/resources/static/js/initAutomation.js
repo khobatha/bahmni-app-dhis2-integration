@@ -38,6 +38,7 @@ function initPharmSchedulePeriodDatePickers(){
 	let periodMonths= [7,8,9,10,11,0,1,2,3,4,5,6];
 	let endOfYear=false;
 	let currentDatetime = new Date();
+	currentDatetime.setHours(0, 0, 0, 0);
 	let currentDate = new Date(currentDatetime.getFullYear(),currentDatetime.getMonth(),currentDatetime.getDate());
 	let incrementedYearEndDateValue=currentDate;
 	for (let i = 0; i < 12; i++) {
