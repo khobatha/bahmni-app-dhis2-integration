@@ -220,9 +220,9 @@ public class DHISIntegratorScheduler {
 		try{
 			//Get Periods for this schedule
 			pharmacyPeriodResults = databaseDriver.executeQuery(periodsSql, type);
-			PharmacyPeriod pharmacyPeriod = new PharmacyPeriod();
 				
 			for(List<String> rowList : pharmacyPeriodResults.getRows()){
+				PharmacyPeriod pharmacyPeriod = new PharmacyPeriod();
 				pharmacyPeriod.setId(Integer.parseInt(rowList.get(0)));
 				pharmacyPeriod.setDhis2ScheduleId(Integer.parseInt(rowList.get(1)));
 				pharmacyPeriod.setPeriod(Integer.parseInt(rowList.get(2)));
@@ -362,7 +362,7 @@ public class DHISIntegratorScheduler {
 		newPharmacySchedule.setPeriods(pharmacyPeriods);
 		logger.info("[Start date of first period of new schedule is...]"+newPharmacySchedule.getPeriods().get(0).getStartTime());
 		logger.info("[Number of periods for the new schedule is...]"+newPharmacySchedule.getPeriods().size());
-		newPharmacySchedule.setTargetDateInit();
+		newPharmacySchedule.determineAndSetTargetDate();
 		logger.info("[Target date of new schedule set...as...]"+newPharmacySchedule.getTargetDate());
 
 		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypeName+"';";
