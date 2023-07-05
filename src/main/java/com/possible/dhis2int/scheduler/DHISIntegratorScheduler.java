@@ -186,30 +186,7 @@ public class DHISIntegratorScheduler {
 				schedule.setLastRun(row.get(5));
 				schedule.setTargetDate(row.get(6));
 				schedule.setStatus(row.get(7));
-					
-
-				//Get Periods for this schedule
-                String periodsSql = "SELECT id, dhis2_schedule_id, period, created_by, created_date, start_time, end_time, last_run, status, enabled FROM openmrs.dhis2_pharmacy_periods WHERE dhis2_schedule_id="+schedule.getId()+";";
-		        pharmacyPeriodResults = databaseDriver.executeQuery(periodsSql, type);
-				PharmacyPeriod pharmacyPeriod = new PharmacyPeriod();
-                    
-				for(List<String> rowList : pharmacyPeriodResults.getRows()){
-					pharmacyPeriod.setId(Integer.parseInt(rowList.get(0)));
-					pharmacyPeriod.setDhis2ScheduleId(Integer.parseInt(rowList.get(1)));
-					pharmacyPeriod.setPeriod(Integer.parseInt(rowList.get(2)));
-					pharmacyPeriod.setCreatedBy(rowList.get(3));
-					LocalDate dateNow = LocalDate.of(1995, 1, 20);
-					pharmacyPeriod.setCreatedDate(dateNow);
-					pharmacyPeriod.setStartTime(rowList.get(5));
-					pharmacyPeriod.setEndTime(rowList.get(6));
-					pharmacyPeriod.setLastRun(rowList.get(7));
-					pharmacyPeriod.setStatus(rowList.get(8));
-					pharmacyPeriod.setEnabled(Integer.parseInt(rowList.get(9)) == 1 ? true : false);
-						
-					pharmacyPeriods.add(pharmacyPeriod);
-				}
-
-                schedule.setPeriods(pharmacyPeriods);
+								
 				list.add(schedule);
 			}
 			
@@ -217,6 +194,55 @@ public class DHISIntegratorScheduler {
 			String jsonstring = mapper.writeValueAsString(list);
 			jsonArray.put(jsonstring);
 			logger.info("Task loadIntegrationSchedules ran successfully...");
+		} catch (DHISIntegratorException | JSONException e) {
+			// logger.info("Inside loadIntegrationSchedules...");
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return jsonArray;
+	}
+
+	@RequestMapping(path = "/get-pharm-schedule-periods")
+	public JSONArray getIntegrationPharmSchedulePeriods(HttpServletRequest clientReq, 
+					HttpServletResponse clientRes, 
+					@RequestParam("pharmschedid") String pharmSchedId)
+			throws IOException, JSONException, DHISIntegratorException, Exception {
+		
+		String periodsSql = "SELECT id, dhis2_schedule_id, period, created_by, created_date, start_time, end_time, last_run, status, enabled FROM openmrs.dhis2_pharmacy_periods WHERE dhis2_schedule_id="+pharmSchedId+";";		
+		String type = "MRSGeneric";
+		JSONArray jsonArray = new JSONArray();
+		ArrayList<PharmacyPeriod> pharmacySchedPeriods = new ArrayList<PharmacyPeriod>();
+		Results pharmacyPeriodResults = new Results();
+		ObjectMapper mapper;
+		
+		try{
+			//Get Periods for this schedule
+			pharmacyPeriodResults = databaseDriver.executeQuery(periodsSql, type);
+			PharmacyPeriod pharmacyPeriod = new PharmacyPeriod();
+				
+			for(List<String> rowList : pharmacyPeriodResults.getRows()){
+				pharmacyPeriod.setId(Integer.parseInt(rowList.get(0)));
+				pharmacyPeriod.setDhis2ScheduleId(Integer.parseInt(rowList.get(1)));
+				pharmacyPeriod.setPeriod(Integer.parseInt(rowList.get(2)));
+				pharmacyPeriod.setCreatedBy(rowList.get(3));
+				// LocalDate dateNow = LocalDate.of(1995, 1, 20);
+				// pharmacyPeriod.setCreatedDate(dateNow);
+				// pharmacyPeriod.setCreatedDate(rowList.get(4));
+				pharmacyPeriod.setStartTime(rowList.get(5));
+				pharmacyPeriod.setEndTime(rowList.get(6));
+				pharmacyPeriod.setLastRun(rowList.get(7));
+				pharmacyPeriod.setStatus(rowList.get(8));
+				pharmacyPeriod.setEnabled(Integer.parseInt(rowList.get(9)) == 1 ? true : false);
+					
+				pharmacySchedPeriods.add(pharmacyPeriod);
+			}
+			
+			mapper = new ObjectMapper();
+			String jsonstring = mapper.writeValueAsString(pharmacySchedPeriods);
+			jsonArray.put(jsonstring);
+			logger.info("Task loadPharmSchedulePeriods ran successfully...");
 		} catch (DHISIntegratorException | JSONException e) {
 			// logger.info("Inside loadIntegrationSchedules...");
 			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
