@@ -3,6 +3,7 @@ var downloadUrl = '/dhis-integration/download?name=NAME&year=YEAR&month=MONTH&is
 var submitUrl = '/dhis-integration/submit-to-dhis';
 var getClinicalSchedulesUrl = '/dhis-integration/get-schedules';
 var getPharmSchedulesUrl = '/dhis-integration/get-pharm-schedules';
+var getPharmSchedulePeriodsUrl=dhis-integration/get-pharm-schedule-periods;
 var createScheduleUrl = '/dhis-integration/create-schedule';
 var createPharmScheduleUrl = '/dhis-integration/create-pharm-schedule';
 var deleteScheduleUrl='/dhis-integration/delete-schedule';
@@ -106,6 +107,29 @@ function addCustomPeriodCheckboxEventListener(){
 		});
 	}
 
+function isMultiPeriodSchedule(schedule_id){
+	var parameters = { pharmschedid : schedule_id};
+	return $.get(getPharmSchedulePeriodsUrl,parameters).done(function(periods) {
+		if(periods.length==0)
+			return false;
+		else
+			return true;
+	}).fail(function(response) {
+		console.log(response);
+	});
+
+}
+
+function getSchedulePeriods(schedule_id){
+	var parameters = { pharmschedid : schedule_id};
+	return $.get(getPharmSchedulePeriodsUrl,parameters).done(function(periods) {
+		return periods;
+	}).fail(function(response) {
+		console.log(response);
+	});
+
+}
+
 //populate and render list of schedules from db
 function renderDHISSchedules(url){
 	getDHISSchedules(url).then(function(data){
@@ -117,10 +141,24 @@ function renderDHISSchedules(url){
 		var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
 		var LabSchedulesTable = document.getElementById('lab-program-schedules');
 		var schedules=JSON.parse(data);
+		var tempHTML;
+		var tr = document.createElement('tr');
 		schedules.forEach(function(object) {
 			console.log(object);
-			var tr = document.createElement('tr');
-			var tempHTML ="<td>"+"<span class='custom-checkbox'>"+
+			if(isMultiPeriodSchedule(object.id)){
+				console.log('Processing a multi-period schedule');
+				//var periods=getSchedulePeriods(object.id);
+				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
+							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
+							"<label for='checkbox1'></label>"+"</span></td>" +
+							'<td><a data-remote="true">' + object.programName + '<span class="menu-ico-collapse"><i class="fa fa-chevron-down"></i></span></a></td>' +
+							'<td>' + object.frequency + '</td>' +
+							'<td>' + object.lastRun + '</td>' +
+							'<td>' + object.status + '</td>' +
+							'<td>' + object.targetDate + '</td>';
+			}
+			else{
+				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
 							"<label for='checkbox1'></label>"+"</span></td>" +
 							'<td>' + object.programName + '</td>' +
@@ -128,6 +166,7 @@ function renderDHISSchedules(url){
 							'<td>' + object.lastRun + '</td>' +
 							'<td>' + object.status + '</td>' +
 							'<td>' + object.targetDate + '</td>';
+			}
 			if(object.reportId==1){
 				tr.innerHTML =tempHTML+
 							"<td>"+
