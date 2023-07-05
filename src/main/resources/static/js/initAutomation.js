@@ -111,6 +111,7 @@ function isMultiPeriodSchedule(schedule_id){
 	var parameters = { pharmschedid : schedule_id};
 	return $.get(getPharmSchedulePeriodsUrl,parameters).done(function(periods) {
 		console.log('Result array is '+periods);
+		console.log('Result array[0] is '+periods[0]);
 		console.log('Result array is of size '+periods[0].length);
 		//const containsEmptyArray = periods.some((arr) => arr.length === 0);
 		if(periods[0].length==0)
