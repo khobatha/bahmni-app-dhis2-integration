@@ -368,7 +368,7 @@ function createDHISSchedule(clicked_id, frequency){
 				}
 				else{
 					sorted=false;
-					showFeedbackMessage('Error creating new schedule!', 'failure', modalName);
+					showFeedbackMessage('Error - periods are not sorted!', 'failure', modalName);
 				}
 				
 			}
