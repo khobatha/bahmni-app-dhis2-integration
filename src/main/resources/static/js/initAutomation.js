@@ -110,9 +110,9 @@ function addCustomPeriodCheckboxEventListener(){
 function isMultiPeriodSchedule(schedule_id){
 	var parameters = { pharmschedid : schedule_id};
 	return $.get(getPharmSchedulePeriodsUrl,parameters).done(function(periods) {
-		console.log('Result array is of size '+periods.length);
-		const containsEmptyArray = periods.some((arr) => arr.length === 0);
-		if(containsEmptyArray)
+		console.log('Result array is of size '+periods[0].length);
+		//const containsEmptyArray = periods.some((arr) => arr.length === 0);
+		if(periods[0].length==0)
 			return false;
 		else
 			return true;
