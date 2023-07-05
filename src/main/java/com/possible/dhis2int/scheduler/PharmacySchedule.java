@@ -28,7 +28,8 @@ public class PharmacySchedule extends Schedule {
     public void setTargetDate(String date){
         targetDate=date;
     }
-    public void setTargetDateInit(){
+
+    public void determineAndSetTargetDate(){
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         LocalDate currentDate = LocalDate.now();
         int currYear = currentDate.getYear();
@@ -48,9 +49,13 @@ public class PharmacySchedule extends Schedule {
                         logger.info("[Found the next date in line ...]"+period.format(formatter));
                         found=true;
                     }
+                }else if(currYear < period.getYear()){
+                    targetDate=periods.get(i).getStartTime();
+                    logger.info("[Found the next date in line ...]"+period.format(formatter));
+                    found=true;
                 }
             }
-        }
+        }        
     }
 
     public String getTargetDate(){
