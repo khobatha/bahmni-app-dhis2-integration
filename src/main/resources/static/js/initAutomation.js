@@ -351,7 +351,13 @@ function createDHISSchedule(clicked_id, frequency){
 		modalName ='addPharmacyScheduleModal';
 		if(isCustomReportingPeriods.checked){
 		// if this pharmacy report has custom reporting periods, read them
-			var maxDate=null;
+			let currentDate=new Date();
+			let currentYear=currentDate.getFullYear();
+			let currentMonth=currentDate.getMonth();
+			let currentDay=currentDate.getDay();
+			let maxDateStr=`${currentYear}-${String(currentMonth).padStart(2, "0")}-${String(currentDay).padStart(2, "0")}`;
+			let maxDate=new Date(maxDateStr);
+			console.log("Current date is "+maxDateStr);
 			let sorted=true;//checks if the pharmacy periods are sorted in ascending order
 			for (let i = 1; i <= 12 && sorted; i++) {
 				let startDatetimePicker = document.getElementById(`reporting_period${i}-start`);
@@ -359,18 +365,27 @@ function createDHISSchedule(clicked_id, frequency){
 				
 				let startDatetime = startDatetimePicker.value;
 				const startDate=new Date(startDatetime);
-				maxDate=startDate;
 				let endDatetime = endDatetimePicker.value;
 				const endDate=new Date(endDatetime);
-				if(maxDate<endDate){
-					maxDate=endDate;
-					pharmReportingPeriods.push({start: startDatetime, end: endDatetime});
+
+				if(startDate>=maxDate){
+					maxDate=startDate;
+					if(maxDate<=endDate){
+						maxDate=endDate;
+						pharmReportingPeriods.push({start: startDatetime, end: endDatetime});
+					}
+					else{
+						sorted=false;
+						showFeedbackMessage('Error - periods are not sorted!', 'failure', modalName);
+						return sorted;
+					}
 				}
-				else{
+				else {
 					sorted=false;
 					showFeedbackMessage('Error - periods are not sorted!', 'failure', modalName);
-					return;
+					return sorted;
 				}
+				
 				
 			}
 
