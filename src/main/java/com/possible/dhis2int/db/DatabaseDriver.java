@@ -267,10 +267,16 @@ public class DatabaseDriver {
             //Execute the two SQLs as a transaction
 			//delete from pharmacy periods first, then from schedules
 			connection.setAutoCommit(false);
-			try (PreparedStatement stmt1 = connection.prepareStatement("DELETE FROM dhis2_pharmacy_periods WHERE dhis2_schedule_id=" + scheduleId)) { // Automatic close.
-				
-				try (PreparedStatement stmt2 = connection.prepareStatement("DELETE FROM dhis2_schedules WHERE id=" + scheduleId) ){
+			try (PreparedStatement stmt1 = connection.prepareStatement("DELETE FROM dhis2_pharmacy_periods WHERE dhis2_schedule_id=?")) { // Automatic close.
+				stmt1.setInt(1, scheduleId);
+            	stmt1.executeUpdate();
+				try (PreparedStatement stmt2 = connection.prepareStatement("DELETE FROM dhis2_schedules WHERE id=?") ){
+					stmt2.setInt(1, scheduleId);
+                	stmt2.executeUpdate();
 					connection.commit();
+					logger.info("Executed both DELETE statements");
+				}catch (SQLException ex){
+					throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), ex);
 				}
 			} catch (SQLException ex) {
 				connection.rollback();
