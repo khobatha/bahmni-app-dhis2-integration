@@ -3,7 +3,7 @@ var downloadUrl = '/dhis-integration/download?name=NAME&year=YEAR&month=MONTH&is
 var submitUrl = '/dhis-integration/submit-to-dhis';
 var getClinicalSchedulesUrl = '/dhis-integration/get-schedules';
 var getPharmSchedulesUrl = '/dhis-integration/get-pharm-schedules';
-var getPharmSchedulePeriodsUrl=dhis-integration/get-pharm-schedule-periods;
+var getPharmSchedulePeriodsUrl='/dhis-integration/get-pharm-schedule-periods';
 var createScheduleUrl = '/dhis-integration/create-schedule';
 var createPharmScheduleUrl = '/dhis-integration/create-pharm-schedule';
 var deleteScheduleUrl='/dhis-integration/delete-schedule';
