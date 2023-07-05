@@ -351,14 +351,25 @@ function createDHISSchedule(clicked_id, frequency){
 		modalName ='addPharmacyScheduleModal';
 		if(isCustomReportingPeriods.checked){
 		// if this pharmacy report has custom reporting periods, read them
-			for (let i = 1; i <= 12; i++) {
+			var maxDate=null;
+			let sorted=true;//checks if the pharmacy periods are sorted in ascending order
+			for (let i = 1; i <= 12 && sorted; i++) {
 				let startDatetimePicker = document.getElementById(`reporting_period${i}-start`);
 				let endDatetimePicker = document.getElementById(`reporting_period${i}-end`);
 				
 				let startDatetime = startDatetimePicker.value;
+				const startDate=new Date(startDatetime);
+				maxDate=startDate;
 				let endDatetime = endDatetimePicker.value;
-				
-				pharmReportingPeriods.push({start: startDatetime, end: endDatetime});
+				const endDate=new Date(endDatetime);
+				if(maxDate<endDate){
+					maxDate=endDate;
+					pharmReportingPeriods.push({start: startDatetime, end: endDatetime});
+				}
+				else{
+					sorted=false;
+					showFeedbackMessage('Error creating new schedule!', 'failure', modalName);
+				}
 				
 			}
 
