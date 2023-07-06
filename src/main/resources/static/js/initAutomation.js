@@ -229,7 +229,7 @@ function renderDHISSchedules(url){
 			//isMultiPeriodSchedule(object.id);
 			// Call the async function
 			var flag=false;
-			isMultiPeriodSchedule(schedule_id).then(returnValue => {
+			isMultiPeriodSchedule(object.id).then(returnValue => {
 				//console.log(returnValue);
 				flag= returnValue;
 			})
