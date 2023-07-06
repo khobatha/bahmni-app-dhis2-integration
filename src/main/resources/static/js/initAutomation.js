@@ -284,12 +284,12 @@ async function renderDHISSchedules(url){
 		//}
 		//else{
 		var tr = document.createElement('tr');
-		var cellId='schedule-'+object.id;
+		var cellId="schedule-"+object.id;
 		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
 		tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 					"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
 					"<label for='checkbox1'></label>"+"</span></td>" +
-					'<td id=' + cellId + "'>" + object.programName + '</td>' +
+					'<td id=' + cellId + ">" + object.programName + '</td>' +
 					'<td>' + object.frequency + '</td>' +
 					'<td>' + object.lastRun + '</td>' +
 					'<td>' + object.status + '</td>' +
