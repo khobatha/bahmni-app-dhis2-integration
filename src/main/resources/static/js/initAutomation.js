@@ -150,7 +150,7 @@ function getSchedulePeriods(url) {
 		const span = document.createElement("span");
 		span.classList.add("expand-icon");
 		const i = document.createElement("i");
-		i.classList.add("fa", "fa fa-plus");
+		i.classList.add("fa", "fa-plus");
 		span.appendChild(i);
 		link.appendChild(span);
 		var cellId="schedule-"+schedule_id;
