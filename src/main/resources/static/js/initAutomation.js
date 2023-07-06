@@ -378,7 +378,8 @@ function getDHISSchedules(url) {
 	return $.get(url).done(function(data) {
 		console.log('[Get DHIS schedules]');
 		console.log(data);
-		return data;
+		var result=JSON.parse(data);
+		return result;
 		
 	}).fail(function(response) {
 		
