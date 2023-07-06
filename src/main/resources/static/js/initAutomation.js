@@ -165,7 +165,7 @@ function getSchedulePeriods(url) {
 	  console.error('Error:', error);
 	}
   }
-  
+ // 
 async function generateMultiSchedulePeriodsHtml(schedule_id){
 	try{
 		var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
