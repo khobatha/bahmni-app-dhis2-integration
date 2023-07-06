@@ -227,7 +227,17 @@ function renderDHISSchedules(url){
 		schedules.forEach(function(object) {
 			console.log('[renderDHISSchedules] Processing schedule '+object.id);
 			//isMultiPeriodSchedule(object.id);
-			if(dummy(object.id)){
+			// Call the async function
+			var flag=false;
+			isMultiPeriodSchedule(schedule_id).then(returnValue => {
+				//console.log(returnValue);
+				flag= returnValue;
+			})
+			.catch(error => {
+			console.error(error);
+			});
+
+			if(flag){
 				console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
 				//var periods=getSchedulePeriods(object.id);
 				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
