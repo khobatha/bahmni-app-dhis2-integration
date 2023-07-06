@@ -212,13 +212,13 @@ function getSchedulePeriods(schedule_id){
 */
 
 //populate and render list of schedules from db
-function renderDHISSchedules(url){
+async function renderDHISSchedules(url){
 
-	var data;
-	getDHISSchedules(url).then(jsonArray => {
-		console.log('[getDHISSchedules] jsonArray = '+jsonArray);
-		data=jsonArray;
-	  });
+	var data = await getDHISSchedules(url);
+	//getDHISSchedules(url).then(jsonArray => {
+	//	console.log('[getDHISSchedules] jsonArray = '+jsonArray);
+	//	data=jsonArray;
+	//  });
 	//getDHISSchedules(url).then(function(data){
 	console.log('[render hmis program schedules]');
 	console.log('[url ]'+url);
