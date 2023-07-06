@@ -152,9 +152,9 @@ function renderDHISSchedules(url){
 		var tempHTML;
 		var tr = document.createElement('tr');
 		schedules.forEach(function(object) {
-			console.log(object);
+			console.log('[renderDHISSchedules] Processing schedule '+object);
 			if(isMultiPeriodSchedule(object.id)){
-				console.log('Processing a multi-period schedule');
+				console.log('[renderDHISSchedules] Processing a multi-period schedule');
 				//var periods=getSchedulePeriods(object.id);
 				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
@@ -166,7 +166,7 @@ function renderDHISSchedules(url){
 							'<td>' + object.targetDate + '</td>';
 			}
 			else{
-				console.log('Processing a single-period schedule');
+				console.log('[renderDHISSchedules] Processing a single-period schedule');
 				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
 							"<label for='checkbox1'></label>"+"</span></td>" +
