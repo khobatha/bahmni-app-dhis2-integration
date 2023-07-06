@@ -156,8 +156,19 @@ function getSchedulePeriods(url) {
 	}
   }
   
-  // Call the function
-  //processData();
+ function dummy(schedule_id){
+	// Call the async function
+	isMultiPeriodSchedule(schedule_id)
+	.then(returnValue => {
+		//console.log(returnValue);
+		return returnValue;
+	})
+	.catch(error => {
+	console.error(error);
+	});
+
+
+ }
   
 
 
@@ -216,7 +227,7 @@ function renderDHISSchedules(url){
 		schedules.forEach(function(object) {
 			console.log('[renderDHISSchedules] Processing schedule '+object.id);
 			//isMultiPeriodSchedule(object.id);
-			if(isMultiPeriodSchedule(object.id)){
+			if(dummy(object.id)){
 				console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
 				//var periods=getSchedulePeriods(object.id);
 				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
