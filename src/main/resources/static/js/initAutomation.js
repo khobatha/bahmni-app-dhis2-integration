@@ -257,7 +257,6 @@ async function renderDHISSchedules(url){
 	var schedules=JSON.parse(data);
 	//var checked = await checkallschedules(schedules);
 	var tempHTML;
-	var tr = document.createElement('tr');
 	schedules.forEach(function(object) {
 		console.log('[renderDHISSchedules] Processing schedule '+object.id);
 		//isMultiPeriodSchedule(object.id);
@@ -284,6 +283,7 @@ async function renderDHISSchedules(url){
 		//				'<td>' + object.targetDate + '</td>';
 		//}
 		//else{
+		var tr = document.createElement('tr');
 		var cellId='schedule-'+object.id;
 		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
 		tempHTML ="<td>"+"<span class='custom-checkbox'>"+
