@@ -107,6 +107,56 @@ function addCustomPeriodCheckboxEventListener(){
 		});
 	}
 
+
+//----------------------------------------------------------------------
+
+// Function to make an asynchronous AJAX call
+function getSchedulePeriods(url) {
+	return new Promise((resolve, reject) => {
+	  const xhr = new XMLHttpRequest();
+	  xhr.open('GET', url);
+	  xhr.onload = function() {
+		if (xhr.status === 200) {
+		  resolve(xhr.responseText);
+		} else {
+		  reject(xhr.statusText);
+		}
+	  };
+	  xhr.onerror = function() {
+		reject('Network error');
+	  };
+	  xhr.send();
+	});
+  }
+  
+  // Function that uses the result of the AJAX calls
+  async function processData(schedule_id) {
+	try {
+	  var url=`${getPharmSchedulePeriodsUrl}?${schedule_id}`;
+	  console.log('The url is:', url);
+	  const periods = await getSchedulePeriods(url);
+	  console.log('Data1 received:', periods);
+  
+	  //const result2 = await makeAjaxCall('https://api.example.com/data2');
+	  //console.log('Data2 received:', result2);
+  
+	  // Continue with additional AJAX calls or processing
+	} catch (error) {
+	  console.error('Error:', error);
+	}
+  }
+  
+  // Call the function
+  //processData();
+  
+
+
+
+
+
+//-----------------------------------------------------------------------
+
+/*
 function isMultiPeriodSchedule(schedule_id){
 	var parameters = { pharmschedid : schedule_id};
 	return $.get(getPharmSchedulePeriodsUrl,parameters).done(function(periods) {
@@ -128,6 +178,7 @@ function isMultiPeriodSchedule(schedule_id){
 
 }
 
+
 function getSchedulePeriods(schedule_id){
 	var parameters = { pharmschedid : schedule_id};
 	return $.get(getPharmSchedulePeriodsUrl,parameters).done(function(periods) {
@@ -137,6 +188,7 @@ function getSchedulePeriods(schedule_id){
 	});
 
 }
+*/
 
 //populate and render list of schedules from db
 function renderDHISSchedules(url){
@@ -153,7 +205,8 @@ function renderDHISSchedules(url){
 		var tr = document.createElement('tr');
 		schedules.forEach(function(object) {
 			console.log('[renderDHISSchedules] Processing schedule '+object.id);
-			if(isMultiPeriodSchedule(object.id)){
+			processData(object.id);
+			/*if(isMultiPeriodSchedule(object.id)){
 				console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
 				//var periods=getSchedulePeriods(object.id);
 				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
@@ -176,6 +229,7 @@ function renderDHISSchedules(url){
 							'<td>' + object.status + '</td>' +
 							'<td>' + object.targetDate + '</td>';
 			}
+			*/
 			if(object.reportId==1){
 				tr.innerHTML =tempHTML+
 							"<td>"+
