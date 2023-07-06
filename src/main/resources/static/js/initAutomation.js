@@ -26,7 +26,7 @@ $(document).ready(
 
 			initTabs();
 			initDHISProgramNameDropdowns();
-			renderDHISSchedules(getClinicalSchedulesUrl,0,false);
+			renderDHISSchedules(getClinicalSchedulesUrl);
 			renderDHISSchedules(getPharmSchedulesUrl);
 			initPharmSchedulePeriodDatePickers();
 			addPharmScheduleFrequencyEventListener();
@@ -136,8 +136,8 @@ function getSchedulePeriods(url) {
 	  console.log('The url is:', url);
 	  const result = await getSchedulePeriods(url);
 	  const periods = JSON.parse(result);
-	  console.log('Data1 received for schedule '+schedule_id+':', periods);
-	  console.log('Length of received data for schedule '+schedule_id+':', periods[0].length);
+	  console.log('[isMultiPeriodSchedule] Data1 received for schedule '+schedule_id+':', periods);
+	  console.log('[isMultiPeriodSchedule] Length of received data for schedule '+schedule_id+':', periods[0].length);
 	  if(periods[0].length==2){
 		console.log('[isMultiPeriodSchedule] Processing a single-period schedule '+schedule_id);
 		return false;
@@ -212,83 +212,81 @@ function getSchedulePeriods(schedule_id){
 */
 
 //populate and render list of schedules from db
-function renderDHISSchedules(url,callCount,flag){
-	getDHISSchedules(url).then(function(data){
-		console.log('[render hmis program schedules]');
-		console.log('[url ]'+url);
-		console.log(data);
-		//alert(data);
-		var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
-		var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
-		var LabSchedulesTable = document.getElementById('lab-program-schedules');
-		var schedules=JSON.parse(data);
-		var tempHTML;
-		var tr = document.createElement('tr');
-		schedules.forEach(function(object) {
-			console.log('[renderDHISSchedules] Processing schedule '+object.id);
-			//isMultiPeriodSchedule(object.id);
-			// Call the async function
-			var flag=false;
-			isMultiPeriodSchedule(object.id).then(returnValue => {
-				//console.log(returnValue);
-				flag= returnValue;
-				if(callCount==0){
-					callCount++;
-					renderDHISSchedules(url,callCount,flag);
-				}
-			})
-			.catch(error => {
-			console.error(error);
-			});
+function renderDHISSchedules(url){
 
-			if(flag){
-				console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
-				//var periods=getSchedulePeriods(object.id);
-				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
-							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
-							"<label for='checkbox1'></label>"+"</span></td>" +
-							'<td><a data-remote="true">' + object.programName + '<span class="menu-ico-collapse"><i class="fa fa-chevron-down"></i></span></a></td>' +
-							'<td>' + object.frequency + '</td>' +
-							'<td>' + object.lastRun + '</td>' +
-							'<td>' + object.status + '</td>' +
-							'<td>' + object.targetDate + '</td>';
-			}
-			else{
-				console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
-				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
-							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
-							"<label for='checkbox1'></label>"+"</span></td>" +
-							'<td>' + object.programName + '</td>' +
-							'<td>' + object.frequency + '</td>' +
-							'<td>' + object.lastRun + '</td>' +
-							'<td>' + object.status + '</td>' +
-							'<td>' + object.targetDate + '</td>';
-			}
-	
-			if(object.reportId==1){
-				tr.innerHTML =tempHTML+
-							"<td>"+
-							"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
-							"</td>";
-				clinicalSchedulesTable.appendChild(tr);
-			}
-			else if(object.reportId==2){
-				tr.innerHTML =tempHTML+
-							"<td>"+
-							"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
-							"</td>";
-				pharmacySchedulesTable.appendChild(tr);
-			}
-			else if(object.reportId==3){
-				tr.innerHTML =tempHTML+
-							"<td>"+
-							"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
-							"</td>";
-				LabSchedulesTable.appendChild(tr);
-			}
-			document.getElementById(object.id).checked= object.enabled;
+	var data=getDHISSchedules(url);
+	//getDHISSchedules(url).then(function(data){
+	console.log('[render hmis program schedules]');
+	console.log('[url ]'+url);
+	console.log('Loaded data is'+data);
+	//alert(data);
+	var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
+	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
+	var LabSchedulesTable = document.getElementById('lab-program-schedules');
+	var schedules=JSON.parse(data);
+	var tempHTML;
+	var tr = document.createElement('tr');
+	schedules.forEach(function(object) {
+		console.log('[renderDHISSchedules] Processing schedule '+object.id);
+		//isMultiPeriodSchedule(object.id);
+		// Call the async function
+		//var flag=false;
+		/*isMultiPeriodSchedule(object.id).then(returnValue => {
+			//console.log(returnValue);
+			flag= returnValue;
+		})
+		.catch(error => {
+		console.error(error);
 		});
+		*/
+		if(dummy(object.id)){
+			console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
+			//var periods=getSchedulePeriods(object.id);
+			tempHTML ="<td>"+"<span class='custom-checkbox'>"+
+						"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
+						"<label for='checkbox1'></label>"+"</span></td>" +
+						'<td><a data-remote="true">' + object.programName + '<span class="menu-ico-collapse"><i class="fa fa-chevron-down"></i></span></a></td>' +
+						'<td>' + object.frequency + '</td>' +
+						'<td>' + object.lastRun + '</td>' +
+						'<td>' + object.status + '</td>' +
+						'<td>' + object.targetDate + '</td>';
+		}
+		else{
+			console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
+			tempHTML ="<td>"+"<span class='custom-checkbox'>"+
+						"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
+						"<label for='checkbox1'></label>"+"</span></td>" +
+						'<td>' + object.programName + '</td>' +
+						'<td>' + object.frequency + '</td>' +
+						'<td>' + object.lastRun + '</td>' +
+						'<td>' + object.status + '</td>' +
+						'<td>' + object.targetDate + '</td>';
+		}
+
+		if(object.reportId==1){
+			tr.innerHTML =tempHTML+
+						"<td>"+
+						"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
+						"</td>";
+			clinicalSchedulesTable.appendChild(tr);
+		}
+		else if(object.reportId==2){
+			tr.innerHTML =tempHTML+
+						"<td>"+
+						"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
+						"</td>";
+			pharmacySchedulesTable.appendChild(tr);
+		}
+		else if(object.reportId==3){
+			tr.innerHTML =tempHTML+
+						"<td>"+
+						"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
+						"</td>";
+			LabSchedulesTable.appendChild(tr);
+		}
+		document.getElementById(object.id).checked= object.enabled;
 	});
+	//});
 }
 
 //use checkboxes to disable/enable scheduled reports
@@ -380,6 +378,7 @@ function getDHISSchedules(url) {
 	return $.get(url).done(function(data) {
 		console.log('[Get DHIS schedules]');
 		//console.log(data);
+		return data;
 		
 	}).fail(function(response) {
 		
