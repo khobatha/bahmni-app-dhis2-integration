@@ -174,10 +174,10 @@ async function generateMultiSchedulePeriodsHtml(schedule_id,result){
 		//var data='[{"id":62,"dhis2ScheduleId":25,"period":0,"createdBy":"Test","createdDate":null,"startTime":"2023-08-01 00:00:00.0","endTime":"2023-09-01 00:00:00.0","lastRun":null,"status":"Ready","enabled":true},{"id":63,"dhis2ScheduleId":25,"period":1,"createdBy":"Test","createdDate":null,"startTime":"2023-09-01 00:00:00.0","endTime":"2023-10-01 00:00:00.0","lastRun":null,"status":"Ready","enabled":true}]';
 		console.log('[generateMultiSchedulePeriodsHtml] Loaded data is '+result);
 		var periods=JSON.parse(result);
-		console.log('[generateMultiSchedulePeriodsHtml] Processing period '+periods[0].id);
-		//periods.forEach(function(object){
-		//	console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
-		//});
+		//console.log('[generateMultiSchedulePeriodsHtml] Processing period '+periods[0].id);
+		periods.forEach(function(object){
+			console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
+		});
 	}
 	catch(error){
 		console.error('Error:', error);
