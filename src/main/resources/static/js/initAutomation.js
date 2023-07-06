@@ -227,10 +227,10 @@ async function renderDHISSchedules(url){
 	var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
 	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
 	var LabSchedulesTable = document.getElementById('lab-program-schedules');
-	//var schedules=JSON.parse(data);
+	var schedules=JSON.parse(data);
 	var tempHTML;
 	var tr = document.createElement('tr');
-	/*schedules.forEach(function(object) {
+	schedules.forEach(function(object) {
 		console.log('[renderDHISSchedules] Processing schedule '+object.id);
 		//isMultiPeriodSchedule(object.id);
 		// Call the async function
@@ -289,7 +289,6 @@ async function renderDHISSchedules(url){
 		}
 		document.getElementById(object.id).checked= object.enabled;
 	});
-	*/
 
 	//});
 }
