@@ -130,12 +130,21 @@ function getSchedulePeriods(url) {
   }
   
   // Function that uses the result of the AJAX calls
-  async function processData(schedule_id) {
+  async function isMultiPeriodSchedule(schedule_id) {
 	try {
 	  var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
 	  console.log('The url is:', url);
 	  const periods = await getSchedulePeriods(url);
 	  console.log('Data1 received for schedule '+schedule_id+':', periods);
+	  console.log('Length of received data for schedule '+schedule_id+':', periods[0].length==2);
+	  if(periods[0].length==2){
+		console.log('[isMultiPeriodSchedule] Processing a single-period schedule '+schedule_id);
+		return false;
+	  }
+	  else{
+		console.log('[isMultiPeriodSchedule] Processing a multi-period schedule '+schedule_id);
+		return true;
+	}
   
 	  //const result2 = await makeAjaxCall('https://api.example.com/data2');
 	  //console.log('Data2 received:', result2);
