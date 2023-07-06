@@ -215,8 +215,8 @@ function renderDHISSchedules(url){
 		var tr = document.createElement('tr');
 		schedules.forEach(function(object) {
 			console.log('[renderDHISSchedules] Processing schedule '+object.id);
-			isMultiPeriodSchedule(object.id);
-			/*if(isMultiPeriodSchedule(object.id)){
+			//isMultiPeriodSchedule(object.id);
+			if(isMultiPeriodSchedule(object.id)){
 				console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
 				//var periods=getSchedulePeriods(object.id);
 				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
@@ -239,7 +239,7 @@ function renderDHISSchedules(url){
 							'<td>' + object.status + '</td>' +
 							'<td>' + object.targetDate + '</td>';
 			}
-			*/
+	
 			if(object.reportId==1){
 				tr.innerHTML =tempHTML+
 							"<td>"+
