@@ -287,6 +287,11 @@ table.table .avatar {
     margin-right: 10px;
 }
 
+/* ICONS */
+.small-icon {
+    font-size: 12px; /* Adjust the font size to reduce the icon size */
+}
+
 /* CHECKBOX */
 .custom-checkbox {
     position: relative;
