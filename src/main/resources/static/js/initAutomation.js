@@ -162,7 +162,7 @@ function getSchedulePeriods(url) {
 		// Append the span element to the link element
 		link.appendChild(span);
 		// Find the table cell with id="cell1"
-		var cellId='schedule-'+schedule_id;
+		var cellId="schedule-"+schedule_id;
 		const cell = document.getElementById(cellId);
 
 		// Append the link element to the cell
