@@ -136,7 +136,7 @@ function getSchedulePeriods(url) {
 	  console.log('The url is:', url);
 	  const periods = await getSchedulePeriods(url);
 	  console.log('Data1 received for schedule '+schedule_id+':', periods);
-	  console.log('Length of received data for schedule '+schedule_id+':', periods[0].length==2);
+	  console.log('Length of received data for schedule '+schedule_id+':', periods[0].length);
 	  if(periods[0].length==2){
 		console.log('[isMultiPeriodSchedule] Processing a single-period schedule '+schedule_id);
 		return false;
