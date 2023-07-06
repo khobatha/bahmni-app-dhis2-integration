@@ -132,7 +132,7 @@ function getSchedulePeriods(url) {
   // Function that uses the result of the AJAX calls
   async function processData(schedule_id) {
 	try {
-	  var url=`${getPharmSchedulePeriodsUrl}?${schedule_id}`;
+	  var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
 	  console.log('The url is:', url);
 	  const periods = await getSchedulePeriods(url);
 	  console.log('Data1 received:', periods);
