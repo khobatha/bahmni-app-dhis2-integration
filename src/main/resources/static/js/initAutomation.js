@@ -114,7 +114,7 @@ function isMultiPeriodSchedule(schedule_id){
 		console.log('Result array[0] is '+periods[0]);
 		console.log('Result array[0] is of size '+periods[0].length);
 		//const containsEmptyArray = periods.some((arr) => arr.length === 0);
-		if(periods[0].length==0)
+		if(periods[0].length==2)
 			return false;
 		else
 			return true;
