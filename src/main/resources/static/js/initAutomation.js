@@ -173,13 +173,13 @@ async function generateMultiSchedulePeriodsHtml(schedule_id){
 		var data=await getSchedulePeriods(url);
 		console.log('[generateMultiSchedulePeriodsHtml] Loaded data is'+data);
 		var periods=JSON.parse(data);
-		if(periods[0].lenth>2){
-			periods.forEach(function(object){
-				console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
-			});
-		}else{
-			console.log('[generateMultiSchedulePeriodsHtml] Periods not received!');
-		}
+		//if(periods[0].lenth>2){
+		periods.forEach(function(object){
+			console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
+		});
+		//}else{
+		//	console.log('[generateMultiSchedulePeriodsHtml] Periods not received!');
+		//}
 	}
 	catch(error){
 		console.error('Error:', error);
