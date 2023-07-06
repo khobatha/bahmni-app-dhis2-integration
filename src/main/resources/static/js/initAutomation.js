@@ -134,7 +134,8 @@ function getSchedulePeriods(url) {
 	try {
 	  var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
 	  console.log('The url is:', url);
-	  const periods = await getSchedulePeriods(url);
+	  const result = await getSchedulePeriods(url);
+	  const periods = JSON.parse(result);
 	  console.log('Data1 received for schedule '+schedule_id+':', periods);
 	  console.log('Length of received data for schedule '+schedule_id+':', periods[0].length);
 	  if(periods[0].length==2){
