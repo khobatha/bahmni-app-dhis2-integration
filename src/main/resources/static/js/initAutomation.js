@@ -210,6 +210,14 @@ function getSchedulePeriods(schedule_id){
 
 }
 */
+/*
+async function checkallschedules(schedules){
+	var results;
+	schedules.forEach(function(object) {
+		var flag=await dummy(object.id);
+		results.push(flag);
+	});
+}*/
 
 //populate and render list of schedules from db
 async function renderDHISSchedules(url){
@@ -228,6 +236,7 @@ async function renderDHISSchedules(url){
 	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
 	var LabSchedulesTable = document.getElementById('lab-program-schedules');
 	var schedules=JSON.parse(data);
+	//var checked = await checkallschedules(schedules);
 	var tempHTML;
 	var tr = document.createElement('tr');
 	schedules.forEach(function(object) {
@@ -243,6 +252,10 @@ async function renderDHISSchedules(url){
 		//console.error(error);
 		//});
 		var flag=dummy(object.id);
+		setTimeout(() => {
+			console.log("After delay");
+		  }, 2000); // Delay of 2000 milliseconds (2 seconds)
+		  
 		if(flag){
 			console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
 			//var periods=getSchedulePeriods(object.id);
