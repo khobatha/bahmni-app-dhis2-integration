@@ -153,6 +153,7 @@ function getSchedulePeriods(url) {
 		i.classList.add("fa", "fa-plus");
 		span.appendChild(i);
 		link.appendChild(span);
+		link.appendChild(document.createTextNode("\u00A0"));
 		var cellId="schedule-"+schedule_id;
 		const cell = document.getElementById(cellId);
 		cell.insertBefore(link,cell.firstChild);
