@@ -27,7 +27,7 @@ $(document).ready(
 			initTabs();
 			initDHISProgramNameDropdowns();
 			renderDHISSchedules(getClinicalSchedulesUrl);
-			renderDHISSchedules(getPharmSchedulesUrl);
+			//renderDHISSchedules(getPharmSchedulesUrl);
 			initPharmSchedulePeriodDatePickers();
 			addPharmScheduleFrequencyEventListener();
 			addCustomPeriodCheckboxEventListener();
@@ -133,11 +133,11 @@ function getSchedulePeriods(url) {
   async function isMultiPeriodSchedule(schedule_id) {
 	try {
 	  var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
-	  console.log('The url is:', url);
+	  //console.log('The url is:', url);
 	  const result = await getSchedulePeriods(url);
 	  const periods = JSON.parse(result);
-	  console.log('[isMultiPeriodSchedule] Data1 received for schedule '+schedule_id+':', periods);
-	  console.log('[isMultiPeriodSchedule] Length of received data for schedule '+schedule_id+':', periods[0].length);
+	  console.log('[isMultiPeriodSchedule] Periods received for schedule '+schedule_id+':', periods);
+	  console.log('[isMultiPeriodSchedule] Length of received periods for schedule '+schedule_id+':', periods[0].length);
 	  if(periods[0].length==2){
 		console.log('[isMultiPeriodSchedule] Processing a single-period schedule '+schedule_id);
 		return false;
@@ -220,9 +220,9 @@ async function renderDHISSchedules(url){
 	//	data=jsonArray;
 	//  });
 	//getDHISSchedules(url).then(function(data){
-	console.log('[render hmis program schedules]');
-	console.log('[url ]'+url);
-	console.log('Loaded data is'+data);
+	console.log('[renderDHISSchedules] Welcome');
+	//console.log('[url ]'+url);
+	console.log('[renderDHISSchedules] Loaded data is'+data);
 	//alert(data);
 	var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
 	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
@@ -242,7 +242,8 @@ async function renderDHISSchedules(url){
 		//.catch(error => {
 		//console.error(error);
 		//});
-		if(dummy(object.id)){
+		var flag=dummy(object.id);
+		if(flag){
 			console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
 			//var periods=getSchedulePeriods(object.id);
 			tempHTML ="<td>"+"<span class='custom-checkbox'>"+
