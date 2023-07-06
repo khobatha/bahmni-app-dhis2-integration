@@ -214,11 +214,15 @@ function getSchedulePeriods(schedule_id){
 //populate and render list of schedules from db
 function renderDHISSchedules(url){
 
-	var schedules=getDHISSchedules(url);
+	var data;
+	getDHISSchedules(url).then(jsonArray => {
+		console.log(jsonArray);
+		data=jsonArray;
+	  });
 	//getDHISSchedules(url).then(function(data){
 	console.log('[render hmis program schedules]');
 	console.log('[url ]'+url);
-	//console.log('Loaded data is'+data);
+	console.log('Loaded data is'+data);
 	//alert(data);
 	var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
 	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
@@ -226,7 +230,7 @@ function renderDHISSchedules(url){
 	//var schedules=JSON.parse(data);
 	var tempHTML;
 	var tr = document.createElement('tr');
-	schedules.forEach(function(object) {
+	/*schedules.forEach(function(object) {
 		console.log('[renderDHISSchedules] Processing schedule '+object.id);
 		//isMultiPeriodSchedule(object.id);
 		// Call the async function
@@ -285,6 +289,7 @@ function renderDHISSchedules(url){
 		}
 		document.getElementById(object.id).checked= object.enabled;
 	});
+	*/
 
 	//});
 }
@@ -375,7 +380,16 @@ function getDHISPrograms() {
 
 //read list of existing DHIS scheduless
 function getDHISSchedules(url) {
-	return $.get(url).done(function(data) {
+	return fetch(url)
+		.then(response => response.json())
+		.then(jsonArray => {
+		return jsonArray;
+		})
+		.catch(error => {
+		console.error('Error:', error);
+		});
+	 
+	/*return $.get(url).done(function(data) {
 		console.log('[Get DHIS schedules]');
 		console.log(data);
 		var result=JSON.parse(data);
@@ -384,6 +398,7 @@ function getDHISSchedules(url) {
 	}).fail(function(response) {
 		
 	});
+	*/
 }
 
 //delete checked schedules from the list
