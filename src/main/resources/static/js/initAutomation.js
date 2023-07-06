@@ -115,11 +115,11 @@ function isMultiPeriodSchedule(schedule_id){
 		console.log('Result array[0] is of size '+periods[0].length);
 		//const containsEmptyArray = periods.some((arr) => arr.length === 0);
 		if(periods[0].length==2){
-			console.log('[isMultiPeriodSchedule] Processing a multi-period schedule');
+			console.log('[isMultiPeriodSchedule] Processing a multi-period schedule '+schedule_id);
 			return false;
 		}
 		else{
-			console.log('[isMultiPeriodSchedule] Processing a single-period schedule');
+			console.log('[isMultiPeriodSchedule] Processing a single-period schedule '+schedule_id);
 			return true;
 		}
 	}).fail(function(response) {
@@ -152,9 +152,9 @@ function renderDHISSchedules(url){
 		var tempHTML;
 		var tr = document.createElement('tr');
 		schedules.forEach(function(object) {
-			console.log('[renderDHISSchedules] Processing schedule '+object);
+			console.log('[renderDHISSchedules] Processing schedule '+object.id);
 			if(isMultiPeriodSchedule(object.id)){
-				console.log('[renderDHISSchedules] Processing a multi-period schedule');
+				console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
 				//var periods=getSchedulePeriods(object.id);
 				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
@@ -166,7 +166,7 @@ function renderDHISSchedules(url){
 							'<td>' + object.targetDate + '</td>';
 			}
 			else{
-				console.log('[renderDHISSchedules] Processing a single-period schedule');
+				console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
 				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
 							"<label for='checkbox1'></label>"+"</span></td>" +
