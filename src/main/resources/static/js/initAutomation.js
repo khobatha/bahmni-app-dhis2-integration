@@ -146,7 +146,7 @@ function getSchedulePeriods(url) {
 		console.log('[isMultiPeriodSchedule] Processing a multi-period schedule '+schedule_id);
 		// Create the link element
 		const link = document.createElement("a");
-		link.href = "https://example.com";
+		link.href = "collapseOne";
 		const span = document.createElement("span");
 		span.classList.add("expand-icon");
 		const i = document.createElement("i");
@@ -168,15 +168,42 @@ function getSchedulePeriods(url) {
  // 
 async function generateMultiSchedulePeriodsHtml(schedule_id,result){
 	try{
-		//var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
-		//console.log('[generateMultiSchedulePeriodsHtml] Welcome');
-		//const data=await getSchedulePeriods(url);
-		//var data='[{"id":62,"dhis2ScheduleId":25,"period":0,"createdBy":"Test","createdDate":null,"startTime":"2023-08-01 00:00:00.0","endTime":"2023-09-01 00:00:00.0","lastRun":null,"status":"Ready","enabled":true},{"id":63,"dhis2ScheduleId":25,"period":1,"createdBy":"Test","createdDate":null,"startTime":"2023-09-01 00:00:00.0","endTime":"2023-10-01 00:00:00.0","lastRun":null,"status":"Ready","enabled":true}]';
+		
 		console.log('[generateMultiSchedulePeriodsHtml] Loaded data is '+result);
 		var periods=JSON.parse(result);
-		//console.log('[generateMultiSchedulePeriodsHtml] Processing period '+periods[0].id);
+		var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
+		var tr = document.createElement('tr');
+		var tempHTML = '<tr class="hide-table-padding">'+
+        				'<td></td>'+
+        				'<td colspan="3">'+
+          				'<div id="collapseOne" class="collapse in p-3">'+
+            			'<div class="row">'+
+              			'<div class="col-2">label</div>'+
+              			'<div class="col-6">value 1</div>'+
+			            '</div>'+
+          				'</div></td></tr>';
+		pharmacySchedulesTable.appendChild(tr);
 		periods.forEach(function(object){
 			console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
+			//--
+			var periodId="period-"+object.id;
+			//console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
+			// checkbox | Name | Frequency | LastRun | Status | NextRun | Enabled
+			/*tempHTML =	'<td></td>'+ 
+						'<td>' + object.period + '</td>' + 
+						'<td>monthly</td>' +
+						'<td>' + object.lastRun + '</td>' +
+						'<td>' + object.status + '</td>' +
+						'<td>-</td>'+
+						'<td>'+
+						'<label class="switch"><input type="checkbox" id='+periodId+' onclick="disenPeriodSchedule('+object.id+')"+><span class="slider round"></span></label>'+
+						'</td>';
+			tr.innerHTML=tempHTML;
+			document.getElementById(periodId).checked= object.enabled;*/
+			
+			//---
+
+
 		});
 	}
 	catch(error){
