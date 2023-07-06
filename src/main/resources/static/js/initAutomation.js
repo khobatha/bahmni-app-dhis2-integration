@@ -170,17 +170,14 @@ async function generateMultiSchedulePeriodsHtml(schedule_id){
 	try{
 		var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
 		console.log('[generateMultiSchedulePeriodsHtml] Welcome');
-		var data=await getSchedulePeriods(url);
+		//var data=await getSchedulePeriods(url);
+		var data='[{"id":62,"dhis2ScheduleId":25,"period":0,"createdBy":"Test","createdDate":null,"startTime":"2023-08-01 00:00:00.0","endTime":"2023-09-01 00:00:00.0","lastRun":null,"status":"Ready","enabled":true},{"id":63,"dhis2ScheduleId":25,"period":1,"createdBy":"Test","createdDate":null,"startTime":"2023-09-01 00:00:00.0","endTime":"2023-10-01 00:00:00.0","lastRun":null,"status":"Ready","enabled":true}]';
 		console.log('[generateMultiSchedulePeriodsHtml] Loaded data is'+data);
-		var periods=JSON.parse(data);
-		console.log('[generateMultiSchedulePeriodsHtml] Processing period '+periods[0].id);
-		//if(periods[0].lenth>2){
+		const periods=JSON.parse(data);
+		//console.log('[generateMultiSchedulePeriodsHtml] Processing period '+periods.id);
 		periods.forEach(function(object){
 			console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
 		});
-		//}else{
-		//	console.log('[generateMultiSchedulePeriodsHtml] Periods not received!');
-		//}
 	}
 	catch(error){
 		console.error('Error:', error);
