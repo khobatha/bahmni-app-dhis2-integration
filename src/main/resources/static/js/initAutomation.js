@@ -172,9 +172,9 @@ async function generateMultiSchedulePeriodsHtml(schedule_id){
 		console.log('[generateMultiSchedulePeriodsHtml] Welcome');
 		var data=await getSchedulePeriods(url);
 		console.log('[generateMultiSchedulePeriodsHtml] Loaded data is'+data);
-		var periods=JSON.parse(data);
+		var periods=JSON.parse(data[0]);
 		//if(periods[0].lenth>2){
-		periods[0].forEach(function(object){
+		periods.forEach(function(object){
 			console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
 		});
 		//}else{
