@@ -26,7 +26,7 @@ $(document).ready(
 
 			initTabs();
 			initDHISProgramNameDropdowns();
-			renderDHISSchedules(getClinicalSchedulesUrl);
+			renderDHISSchedules(getClinicalSchedulesUrl,0);
 			renderDHISSchedules(getPharmSchedulesUrl);
 			initPharmSchedulePeriodDatePickers();
 			addPharmScheduleFrequencyEventListener();
@@ -212,7 +212,7 @@ function getSchedulePeriods(schedule_id){
 */
 
 //populate and render list of schedules from db
-function renderDHISSchedules(url){
+function renderDHISSchedules(url,callCount){
 	getDHISSchedules(url).then(function(data){
 		console.log('[render hmis program schedules]');
 		console.log('[url ]'+url);
@@ -232,6 +232,10 @@ function renderDHISSchedules(url){
 			isMultiPeriodSchedule(object.id).then(returnValue => {
 				//console.log(returnValue);
 				flag= returnValue;
+				if(callCount==0){
+					callCount++;
+					renderDHISSchedules(url,callCount);
+				}
 			})
 			.catch(error => {
 			console.error(error);
