@@ -162,6 +162,7 @@ function renderDHISSchedules(url){
 							'<td>' + object.targetDate + '</td>';
 			}
 			else{
+				console.log('Processing a single-period schedule');
 				tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 							"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
 							"<label for='checkbox1'></label>"+"</span></td>" +
