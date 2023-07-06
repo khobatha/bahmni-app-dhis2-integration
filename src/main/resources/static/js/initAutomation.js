@@ -177,6 +177,8 @@ async function generateMultiSchedulePeriodsHtml(schedule_id){
 			periods.forEach(function(object){
 				console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
 			});
+		}else{
+			console.log('[generateMultiSchedulePeriodsHtml] Periods not received!');
 		}
 	}
 	catch(error){
