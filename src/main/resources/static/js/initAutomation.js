@@ -27,7 +27,7 @@ $(document).ready(
 			initTabs();
 			initDHISProgramNameDropdowns();
 			renderDHISSchedules(getClinicalSchedulesUrl);
-			//renderDHISSchedules(getPharmSchedulesUrl);
+			renderDHISSchedules(getPharmSchedulesUrl);
 			initPharmSchedulePeriodDatePickers();
 			addPharmScheduleFrequencyEventListener();
 			addCustomPeriodCheckboxEventListener();
@@ -255,7 +255,7 @@ async function renderDHISSchedules(url){
 		setTimeout(() => {
 			console.log("After delay");
 		  }, 2000); // Delay of 2000 milliseconds (2 seconds)
-		  
+
 		if(flag){
 			console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
 			//var periods=getSchedulePeriods(object.id);
