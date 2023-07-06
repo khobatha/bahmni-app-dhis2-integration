@@ -148,10 +148,10 @@ function getSchedulePeriods(url) {
 		const link = document.createElement("a");
 		link.href = "https://example.com";
 		const span = document.createElement("span");
-		span.classList.add("menu-ico-collapse");
-		const i = document.createElement("i");
-		i.classList.add("fa", "fa-chevron-down");
-		span.appendChild(i);
+		span.classList.add("expand-icon");
+		//const i = document.createElement("i");
+		//i.classList.add("fa", "fa-chevron-down");
+		//span.appendChild(i);
 		link.appendChild(span);
 		var cellId="schedule-"+schedule_id;
 		const cell = document.getElementById(cellId);
