@@ -140,11 +140,34 @@ function getSchedulePeriods(url) {
 	  console.log('[isMultiPeriodSchedule] Length of received periods for schedule '+schedule_id+':', periods[0].length);
 	  if(periods[0].length==2){
 		console.log('[isMultiPeriodSchedule] Processing a single-period schedule '+schedule_id);
-		return false;
+		//return false;
 	  }
 	  else{
 		console.log('[isMultiPeriodSchedule] Processing a multi-period schedule '+schedule_id);
-		return true;
+		// Create the link element
+		const link = document.createElement("a");
+		link.href = "https://example.com";
+
+		// Create the span element
+		const span = document.createElement("span");
+		span.classList.add("menu-ico-collapse");
+
+		// Create the i element
+		const i = document.createElement("i");
+		i.classList.add("fa", "fa-chevron-down");
+
+		// Append the i element to the span element
+		span.appendChild(i);
+
+		// Append the span element to the link element
+		link.appendChild(span);
+		// Find the table cell with id="cell1"
+		const cell = document.getElementById(schedule_id);
+
+		// Append the link element to the cell
+		cell.appendChild(link);
+
+		//return true;
 	}
   
 	  //const result2 = await makeAjaxCall('https://api.example.com/data2');
@@ -251,34 +274,30 @@ async function renderDHISSchedules(url){
 		//.catch(error => {
 		//console.error(error);
 		//});
-		var flag=dummy(object.id);
-		setTimeout(() => {
-			console.log("After delay");
-		  }, 2000); // Delay of 2000 milliseconds (2 seconds)
-
-		if(flag){
-			console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
-			//var periods=getSchedulePeriods(object.id);
-			tempHTML ="<td>"+"<span class='custom-checkbox'>"+
-						"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
-						"<label for='checkbox1'></label>"+"</span></td>" +
-						'<td><a data-remote="true">' + object.programName + '<span class="menu-ico-collapse"><i class="fa fa-chevron-down"></i></span></a></td>' +
-						'<td>' + object.frequency + '</td>' +
-						'<td>' + object.lastRun + '</td>' +
-						'<td>' + object.status + '</td>' +
-						'<td>' + object.targetDate + '</td>';
-		}
-		else{
-			console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
-			tempHTML ="<td>"+"<span class='custom-checkbox'>"+
-						"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
-						"<label for='checkbox1'></label>"+"</span></td>" +
-						'<td>' + object.programName + '</td>' +
-						'<td>' + object.frequency + '</td>' +
-						'<td>' + object.lastRun + '</td>' +
-						'<td>' + object.status + '</td>' +
-						'<td>' + object.targetDate + '</td>';
-		}
+		
+		//if(flag){
+		//	console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
+		//	//var periods=getSchedulePeriods(object.id);
+		//	tempHTML ="<td>"+"<span class='custom-checkbox'>"+
+		//				"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
+		//				"<label for='checkbox1'></label>"+"</span></td>" +
+		//				'<td><a data-remote="true">' + object.programName + '<span class="menu-ico-collapse"><i class="fa fa-chevron-down"></i></span></a></td>' +
+		//				'<td>' + object.frequency + '</td>' +
+		//				'<td>' + object.lastRun + '</td>' +
+		//				'<td>' + object.status + '</td>' +
+		//				'<td>' + object.targetDate + '</td>';
+		//}
+		//else{
+		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
+		tempHTML ="<td>"+"<span class='custom-checkbox'>"+
+					"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
+					"<label for='checkbox1'></label>"+"</span></td>" +
+					'<td id='+object.id+' >' + object.programName + '</td>' +
+					'<td>' + object.frequency + '</td>' +
+					'<td>' + object.lastRun + '</td>' +
+					'<td>' + object.status + '</td>' +
+					'<td>' + object.targetDate + '</td>';
+		//}
 
 		if(object.reportId==1){
 			tr.innerHTML =tempHTML+
@@ -302,6 +321,7 @@ async function renderDHISSchedules(url){
 			LabSchedulesTable.appendChild(tr);
 		}
 		document.getElementById(object.id).checked= object.enabled;
+		isMultiPeriodSchedule(object.id);
 	});
 
 	//});
