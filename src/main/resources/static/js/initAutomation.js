@@ -216,7 +216,7 @@ function renderDHISSchedules(url){
 
 	var data;
 	getDHISSchedules(url).then(jsonArray => {
-		console.log(jsonArray);
+		console.log('[getDHISSchedules] jsonArray = '+jsonArray);
 		data=jsonArray;
 	  });
 	//getDHISSchedules(url).then(function(data){
