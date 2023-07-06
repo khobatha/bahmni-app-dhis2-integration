@@ -155,7 +155,7 @@ function getSchedulePeriods(url) {
 		link.appendChild(span);
 		var cellId="schedule-"+schedule_id;
 		const cell = document.getElementById(cellId);
-		cell.appendChild(link);
+		cell.insertBefore(link,cell.firstChild);
 
 		//return true;
 	}
