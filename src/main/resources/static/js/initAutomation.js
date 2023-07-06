@@ -214,7 +214,7 @@ function renderDHISSchedules(url){
 		var tr = document.createElement('tr');
 		schedules.forEach(function(object) {
 			console.log('[renderDHISSchedules] Processing schedule '+object.id);
-			processData(object.id);
+			isMultiPeriodSchedule(object.id);
 			/*if(isMultiPeriodSchedule(object.id)){
 				console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
 				//var periods=getSchedulePeriods(object.id);
