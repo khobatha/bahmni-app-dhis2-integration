@@ -130,7 +130,7 @@ function getSchedulePeriods(url) {
   }
   
   // Function that uses the result of the AJAX calls
-  async function isMultiPeriodSchedule(schedule_id) {
+  async function addCollapsibleLinkOnMultiperiodSchedule(schedule_id) {
 	try {
 	  var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
 	  //console.log('The url is:', url);
@@ -147,25 +147,14 @@ function getSchedulePeriods(url) {
 		// Create the link element
 		const link = document.createElement("a");
 		link.href = "https://example.com";
-
-		// Create the span element
 		const span = document.createElement("span");
 		span.classList.add("menu-ico-collapse");
-
-		// Create the i element
 		const i = document.createElement("i");
 		i.classList.add("fa", "fa-chevron-down");
-
-		// Append the i element to the span element
 		span.appendChild(i);
-
-		// Append the span element to the link element
 		link.appendChild(span);
-		// Find the table cell with id="cell1"
 		var cellId="schedule-"+schedule_id;
 		const cell = document.getElementById(cellId);
-
-		// Append the link element to the cell
 		cell.appendChild(link);
 
 		//return true;
@@ -175,78 +164,13 @@ function getSchedulePeriods(url) {
 	}
   }
   
- function dummy(schedule_id){
-	// Call the async function
-	isMultiPeriodSchedule(schedule_id)
-	.then(returnValue => {
-		//console.log(returnValue);
-		return returnValue;
-	})
-	.catch(error => {
-	console.error(error);
-	});
-
-
- }
-  
-
-
-
-
 
 //-----------------------------------------------------------------------
-
-/*
-function isMultiPeriodSchedule(schedule_id){
-	var parameters = { pharmschedid : schedule_id};
-	return $.get(getPharmSchedulePeriodsUrl,parameters).done(function(periods) {
-		console.log('Result array for schedule '+schedule_id+' is '+periods);
-		console.log('Result array[0] for schedule '+schedule_id+' is '+periods[0]);
-		console.log('Result array[0] for schedule '+schedule_id+' is of size '+periods[0].length);
-		//const containsEmptyArray = periods.some((arr) => arr.length === 0);
-		if(periods[0].length==2){
-			console.log('[isMultiPeriodSchedule] Processing a multi-period schedule '+schedule_id);
-			return false;
-		}
-		else{
-			console.log('[isMultiPeriodSchedule] Processing a single-period schedule '+schedule_id);
-			return true;
-		}
-	}).fail(function(response) {
-		console.log(response);
-	});
-
-}
-
-
-function getSchedulePeriods(schedule_id){
-	var parameters = { pharmschedid : schedule_id};
-	return $.get(getPharmSchedulePeriodsUrl,parameters).done(function(periods) {
-		return periods;
-	}).fail(function(response) {
-		console.log(response);
-	});
-
-}
-*/
-/*
-async function checkallschedules(schedules){
-	var results;
-	schedules.forEach(function(object) {
-		var flag=await dummy(object.id);
-		results.push(flag);
-	});
-}*/
 
 //populate and render list of schedules from db
 async function renderDHISSchedules(url){
 
 	var data = await getDHISSchedules(url);
-	//getDHISSchedules(url).then(jsonArray => {
-	//	console.log('[getDHISSchedules] jsonArray = '+jsonArray);
-	//	data=jsonArray;
-	//  });
-	//getDHISSchedules(url).then(function(data){
 	console.log('[renderDHISSchedules] Welcome');
 	//console.log('[url ]'+url);
 	console.log('[renderDHISSchedules] Loaded data is'+data);
@@ -255,34 +179,9 @@ async function renderDHISSchedules(url){
 	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
 	var LabSchedulesTable = document.getElementById('lab-program-schedules');
 	var schedules=JSON.parse(data);
-	//var checked = await checkallschedules(schedules);
 	var tempHTML;
 	schedules.forEach(function(object) {
 		console.log('[renderDHISSchedules] Processing schedule '+object.id);
-		//isMultiPeriodSchedule(object.id);
-		// Call the async function
-		//var flag=false;
-		//isMultiPeriodSchedule(object.id).then(returnValue => {
-		//	//console.log(returnValue);
-		//	flag= returnValue;
-		//})
-		//.catch(error => {
-		//console.error(error);
-		//});
-		
-		//if(flag){
-		//	console.log('[renderDHISSchedules] Processing a multi-period schedule '+object.id);
-		//	//var periods=getSchedulePeriods(object.id);
-		//	tempHTML ="<td>"+"<span class='custom-checkbox'>"+
-		//				"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
-		//				"<label for='checkbox1'></label>"+"</span></td>" +
-		//				'<td><a data-remote="true">' + object.programName + '<span class="menu-ico-collapse"><i class="fa fa-chevron-down"></i></span></a></td>' +
-		//				'<td>' + object.frequency + '</td>' +
-		//				'<td>' + object.lastRun + '</td>' +
-		//				'<td>' + object.status + '</td>' +
-		//				'<td>' + object.targetDate + '</td>';
-		//}
-		//else{
 		var tr = document.createElement('tr');
 		var cellId="schedule-"+object.id;
 		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
@@ -294,8 +193,6 @@ async function renderDHISSchedules(url){
 					'<td>' + object.lastRun + '</td>' +
 					'<td>' + object.status + '</td>' +
 					'<td>' + object.targetDate + '</td>';
-		//}
-
 		if(object.reportId==1){
 			tr.innerHTML =tempHTML+
 						"<td>"+
@@ -318,7 +215,7 @@ async function renderDHISSchedules(url){
 			LabSchedulesTable.appendChild(tr);
 		}
 		document.getElementById(object.id).checked= object.enabled;
-		isMultiPeriodSchedule(object.id);
+		addCollapsibleLinkOnMultiperiodSchedule(object.id);
 	});
 
 	//});
