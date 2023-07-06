@@ -162,18 +162,14 @@ function getSchedulePeriods(url) {
 		// Append the span element to the link element
 		link.appendChild(span);
 		// Find the table cell with id="cell1"
-		const cell = document.getElementById(schedule_id);
+		var cellId='schedule-'+schedule_id;
+		const cell = document.getElementById(cellId);
 
 		// Append the link element to the cell
 		cell.appendChild(link);
 
 		//return true;
 	}
-  
-	  //const result2 = await makeAjaxCall('https://api.example.com/data2');
-	  //console.log('Data2 received:', result2);
-  
-	  // Continue with additional AJAX calls or processing
 	} catch (error) {
 	  console.error('Error:', error);
 	}
@@ -288,11 +284,12 @@ async function renderDHISSchedules(url){
 		//				'<td>' + object.targetDate + '</td>';
 		//}
 		//else{
+		var cellId='schedule-'+object.id;
 		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
 		tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 					"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
 					"<label for='checkbox1'></label>"+"</span></td>" +
-					'<td id='+object.id+' >' + object.programName + '</td>' +
+					'<td id=' + cellId + "'>" + object.programName + '</td>' +
 					'<td>' + object.frequency + '</td>' +
 					'<td>' + object.lastRun + '</td>' +
 					'<td>' + object.status + '</td>' +
