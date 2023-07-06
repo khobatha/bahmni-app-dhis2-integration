@@ -135,7 +135,7 @@ function getSchedulePeriods(url) {
 	  var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
 	  console.log('The url is:', url);
 	  const periods = await getSchedulePeriods(url);
-	  console.log('Data1 received:', periods);
+	  console.log('Data1 received for schedule '+schedule_id+':', periods);
   
 	  //const result2 = await makeAjaxCall('https://api.example.com/data2');
 	  //console.log('Data2 received:', result2);
