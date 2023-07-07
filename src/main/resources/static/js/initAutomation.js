@@ -234,6 +234,13 @@ async function renderDHISSchedules(url){
 	var clinicalSchedulesTable = document.getElementById('clinical-program-schedules');
 	var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
 	var LabSchedulesTable = document.getElementById('lab-program-schedules');
+
+	//create table bodies for all tables
+	const clinicalSchedulesTableBody = document.createElement('tbody');
+	const pharmacySchedulesTableBody = document.createElement('tbody');
+	const LabSchedulesTableBody = document.createElement('tbody');
+
+
 	var schedules=JSON.parse(data);
 	var tempHTML;
 	schedules.forEach(function(object) {
@@ -256,21 +263,24 @@ async function renderDHISSchedules(url){
 						"<td>"+
 						"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
 						"</td>";
-			clinicalSchedulesTable.appendChild(tr);
+			clinicalSchedulesTableBody.appendChild(tr);
+			clinicalSchedulesTable.appendChild(clinicalSchedulesTableBody);
 		}
 		else if(object.reportId==2){
 			tr.innerHTML =tempHTML+
 						"<td>"+
 						"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
 						"</td>";
-			pharmacySchedulesTable.appendChild(tr);
+			pharmacySchedulesTableBody.appendChild(tr);
+			pharmacySchedulesTable.appendChild(pharmacySchedulesTableBody);
 		}
 		else if(object.reportId==3){
 			tr.innerHTML =tempHTML+
 						"<td>"+
 						"<label class='switch'><input type='checkbox' id='"+object.id+"' onclick='disenSchedule(this.id)'><span class='slider round'></span></label>"+
 						"</td>";
-			LabSchedulesTable.appendChild(tr);
+			LabSchedulesTableBody.appendChild(tr);
+			LabSchedulesTable.appendChild(LabSchedulesTableBody);
 		}
 		document.getElementById(object.id).checked= object.enabled;
 		addCollapsibleLinkOnMultiperiodSchedule(object.id);
