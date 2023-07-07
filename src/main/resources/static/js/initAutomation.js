@@ -76,18 +76,6 @@ function initPharmSchedulePeriodDatePickers(){
 	}
 
 }
-/*
-function addCollapseMultiPeriodsEventListener(){
-	const rows = document.querySelectorAll('.table-row');
-    rows.forEach(row => {
-      row.addEventListener('click', () => {
-        const hiddenRow = row.nextElementSibling;
-        row.classList.toggle('collapsed');
-        hiddenRow.classList.toggle('hidden-row');
-      });
-    });
-	console.log('[addCollapseMultiPeriodsEventListener] Added!');
-}*/
 
 function addPharmScheduleFrequencyEventListener(){
 // if monthly frequency selected for a pharmacy report, display checkbox for determining if report has
@@ -178,9 +166,9 @@ function getSchedulePeriods(url) {
 		
 
 		//generate dynamic html to display the periods of this schedule
-		const periodsTr = '<tr class="hidden-row"><td colspan="2">Hidden Content 1</td></tr>';
-		tr.insertAdjacentHTML('afterend', periodsTr);	
-		//generateMultiSchedulePeriodsHtml(schedule_id,periods);
+		//const periodsTr = '<tr class="hidden-row"><td colspan="2">Hidden Content 1</td></tr>';
+		//tr.insertAdjacentHTML('afterend', periodsTr);	
+		generateMultiSchedulePeriodsHtml(schedule_id,periods);
 
 		//add event listener to parent row to collapse when clicked
 		tr.addEventListener('click', function() {
@@ -200,41 +188,53 @@ async function generateMultiSchedulePeriodsHtml(schedule_id,result){
 		
 		console.log('[generateMultiSchedulePeriodsHtml] Loaded data is '+result);
 		var periods=JSON.parse(result);
-		var periodsId="schedule-"+schedule_id+"-periods";
+
+		// create a new hidden row to hold periods of this schedule
 		var periodsTr = document.createElement('tr');
 		periodsTr.classList.add("hidden-row");
-		var tempHTML =  '<td colspan="2">Hidden Content 1</td>';
-		periodsTr.innerHTML =tempHTML;
+		//var tempHTML =  '<td colspan="2">Hidden Content 1</td>';
+		//periodsTr.innerHTML =tempHTML;
 
-		//insert this row of periods after the corresponding parent row
+		//add empty cell to the new row
+		const cell = document.createElement('td');
+		periodsTr.appendChild(cell);
+
+		//create a parent cell to hold the div of periods
+		const periodsCell = document.createElement('td');
+		periodsCell.setAttribute('colspan', '6');
+
+		//create a parent div to hold periods inside the parent cell
+		const periodsDiv = document.createElement('div');
+
+		// construct html to render periods of this schedule
+		periods.forEach(function(object){
+			console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
+			// checkbox | Name | Frequency | LastRun | Status | NextRun | Enabled
+			var rowDiv ='<div class="row">'+ 
+						'<div>' + object.period + '</div>' + 
+						'<div>monthly</div>' +
+						'<div>' + object.lastRun + '</div>' +
+						'<div>' + object.status + '</div>' +
+						'<div>-</div>'+
+						'<div>'+
+						'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+><span class="slider round"></span></label>'+
+						'</div></div>';
+			//add this period row div to the parent div
+			periodsDiv.innerHTML=rowDiv;
+			//set the checkbox of this period to checked
+			//var periodId="period-"+object.id;
+			//document.getElementById(periodId).checked= object.enabled;
+		});
+
+		//add the parent div to the cell
+		periodsCell.appendChild(periodsDiv);
+		//add the parent cell to the period row
+		periodsTr.appendChild(periodsCell);
+		//insert the row of periods immediately after the corresponding parent row
 		var rowId="schedule-"+schedule_id+"-row";
 		var parentTr = document.getElementById(rowId);
 		parentTr.insertAdjacentHTML('afterend', periodsTr);	
 
-		//pharmacySchedulesTable.appendChild(tr);
-
-		periods.forEach(function(object){
-			console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
-			//--
-			var periodId="period-"+object.id;
-			//console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
-			// checkbox | Name | Frequency | LastRun | Status | NextRun | Enabled
-			/*tempHTML =	'<td></td>'+ 
-						'<td>' + object.period + '</td>' + 
-						'<td>monthly</td>' +
-						'<td>' + object.lastRun + '</td>' +
-						'<td>' + object.status + '</td>' +
-						'<td>-</td>'+
-						'<td>'+
-						'<label class="switch"><input type="checkbox" id='+periodId+' onclick="disenPeriodSchedule('+object.id+')"+><span class="slider round"></span></label>'+
-						'</td>';
-			tr.innerHTML=tempHTML;
-			document.getElementById(periodId).checked= object.enabled;*/
-			
-			//---
-
-
-		});
 	}
 	catch(error){
 		console.error('Error:', error);
