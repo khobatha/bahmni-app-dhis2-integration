@@ -184,8 +184,10 @@ function getSchedulePeriods(url) {
 
 		//add event listener to parent row to collapse when clicked
 		tr.addEventListener('click', function() {
-		  // Handle the row click event
-		  console.log('Schedule '+schedule_id+' Row clicked!');
+			const hiddenRow = row.nextElementSibling;
+			row.classList.toggle('collapsed');
+			hiddenRow.classList.toggle('hidden-row');
+		  	console.log('Schedule '+schedule_id+' Row clicked!');
 		});
 	}
 	} catch (error) {
