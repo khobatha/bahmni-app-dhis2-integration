@@ -140,11 +140,15 @@ function getSchedulePeriods(url) {
 	  console.log('[isMultiPeriodSchedule] Length of received periods for schedule '+schedule_id+':', periods[0].length);
 	  if(periods[0].length==2){
 		console.log('[isMultiPeriodSchedule] Processing a single-period schedule '+schedule_id);
-		//return false;
 	  }
 	  else{
+		//add bootstrap classes to make this row collapsible
 		console.log('[isMultiPeriodSchedule] Processing a multi-period schedule '+schedule_id);
-		// Create the link element
+		var rowId="schedule-"+schedule_id+"-row";
+		var tr = document.getElementById(rowId);
+		tr.classList.add("accordion-toggle", "collapsed");
+
+		//add the plus icon link for collapsing this schedule
 		const link = document.createElement("a");
 		var ref="schedule-"+schedule_id+"-periods";
 		link.href = ref;
@@ -159,8 +163,8 @@ function getSchedulePeriods(url) {
 		const cell = document.getElementById(cellId);
 		cell.insertBefore(link,cell.firstChild);
 
+		//generate dynamic html to display the periods of this schedule
 		generateMultiSchedulePeriodsHtml(schedule_id,periods);
-		//return true;
 	}
 	} catch (error) {
 	  console.error('Error:', error);
@@ -232,6 +236,7 @@ async function renderDHISSchedules(url){
 		console.log('[renderDHISSchedules] Processing schedule '+object.id);
 		var tr = document.createElement('tr');
 		var cellId="schedule-"+object.id;
+		var rowId="schedule-"+object.id+"-row";
 		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
 		tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 					"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
