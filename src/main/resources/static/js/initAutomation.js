@@ -151,7 +151,7 @@ function getSchedulePeriods(url) {
 		//add the plus icon link for collapsing this schedule
 		const link = document.createElement("a");
 		var ref="schedule-"+schedule_id+"-periods";
-		link.href = ref;
+		//link.href = ref;
 		const span = document.createElement("span");
 		span.classList.add("expand-icon");
 		const i = document.createElement("i");
