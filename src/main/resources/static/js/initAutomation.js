@@ -184,8 +184,8 @@ function getSchedulePeriods(url) {
 
 		//add event listener to parent row to collapse when clicked
 		tr.addEventListener('click', function() {
-			const hiddenRow = row.nextElementSibling;
-			row.classList.toggle('collapsed');
+			const hiddenRow = tr.nextElementSibling;
+			tr.classList.toggle('collapsed');
 			hiddenRow.classList.toggle('hidden-row');
 		  	console.log('Schedule '+schedule_id+' Row clicked!');
 		});
