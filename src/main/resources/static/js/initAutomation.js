@@ -76,7 +76,7 @@ function initPharmSchedulePeriodDatePickers(){
 	}
 
 }
-
+/*
 function addCollapseMultiPeriodsEventListener(){
 	const rows = document.querySelectorAll('.table-row');
     rows.forEach(row => {
@@ -87,7 +87,7 @@ function addCollapseMultiPeriodsEventListener(){
       });
     });
 	console.log('[addCollapseMultiPeriodsEventListener] Added!');
-}
+}*/
 
 function addPharmScheduleFrequencyEventListener(){
 // if monthly frequency selected for a pharmacy report, display checkbox for determining if report has
