@@ -237,6 +237,7 @@ async function renderDHISSchedules(url){
 		var tr = document.createElement('tr');
 		var cellId="schedule-"+object.id;
 		var rowId="schedule-"+object.id+"-row";
+		tr.setAttribute("id", rowId);
 		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
 		tempHTML ="<td>"+"<span class='custom-checkbox'>"+
 					"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
