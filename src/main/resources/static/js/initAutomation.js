@@ -191,7 +191,9 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 	// create a new hidden row to hold periods of this schedule
 	//var periodsTr = document.createElement('tr');
 	//periodsTr.classList.add("hidden-row");
-	var tempHTML =  '<tr class="hidden-row"><td colspan="2">Hidden Content 1</td></tr>';
+	var tempHTML='<tr class="hidden-row"><td></td><td colspan="6"><div>';
+	var closingHTML='</div></td></tr>';
+	//<td colspan="2">Hidden Content 1</td></tr>';
 	//periodsTr.innerHTML =tempHTML;
 
 	/*
@@ -205,7 +207,7 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 
 	//create a parent div to hold periods inside the parent cell
 	const periodsDiv = document.createElement('div');
-
+	*/
 	// construct html to render periods of this schedule
 	periods.forEach(function(object){
 		console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
@@ -220,12 +222,13 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 					'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+><span class="slider round"></span></label>'+
 					'</div></div>';
 		//add this period row div to the parent div
-		periodsDiv.innerHTML=rowDiv;
+		tempHTML=tempHTML+rowDiv;
 		//set the checkbox of this period to checked
 		//var periodId="period-"+object.id;
 		//document.getElementById(periodId).checked= object.enabled;
 	});
-
+	tempHTML=tempHTML+closingHTML;
+	/*
 	//add the parent div to the cell
 	periodsCell.appendChild(periodsDiv);
 	//add the parent cell to the period row
