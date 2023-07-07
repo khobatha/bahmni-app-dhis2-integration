@@ -236,9 +236,9 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 					'<div class="col-2" align="center">monthly</div>' +
 					'<div class="col-1">' + object.lastRun + '</div>' +
 					'<div class="col-1" align="center" style="padding-left:40px">' + object.status + '</div>' +
-					'<div class="col-2">-</div>'+
+					'<div class="col-2" align="center">-</div>'+
 					'<div class="col-2" align="center" style="padding-left:60px">'+
-					'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+><span class="slider round" checked></span></label>'+
+					'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+ checked ><span class="slider round"></span></label>'+
 					'</div></div>';
 		//add this period row div to the parent div
 		tempHTML=tempHTML+rowDiv;
