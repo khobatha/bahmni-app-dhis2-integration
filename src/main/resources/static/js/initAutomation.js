@@ -86,6 +86,7 @@ function addCollapseMultiPeriodsEventListener(){
         hiddenRow.classList.toggle('hidden-row');
       });
     });
+	console.log('[addCollapseMultiPeriodsEventListener] Added!');
 }
 
 function addPharmScheduleFrequencyEventListener(){
