@@ -146,7 +146,7 @@ function getSchedulePeriods(url) {
 		console.log('[isMultiPeriodSchedule] Processing a multi-period schedule '+schedule_id);
 		var rowId="schedule-"+schedule_id+"-row";
 		var tr = document.getElementById(rowId);
-		tr.classList.add("accordion-toggle", "collapsed");
+		tr.classList.add("table-row");
 
 		//add the plus icon link for collapsing this schedule
 		const link = document.createElement("a");
@@ -177,18 +177,19 @@ async function generateMultiSchedulePeriodsHtml(schedule_id,result){
 		console.log('[generateMultiSchedulePeriodsHtml] Loaded data is '+result);
 		var periods=JSON.parse(result);
 		var periodsId="schedule-"+schedule_id+"-periods";
-		var pharmacySchedulesTable = document.getElementById('pharmacy-program-schedules');
-		var tr = document.createElement('tr');
-		var tempHTML = '<tr class="hide-table-padding">'+
-        				'<td></td>'+
-        				'<td colspan="3">'+
-          				'<div id="'+periodsId+'" class="collapse in p-3">'+
-            			'<div class="row">'+
-              			'<div class="col-2">label</div>'+
-              			'<div class="col-6">value 1</div>'+
-			            '</div>'+
-          				'</div></td></tr>';
-		pharmacySchedulesTable.appendChild(tr);
+		var periodsTr = document.createElement('tr');
+		var tempHTML =  '<tr class="hidden-row">'+
+        				'<td colspan="2">Hidden Content 1</td>'+
+        				'</tr>';
+		periodsTr.innerHTML =tempHTML;
+
+		//insert this row of periods after the corresponding parent row
+		var rowId="schedule-"+schedule_id+"-row";
+		var parentTr = document.getElementById(rowId);
+		parentTr.insertAdjacentHTML('afterend', periodsTr);	
+
+		//pharmacySchedulesTable.appendChild(tr);
+
 		periods.forEach(function(object){
 			console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
 			//--
