@@ -149,19 +149,21 @@ function getSchedulePeriods(url) {
 		tr.classList.add("table-row");
 
 		//add the plus icon link for collapsing this schedule
-		const link = document.createElement("a");
-		var ref="schedule-"+schedule_id+"-periods";
+		
+		//const link = document.createElement("a");
+		//var ref="schedule-"+schedule_id+"-periods";
 		//link.href = ref;
 		const span = document.createElement("span");
 		span.classList.add("expand-icon");
-		const i = document.createElement("i");
-		i.classList.add("fa", "fa-plus","small-icon");
-		span.appendChild(i);
-		link.appendChild(span);
-		link.appendChild(document.createTextNode("\u00A0"));
+		//const i = document.createElement("i");
+		//i.classList.add("fa", "fa-plus","small-icon");
+		//span.appendChild(i);
+		//link.appendChild(span);
+		span.appendChild(document.createTextNode("\u00A0"));
 		var cellId="schedule-"+schedule_id;
 		const cell = document.getElementById(cellId);
-		cell.insertBefore(link,cell.firstChild);
+		cell.insertBefore(span,cell.firstChild);
+		
 
 		//generate dynamic html to display the periods of this schedule
 		generateMultiSchedulePeriodsHtml(schedule_id,periods);
