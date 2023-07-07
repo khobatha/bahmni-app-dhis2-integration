@@ -2,6 +2,7 @@ package com.possible.dhis2int.date;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class ReportDateRange {
 	
@@ -13,6 +14,18 @@ public class ReportDateRange {
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
+
+	public ReportDateRange(String startDateString, String endDateString) {
+        String pattern = "yyyy-MM-dd";
+        DateTimeFormatter formatter = DateTimeFormat.forPattern(pattern);
+
+        try {
+            this.startDate = formatter.parseDateTime(startDateString);
+            this.endDate = formatter.parseDateTime(endDateString);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid date format. Please provide dates in the format 'yyyy-MM-dd'.", e);
+        }
+    }
 	
 	public String getStartDate() {
 		return DateTimeFormat.forPattern("yyyy-MM-dd").print(startDate);

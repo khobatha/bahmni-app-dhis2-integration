@@ -64,6 +64,7 @@ public class DHISIntegratorScheduler {
 	private final Logger logger = getLogger(DHISIntegratorScheduler.class);
 	private final Properties properties;
 	private final String SUBMISSION_ENDPOINT = "/dhis-integration/submit-to-dhis";
+	private final String SUBMISSION_ENDPOINT_PHARM = "/dhis-integration/submit-to-dhis-with-period";
 	private final String OPENMRS_LOGIN_ENDPOINT = "/session";
 
 	@Autowired
@@ -457,7 +458,7 @@ public class DHISIntegratorScheduler {
 		try {
 			for (String schedule_id : scheduleIds) {
 				databaseDriver.executeDeletePharmSchedQuery(Integer.parseInt(schedule_id));
-				logger.info("Executed delete pharmacy schedule query successfully...");
+				logger.info("Executed delete pharmacy schedule query successfully...for pharmacy schedule id "+schedule_id);
 			}
 
 		} catch (DHISIntegratorException | JSONException e) {
@@ -485,6 +486,15 @@ public class DHISIntegratorScheduler {
 		DHISIntegratorRequestUrl.append("?name=").append(reportName).append("&month=").append(month).append("&year=")
 				.append(year)
 				.append("&isImam=false&isFamily=false").append("&comment=").append(comment);
+		return DHISIntegratorRequestUrl.toString();
+	}
+
+	private String buildDHISIntegratorUrlWithPeriod(String reportName, Integer month, Integer year, String comment, String startDate, String endDate) {
+		StringBuilder DHISIntegratorRequestUrl = new StringBuilder(
+				properties.dhisIntegratorRootUrl + SUBMISSION_ENDPOINT_PHARM);
+		DHISIntegratorRequestUrl.append("?name=").append(reportName).append("&month=").append(month).append("&year=")
+				.append(year)
+				.append("&isImam=false&isFamily=false").append("&comment=").append(comment).append("&startDate=").append(startDate).append("&endDate=").append(endDate);
 		return DHISIntegratorRequestUrl.toString();
 	}
 
@@ -558,6 +568,26 @@ public class DHISIntegratorScheduler {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime scheduleTargetDate = LocalDateTime.parse(schedule.getTargetDate(), formatter);
 		return scheduleTargetDate.toLocalDate().isBefore(LocalDate.now());
+	}
+
+	private String getScheduleType(Schedule sched){
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+sched.getReportId()+"'";
+		String type = "MRSGeneric";
+		Results results = new Results();
+		String reportName = "";
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+
+			for (List<String> row : results.getRows()) {
+				reportName = row.get(0);
+			}
+		} catch (DHISIntegratorException e) {
+		// logger.info("Inside loadIntegrationSchedules...");
+		logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+		return reportName;
 	}
 
 	private ArrayList<Schedule> getIntegrationSchedules()
@@ -645,6 +675,9 @@ public class DHISIntegratorScheduler {
 			for (int i = 0; i < schedules.size(); i++) {
 				logger.info("Current item " + schedules.get(i).getProgramName());
 				Schedule currSchedule = schedules.get(i);
+				if(getScheduleType(currSchedule).equals("ERPGeneric")){
+					break; //skip this schedule i.e. this should process clinical schdeules only
+				}
 				switch (currSchedule.getFrequency()) {
 					case "daily":
 						// daily logic
@@ -674,13 +707,15 @@ public class DHISIntegratorScheduler {
 							String comment = "DHISIntegratorScheduler submitted " + currSchedule.getProgramName()
 									+ " on " + LocalDate.now();
 
+
 							if(currSchedule.getProgramName().equals("PHARM-001 Pharmacy ARV Regimen") || currSchedule.getProgramName().equals("PHARM-003 Dispensing Summary Report")){
 								if(month == 12){
 									month = 1;
 								}else{
 									month = month + 1;
 								}
-							}			
+							}		
+														
 							String DHISIntegratorUrl = buildDHISIntegratorUrl(currSchedule.getProgramName(), month,
 									year, comment);
 							AuthResponse authResponse = authenticate(
@@ -756,6 +791,110 @@ public class DHISIntegratorScheduler {
 		 * // logout when done
 		 * getSchedules();
 		 */
+	}
+
+	@Scheduled(cron = "0 0/5 * * * *")
+	public void processPharmSchedules() {
+		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+		try {
+			schedules = getIntegrationSchedules();
+			// for each item, is this report due
+			// if due => call submitToDHIS(x,y,z)
+			for (int i = 0; i < schedules.size(); i++) {
+				logger.info("Current item " + schedules.get(i).getProgramName());
+				Schedule currSchedule = schedules.get(i);
+				if(getScheduleType(currSchedule).equals("MRSGeneric")){
+					break; //skip this schedule i.e. this should process pharmacy schdeules only
+				}
+				switch (currSchedule.getFrequency()) {
+					case "daily":
+						// daily logic
+						logger.info("Processing a daily schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						break;
+					case "weekly":
+						// weekly logic
+						logger.info("Processing a weekly schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						break;
+					case "monthly":
+						// monthly logic
+						logger.info("Processing a montly schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						if (isDue(currSchedule)) {
+							logger.info("The following report is due " + currSchedule.getProgramName());
+							// extract period
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        					LocalDateTime dateTime = LocalDateTime.parse(currSchedule.getTargetDate(), formatter);
+							Integer year = dateTime.getYear();
+							Integer month = dateTime.getMonthValue();
+							String comment = "DHISIntegratorScheduler submitted " + currSchedule.getProgramName()
+									+ " on " + LocalDate.now();
+
+							//Period to run report
+							String startDate = "2022-01-22";
+							String endDate = "2022-02-15";		
+
+
+							if(currSchedule.getProgramName().equals("PHARM-001 Pharmacy ARV Regimen") || currSchedule.getProgramName().equals("PHARM-003 Dispensing Summary Report")){
+								if(month == 12){
+									month = 1;
+								}else{
+									month = month + 1;
+								}
+							}		
+														
+							String DHISIntegratorUrl = buildDHISIntegratorUrlWithPeriod(currSchedule.getProgramName(), month,
+									year, comment, startDate, endDate);
+							AuthResponse authResponse = authenticate(
+									properties.openmrsRootUrl + OPENMRS_LOGIN_ENDPOINT);
+							ResponseEntity<String> responseEntity = null;
+							if (authResponse.getSessionId() != "") {
+								responseEntity = submitToDHISIntegrator(DHISIntegratorUrl, authResponse);
+							}
+							logout(properties.openmrsRootUrl + OPENMRS_LOGIN_ENDPOINT);
+
+							// if submitted successfully, set new target, else leave it to be retried.
+							if (isSubmissionSuccessful(responseEntity)) {
+								// determine & set new target date
+								LocalDate newTatgetDate = getMonthlyTargetDate(LocalDate.now());
+								String status = "Success";
+								updateSchedule(currSchedule.getId(), newTatgetDate, status);
+								logger.info("Submission went through ... :-)");
+								logger.info("Response body: " + responseEntity.getBody());
+
+							} else {
+								LocalDate newTatgetDate = null;
+								String status = "Failure";
+								updateSchedule(currSchedule.getId(), newTatgetDate, status);
+								logger.info("Submission did not go through ... :-(");
+								logger.info("Response body: " + responseEntity.getBody());
+							}
+
+						}else {
+							logger.info("The following report is NOT due " + currSchedule.getProgramName());
+						}
+						break;
+					case "quarterly":
+						// quarterly logic
+						logger.info("Processing a quarterly schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						break;
+					case "yearly":
+						// yearly logic
+						logger.info("Processing a yearly schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						break;
+					default:
+						// Ache banna, how did we get here?? .. do nothing
+				}
+
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	@Scheduled(cron = "0 0/5 * * * *")
