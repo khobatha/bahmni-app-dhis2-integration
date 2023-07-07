@@ -183,6 +183,25 @@ function getSchedulePeriods(url) {
 	}
   }
 
+function periodIdToName(period_id){
+	const periodMap = {
+		0: "Aug/Sept",
+		1: "Sept/Oct",
+		2: "Oct/Nov",
+		3: "Nov/Dec",
+		4: "Dec/Jan",
+		5: "Jan/Feb",
+		6: "Feb/Mar",
+		7: "Mar/Apr",
+		8: "Apr/May",
+		9: "May/Jun",
+		10: "Jun/Jul",
+		11: "Jul/Aug"
+	  };
+	
+	  return periodMap[period_id] || "Unknown";
+}  
+
 function generateMultiSchedulePeriodsHtml(schedule_id,result){
 	
 	console.log('[generateMultiSchedulePeriodsHtml] Loaded data is '+result);
@@ -213,7 +232,7 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 		console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
 		// checkbox | Name | Frequency | LastRun | Status | NextRun | Enabled
 		var rowDiv ='<div class="row">'+ 
-					'<div class="col-4">' + object.period + '</div>' + 
+					'<div class="col-4">' + periodIdToName(period_id) + '</div>' + 
 					'<div class="col-2" align="center">monthly</div>' +
 					'<div class="col-1">' + object.lastRun + '</div>' +
 					'<div class="col-1" align="center" style="padding-left:40px">' + object.status + '</div>' +
