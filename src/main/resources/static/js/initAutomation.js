@@ -31,7 +31,7 @@ $(document).ready(
 			initPharmSchedulePeriodDatePickers();
 			addPharmScheduleFrequencyEventListener();
 			addCustomPeriodCheckboxEventListener();
-			addCollapseMultiPeriodsEventListener();
+			//addCollapseMultiPeriodsEventListener();
 			
 });
 
