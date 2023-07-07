@@ -181,6 +181,12 @@ function getSchedulePeriods(url) {
 		const periodsTr = '<tr class="hidden-row"><td colspan="2">Hidden Content 1</td></tr>';
 		tr.insertAdjacentHTML('afterend', periodsTr);	
 		//generateMultiSchedulePeriodsHtml(schedule_id,periods);
+
+		//add event listener to parent row to collapse when clicked
+		tr.addEventListener('click', function() {
+		  // Handle the row click event
+		  console.log('Schedule '+schedule_id+' Row clicked!');
+		});
 	}
 	} catch (error) {
 	  console.error('Error:', error);
