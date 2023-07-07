@@ -180,9 +180,8 @@ async function generateMultiSchedulePeriodsHtml(schedule_id,result){
 		var periods=JSON.parse(result);
 		var periodsId="schedule-"+schedule_id+"-periods";
 		var periodsTr = document.createElement('tr');
-		var tempHTML =  '<tr class="hidden-row">'+
-        				'<td colspan="2">Hidden Content 1</td>'+
-        				'</tr>';
+		periodsTr.classList.add("hidden-row");
+		var tempHTML =  '<td colspan="2">Hidden Content 1</td>';
 		periodsTr.innerHTML =tempHTML;
 
 		//insert this row of periods after the corresponding parent row
