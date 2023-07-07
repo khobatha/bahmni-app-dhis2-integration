@@ -167,7 +167,7 @@ function getSchedulePeriods(url) {
 
 		//generate dynamic html to display the periods of this schedule
 		const periodsTr = '<tr class="hidden-row"><td colspan="2">Hidden Content 1</td></tr>';
-		tr.insertAdjacentHTML('afterend', periodsTr);	
+		tr.insertAdjacentHTML('beforeend', periodsTr);	
 		//generateMultiSchedulePeriodsHtml(schedule_id,periods);
 	}
 	} catch (error) {
