@@ -31,6 +31,7 @@ $(document).ready(
 			initPharmSchedulePeriodDatePickers();
 			addPharmScheduleFrequencyEventListener();
 			addCustomPeriodCheckboxEventListener();
+			addCollapseMultiPeriodsEventListener();
 			
 });
 
@@ -294,7 +295,6 @@ async function renderDHISSchedules(url){
 		}
 		document.getElementById(object.id).checked= object.enabled;
 		addCollapsibleLinkOnMultiperiodSchedule(object.id);
-		addCollapseMultiPeriodsEventListener();
 	});
 
 	//});
