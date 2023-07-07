@@ -189,10 +189,10 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 	var periods=JSON.parse(result);
 
 	// create a new hidden row to hold periods of this schedule
-	var periodsTr = document.createElement('tr');
-	periodsTr.classList.add("hidden-row");
-	var tempHTML =  '<td colspan="2">Hidden Content 1</td>';
-	periodsTr.innerHTML =tempHTML;
+	//var periodsTr = document.createElement('tr');
+	//periodsTr.classList.add("hidden-row");
+	var tempHTML =  '<tr class="hidden-row"><td colspan="2">Hidden Content 1</td></tr>';
+	//periodsTr.innerHTML =tempHTML;
 
 	/*
 	//add empty cell to the new row
@@ -234,7 +234,7 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 	//insert the row of periods immediately after the corresponding parent row
 	var rowId="schedule-"+schedule_id+"-row";
 	var parentTr = document.getElementById(rowId);
-	parentTr.insertAdjacentHTML('afterend', periodsTr);	
+	parentTr.insertAdjacentHTML('afterend', tempHTML);	
 }
 
 //-----------------------------------------------------------------------
