@@ -182,63 +182,59 @@ function getSchedulePeriods(url) {
 	  console.error('Error:', error);
 	}
   }
- // 
-async function generateMultiSchedulePeriodsHtml(schedule_id,result){
-	try{
-		
-		console.log('[generateMultiSchedulePeriodsHtml] Loaded data is '+result);
-		var periods=JSON.parse(result);
 
-		// create a new hidden row to hold periods of this schedule
-		var periodsTr = document.createElement('tr');
-		periodsTr.classList.add("hidden-row");
-		//var tempHTML =  '<td colspan="2">Hidden Content 1</td>';
-		//periodsTr.innerHTML =tempHTML;
+function generateMultiSchedulePeriodsHtml(schedule_id,result){
+	
+	console.log('[generateMultiSchedulePeriodsHtml] Loaded data is '+result);
+	var periods=JSON.parse(result);
 
-		//add empty cell to the new row
-		const cell = document.createElement('td');
-		periodsTr.appendChild(cell);
+	// create a new hidden row to hold periods of this schedule
+	var periodsTr = document.createElement('tr');
+	periodsTr.classList.add("hidden-row");
+	var tempHTML =  '<td colspan="2">Hidden Content 1</td>';
+	periodsTr.innerHTML =tempHTML;
 
-		//create a parent cell to hold the div of periods
-		const periodsCell = document.createElement('td');
-		periodsCell.setAttribute('colspan', '6');
+	/*
+	//add empty cell to the new row
+	const cell = document.createElement('td');
+	periodsTr.appendChild(cell);
 
-		//create a parent div to hold periods inside the parent cell
-		const periodsDiv = document.createElement('div');
+	//create a parent cell to hold the div of periods
+	const periodsCell = document.createElement('td');
+	periodsCell.setAttribute('colspan', '6');
 
-		// construct html to render periods of this schedule
-		periods.forEach(function(object){
-			console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
-			// checkbox | Name | Frequency | LastRun | Status | NextRun | Enabled
-			var rowDiv ='<div class="row">'+ 
-						'<div>' + object.period + '</div>' + 
-						'<div>monthly</div>' +
-						'<div>' + object.lastRun + '</div>' +
-						'<div>' + object.status + '</div>' +
-						'<div>-</div>'+
-						'<div>'+
-						'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+><span class="slider round"></span></label>'+
-						'</div></div>';
-			//add this period row div to the parent div
-			periodsDiv.innerHTML=rowDiv;
-			//set the checkbox of this period to checked
-			//var periodId="period-"+object.id;
-			//document.getElementById(periodId).checked= object.enabled;
-		});
+	//create a parent div to hold periods inside the parent cell
+	const periodsDiv = document.createElement('div');
 
-		//add the parent div to the cell
-		periodsCell.appendChild(periodsDiv);
-		//add the parent cell to the period row
-		periodsTr.appendChild(periodsCell);
-		//insert the row of periods immediately after the corresponding parent row
-		var rowId="schedule-"+schedule_id+"-row";
-		var parentTr = document.getElementById(rowId);
-		parentTr.insertAdjacentHTML('afterend', periodsTr);	
+	// construct html to render periods of this schedule
+	periods.forEach(function(object){
+		console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
+		// checkbox | Name | Frequency | LastRun | Status | NextRun | Enabled
+		var rowDiv ='<div class="row">'+ 
+					'<div>' + object.period + '</div>' + 
+					'<div>monthly</div>' +
+					'<div>' + object.lastRun + '</div>' +
+					'<div>' + object.status + '</div>' +
+					'<div>-</div>'+
+					'<div>'+
+					'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+><span class="slider round"></span></label>'+
+					'</div></div>';
+		//add this period row div to the parent div
+		periodsDiv.innerHTML=rowDiv;
+		//set the checkbox of this period to checked
+		//var periodId="period-"+object.id;
+		//document.getElementById(periodId).checked= object.enabled;
+	});
 
-	}
-	catch(error){
-		console.error('Error:', error);
-	}
+	//add the parent div to the cell
+	periodsCell.appendChild(periodsDiv);
+	//add the parent cell to the period row
+	periodsTr.appendChild(periodsCell);
+	*/
+	//insert the row of periods immediately after the corresponding parent row
+	var rowId="schedule-"+schedule_id+"-row";
+	var parentTr = document.getElementById(rowId);
+	parentTr.insertAdjacentHTML('afterend', periodsTr);	
 }
 
 //-----------------------------------------------------------------------
