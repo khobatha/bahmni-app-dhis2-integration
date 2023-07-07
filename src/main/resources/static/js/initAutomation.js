@@ -232,7 +232,7 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 		console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
 		// checkbox | Name | Frequency | LastRun | Status | NextRun | Enabled
 		var rowDiv ='<div class="row">'+ 
-					'<div class="col-4">' + periodIdToName(object.id) + '</div>' + 
+					'<div class="col-4">' + periodIdToName(object.period) + '</div>' + 
 					'<div class="col-2" align="center">monthly</div>' +
 					'<div class="col-1">' + object.lastRun + '</div>' +
 					'<div class="col-1" align="center" style="padding-left:40px">' + object.status + '</div>' +
