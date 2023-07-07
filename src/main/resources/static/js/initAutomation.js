@@ -213,12 +213,12 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 		console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
 		// checkbox | Name | Frequency | LastRun | Status | NextRun | Enabled
 		var rowDiv ='<div class="row">'+ 
-					'<div class="col-2">' + object.period + '</div>' + 
-					'<div class="col-5">monthly</div>' +
-					'<div class="col-6">' + object.lastRun + '</div>' +
-					'<div class="col-7">' + object.status + '</div>' +
-					'<div class="col-8">-</div>'+
-					'<div class="col-10">'+
+					'<div class="col-4">' + object.period + '</div>' + 
+					'<div class="col-1">monthly</div>' +
+					'<div class="col-2">' + object.lastRun + '</div>' +
+					'<div class="col-1">' + object.status + '</div>' +
+					'<div class="col-2">-</div>'+
+					'<div class="col-1">'+
 					'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+><span class="slider round"></span></label>'+
 					'</div></div>';
 		//add this period row div to the parent div
