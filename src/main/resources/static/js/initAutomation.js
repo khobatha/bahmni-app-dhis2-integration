@@ -76,6 +76,16 @@ function initPharmSchedulePeriodDatePickers(){
 
 }
 
+function addCollapseMultiPeriodsEventListener(){
+	const rows = document.querySelectorAll('.table-row');
+    rows.forEach(row => {
+      row.addEventListener('click', () => {
+        const hiddenRow = row.nextElementSibling;
+        row.classList.toggle('collapsed');
+        hiddenRow.classList.toggle('hidden-row');
+      });
+    });
+}
 
 function addPharmScheduleFrequencyEventListener(){
 // if monthly frequency selected for a pharmacy report, display checkbox for determining if report has
@@ -284,6 +294,7 @@ async function renderDHISSchedules(url){
 		}
 		document.getElementById(object.id).checked= object.enabled;
 		addCollapsibleLinkOnMultiperiodSchedule(object.id);
+		addCollapseMultiPeriodsEventListener();
 	});
 
 	//});
