@@ -42,7 +42,6 @@
 <script src="../js/initAutomation.js"></script>
 <script src="../bower_components/nepali-date-picker/dist/jquery.nepaliDatePicker.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -558,6 +557,20 @@
 		</div>
 	  
 	</div>
+	<script>
+		document.addEventListener('load', function() {
+			// Your script code here
+			const rows = document.querySelectorAll('.table-row');
+			rows.forEach(row => {
+			row.addEventListener('click', () => {
+				const hiddenRow = row.nextElementSibling;
+				row.classList.toggle('collapsed');
+				hiddenRow.classList.toggle('hidden-row');
+			});
+			});
+			console.log('[addCollapseMultiPeriodsEventListener] Added!');
+		});
+	</script>
 	<script id="failure-status-template" type="x-tmpl-mustache">
     	<u class="status-failure">
         	<b>{{status}}</b>
