@@ -108,9 +108,6 @@ function addCustomPeriodCheckboxEventListener(){
 	}
 
 
-//----------------------------------------------------------------------
-
-// Function to make an asynchronous AJAX call
 function getSchedulePeriods(url) {
 	return new Promise((resolve, reject) => {
 	  const xhr = new XMLHttpRequest();
@@ -129,7 +126,6 @@ function getSchedulePeriods(url) {
 	});
   }
   
-  // Function that uses the result of the AJAX calls
   async function addCollapsibleLinkOnMultiperiodSchedule(schedule_id) {
 	try {
 	  var url=`${getPharmSchedulePeriodsUrl}?pharmschedid=${schedule_id}`;
@@ -148,17 +144,9 @@ function getSchedulePeriods(url) {
 		var tr = document.getElementById(rowId);
 		tr.classList.add("table-row");
 
-		//add the plus icon link for collapsing this schedule
-		
-		//const link = document.createElement("a");
-		//var ref="schedule-"+schedule_id+"-periods";
-		//link.href = ref;
+		//add the plus icon link for collapsing this multiperiod schedule
 		const span = document.createElement("span");
 		span.classList.add("expand-icon");
-		//const i = document.createElement("i");
-		//i.classList.add("fa", "fa-plus","small-icon");
-		//span.appendChild(i);
-		//link.appendChild(span);
 		span.appendChild(document.createTextNode("\u00A0"));
 		var cellId="schedule-"+schedule_id;
 		const cell = document.getElementById(cellId);
@@ -166,8 +154,6 @@ function getSchedulePeriods(url) {
 		
 
 		//generate dynamic html to display the periods of this schedule
-		//const periodsTr = '<tr class="hidden-row"><td colspan="2">Hidden Content 1</td></tr>';
-		//tr.insertAdjacentHTML('afterend', periodsTr);	
 		generateMultiSchedulePeriodsHtml(schedule_id,periods);
 
 		//add event listener to parent row to collapse when clicked
@@ -208,25 +194,9 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 	var periods=JSON.parse(result);
 
 	// create a new hidden row to hold periods of this schedule
-	//var periodsTr = document.createElement('tr');
-	//periodsTr.classList.add("hidden-row");
 	var tempHTML='<tr class="hidden-row"><td></td><td colspan="6"><div>';
 	var closingHTML='</div></td></tr>';
-	//<td colspan="2">Hidden Content 1</td></tr>';
-	//periodsTr.innerHTML =tempHTML;
 
-	/*
-	//add empty cell to the new row
-	const cell = document.createElement('td');
-	periodsTr.appendChild(cell);
-
-	//create a parent cell to hold the div of periods
-	const periodsCell = document.createElement('td');
-	periodsCell.setAttribute('colspan', '6');
-
-	//create a parent div to hold periods inside the parent cell
-	const periodsDiv = document.createElement('div');
-	*/
 	// construct html to render periods of this schedule
 	periods.forEach(function(object){
 		console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
@@ -238,13 +208,10 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 					'<div class="col-1" align="center" style="padding-left:40px">' + object.status + '</div>' +
 					'<div class="col-2" align="center">-</div>'+
 					'<div class="col-2" align="center" style="padding-left:60px">'+
-					'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+ checked ><span class="slider round"></span></label>'+
+					'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+ '+(object.enabled?checked:)+' ><span class="slider round"></span></label>'+
 					'</div></div>';
 		//add this period row div to the parent div
 		tempHTML=tempHTML+rowDiv;
-		//set the checkbox of this period to checked
-		//var periodId="period-"+object.id;
-		//document.getElementById(periodId).checked= object.enabled;
 	});
 	tempHTML=tempHTML+closingHTML;
 	/*
