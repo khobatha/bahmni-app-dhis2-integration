@@ -443,9 +443,9 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		modal.classList.add('show');
 		modal.style.display = 'block';
 		//enable cancel button
-		$(modal+' .btn-default').prop('disabled', false);
+		$('#'+modal).find('.btn-default').prop('disabled', false);
 		//enable close button
-		$(modal+' .close').prop('disabled', false);
+		$('#'+modal).find('.close').prop('disabled', false);
 	}
 }
 
