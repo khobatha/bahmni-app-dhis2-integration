@@ -210,7 +210,7 @@
 									</div>
 									<div class="col-sm-6">
 										<a href="#addPharmacyScheduleModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>New</span></a>
-										<a href="#deletePharmacyScheduleModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+										<a id="deletePharmacyScheduleLink" href="#" onclick="handleDeleteScheduleEvent(this.id)" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 									</div>
 								</div>
 							</div>
@@ -406,7 +406,7 @@
 									<h4 class="modal-title">Delete pharmacy schedules</h4>
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								</div>
-								<div class="modal-body">					
+								<div class="modal-body">		
 									<p>Are you sure you want to delete these schedules?</p>
 									<p class="text-warning"><small>This action cannot be undone.</small></p>
 								</div>
