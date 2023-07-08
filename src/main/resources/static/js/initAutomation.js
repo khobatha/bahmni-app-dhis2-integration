@@ -398,6 +398,25 @@ function removeAllRowsContainingCheckedCheckbox(table) {
     }
 }
 
+function handleDeleteScheduleEvent(clicked_element_id){
+	console.log(clicked_element_id);
+	if(clicked_element_id!=null){
+		var modal;
+		if(clicked_element_id=='deletePharmacyScheduleLink'){
+			modal = document.getElementById('deletePharmacyScheduleModal');
+		}
+		else if(clicked_element_id=='deleteClinicalScheduleLink'){
+			modal = document.getElementById('deleteClinicalScheduleModal');
+		}
+		else if(clicked_element_id=='deleteLabScheduleLink'){
+			modal = document.getElementById('deleteLabScheduleModal');
+		}
+		modal.classList.add('show');
+		modal.style.display = 'block';
+	}
+}
+
+
 //delete schedule from the database
 function deleteDHISSchedule(clicked_id){
 
