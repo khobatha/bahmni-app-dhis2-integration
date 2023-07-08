@@ -439,14 +439,15 @@ function handleDeleteScheduleEvent(clicked_element_id){
 			paragraph.textContent=msg;
 		}
 
-		//display the right modal with the right message
-		modal.classList.add('show');
-		modal.style.display = 'block';
-		var selectModalbyId="#"+modal;
 		//enable cancel button
 		$("#deletePharmacyScheduleModal").find('.btn-default').prop('disabled', false);
 		//enable close button
 		$("#deletePharmacyScheduleModal").find('.close').prop('disabled', false);
+		//display the right modal with the right message
+		modal.classList.add('show');
+		modal.style.display = 'block';
+		var selectModalbyId="#"+modal;
+	
 	}
 }
 
