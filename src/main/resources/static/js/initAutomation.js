@@ -200,6 +200,7 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 	// construct html to render periods of this schedule
 	periods.forEach(function(object){
 		console.log('[generateMultiSchedulePeriodsHtml] Processing period '+object.id);
+		var enabled=object.enabled?"checked":"unchecked";
 		// checkbox | Name | Frequency | LastRun | Status | NextRun | Enabled
 		var rowDiv ='<div class="row">'+ 
 					'<div class="col-4">' + periodIdToName(object.period) + '</div>' + 
@@ -208,7 +209,7 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 					'<div class="col-1" align="center" style="padding-left:40px">' + object.status + '</div>' +
 					'<div class="col-2" align="center">-</div>'+
 					'<div class="col-2" align="center" style="padding-left:60px">'+
-					'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+ '+(object.enabled?checked:)+' ><span class="slider round"></span></label>'+
+					'<label class="switch"><input type="checkbox" id="period-'+object.id+'" onclick="disenPeriodSchedule('+object.id+')"+ '+enabled+' ><span class="slider round"></span></label>'+
 					'</div></div>';
 		//add this period row div to the parent div
 		tempHTML=tempHTML+rowDiv;
