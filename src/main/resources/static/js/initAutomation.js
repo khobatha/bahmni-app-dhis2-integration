@@ -246,9 +246,10 @@ async function renderDHISSchedules(url){
 		var cellId="schedule-"+object.id;
 		var rowId="schedule-"+object.id+"-row";
 		tr.setAttribute("id", rowId);
+		var mainScheduleCheckBoxId="main-"+((object.reportId==1)?"clinical":(object.reportId==2)?"pharmacy":"lab")+"-schedule-checkbox-"+object.id;
 		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
 		tempHTML ="<td>"+"<span class='custom-checkbox'>"+
-					"<input class='selectSchedule' type='checkbox' id='checkbox1' name='options[]' value='"+object.id+"'/>"+
+					"<input class='selectSchedule' type='checkbox' id='"+mainScheduleCheckBoxId+"' name='options[]' value='"+object.id+"'/>"+
 					"<label for='checkbox1'></label>"+"</span></td>" +
 					'<td id=' + cellId + ">" + object.programName + '</td>' +
 					'<td>' + object.frequency + '</td>' +
@@ -402,20 +403,54 @@ function handleDeleteScheduleEvent(clicked_element_id){
 	console.log(clicked_element_id);
 	if(clicked_element_id!=null){
 		var modal;
+		var programCategory;
+		var msg;
+		var paragraph;
+
+		//select the right modal to display and the paragraph element to update
 		if(clicked_element_id=='deletePharmacyScheduleLink'){
 			modal = document.getElementById('deletePharmacyScheduleModal');
+			programCategory="pharmacy";
+			paragraph = document.querySelector('#deletePharmacyScheduleModal .delete-schedule-msg');
+
 		}
 		else if(clicked_element_id=='deleteClinicalScheduleLink'){
 			modal = document.getElementById('deleteClinicalScheduleModal');
+			programCategory="clinical";
+			paragraph = document.querySelector('#deleteClinicalScheduleModal .delete-schedule-msg');
 		}
 		else if(clicked_element_id=='deleteLabScheduleLink'){
 			modal = document.getElementById('deleteLabScheduleModal');
+			programCategory="lab";
+			paragraph = document.querySelector('#deleteLabScheduleModal .delete-schedule-msg');
 		}
+
+		//select the right message to display
+		if(isProgramScheduleSelected(programCategory)){
+			console.log('[handleDeleteScheduleEvent] atleast one schedule selected!');
+			msg="Are you sure you want to delete these schedules?";
+			paragraph.textContent=msg;
+		}
+		else{
+			console.log('[handleDeleteScheduleEvent] No schedule selected!');
+			msg="No schedule selected for deletion. Select schedule(s) to delete using the checkboxes on the left.";
+			paragraph.textContent=msg;
+		}
+
+		//display the right modal with the right message
 		modal.classList.add('show');
 		modal.style.display = 'block';
 	}
 }
 
+function isProgramScheduleSelected(program_category){
+	$.each($(".selectSchedule:checked"), function(){            
+		if($(this).id.includes(program_category))
+			return true;
+	});
+	return false;
+
+}
 
 //delete schedule from the database
 function deleteDHISSchedule(clicked_id){
