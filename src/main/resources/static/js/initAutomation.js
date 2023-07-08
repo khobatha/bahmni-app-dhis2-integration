@@ -446,13 +446,14 @@ function handleDeleteScheduleEvent(clicked_element_id){
 }
 
 function isProgramScheduleSelected(program_category){
+	var found=false;
 	$.each($(".selectSchedule:checked"), function(index,checkbox){   
 		console.log('[isProgramScheduleSelected] checkedbox id is '+checkbox.id);   
 		console.log('[isProgramScheduleSelected] checkbox id includes '+program_category+'? '+checkbox.id.includes(program_category));       
 		if(checkbox.id.includes(program_category)==true)
-			return true;
+			found= true;
 	});
-	return false;
+	return found;
 
 }
 
