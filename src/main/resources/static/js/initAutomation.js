@@ -426,7 +426,9 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		}
 
 		//select the right message to display
-		if(isProgramScheduleSelected(programCategory)==true){
+		var flag = isProgramScheduleSelected(programCategory);
+		console.log('[handleDeleteScheduleEvent] flag='+flag);
+		if(flag){
 			console.log('[handleDeleteScheduleEvent] atleast one schedule selected!');
 			msg="Are you sure you want to delete these schedules?";
 			paragraph.textContent=msg;
