@@ -459,7 +459,7 @@ function deleteDHISSchedule(clicked_id){
 	var scheduleIds=[];
 	$.each($(".selectSchedule:checked"), function(){            
 		scheduleIds.push($(this).val());
-		alert('ID of clicked schedule to delete is '+$(this).val());
+		//alert('ID of clicked schedule to delete is '+$(this).val());
 		var checkbox=this;
 		var row_index=checkbox.parentElement.parentElement.rowIndex;
 		console.log('Row index of schedule to delete is '+ row_index);
