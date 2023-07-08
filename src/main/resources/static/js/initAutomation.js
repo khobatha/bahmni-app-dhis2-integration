@@ -444,9 +444,9 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		modal.style.display = 'block';
 		var selectModalbyId="#"+modal;
 		//enable cancel button
-		$(selectModalbyId).find('.btn-default').prop('disabled', false);
+		$("#deletePharmacyScheduleModal").find('.btn-default').prop('disabled', false);
 		//enable close button
-		$(selectModalbyId).find('.close').prop('disabled', false);
+		$("#deletePharmacyScheduleModal").find('.close').prop('disabled', false);
 	}
 }
 
