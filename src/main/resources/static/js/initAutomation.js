@@ -445,7 +445,7 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		//$("#deletePharmacyScheduleModal").find('.close').prop('disabled', false);
 		//display the right modal with the right message
 		modal.classList.add('show');
-		//modal.style.display = 'block';
+		modal.style.display = 'block';
 		//modal.modal('show');
 		//var selectModalbyId="#"+modal;
 		//$(modal).modal('show');
