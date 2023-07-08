@@ -442,10 +442,11 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		//display the right modal with the right message
 		modal.classList.add('show');
 		modal.style.display = 'block';
+		var selectModalbyId="#"+modal;
 		//enable cancel button
-		$('"#'+modal+'"').find('.btn-default').prop('disabled', false);
+		$(selectModalbyId).find('.btn-default').prop('disabled', false);
 		//enable close button
-		$('"#'+modal+'"').find('.close').prop('disabled', false);
+		$(selectModalbyId).find('.close').prop('disabled', false);
 	}
 }
 
