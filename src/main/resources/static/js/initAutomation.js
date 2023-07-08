@@ -31,7 +31,6 @@ $(document).ready(
 			initPharmSchedulePeriodDatePickers();
 			addPharmScheduleFrequencyEventListener();
 			addCustomPeriodCheckboxEventListener();
-			//addCollapseMultiPeriodsEventListener();
 			
 });
 
@@ -215,19 +214,11 @@ function generateMultiSchedulePeriodsHtml(schedule_id,result){
 		tempHTML=tempHTML+rowDiv;
 	});
 	tempHTML=tempHTML+closingHTML;
-	/*
-	//add the parent div to the cell
-	periodsCell.appendChild(periodsDiv);
-	//add the parent cell to the period row
-	periodsTr.appendChild(periodsCell);
-	*/
 	//insert the row of periods immediately after the corresponding parent row
 	var rowId="schedule-"+schedule_id+"-row";
 	var parentTr = document.getElementById(rowId);
 	parentTr.insertAdjacentHTML('afterend', tempHTML);	
 }
-
-//-----------------------------------------------------------------------
 
 //populate and render list of schedules from db
 async function renderDHISSchedules(url){
@@ -389,17 +380,6 @@ function getDHISSchedules(url) {
 		.catch(error => {
 		console.error('Error:', error);
 		});
-	 
-	/*return $.get(url).done(function(data) {
-		console.log('[Get DHIS schedules]');
-		console.log(data);
-		var result=JSON.parse(data);
-		return result;
-		
-	}).fail(function(response) {
-		
-	});
-	*/
 }
 
 //delete checked schedules from the list
@@ -639,58 +619,6 @@ function createDHISSchedule(clicked_id, frequency){
 	}
 	else	
 		xhr.send();
-	
-	//closeModal(modalName);	
-	/*fetch(submitTo, {
-		method: 'post',
-		body: JSON.stringify(parameters),
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		}
-	}).then((response) => {
-		return response.json()
-	}).then((res) => {
-		if (res.status === 201) {
-			console.log("Post successfully created!")
-		}
-	}).catch((error) => {
-		console.log(error)
-	});*/
-	
-	/*$.ajax({
-		url: submitTo,
-		type: "POST",
-		data: JSON.stringify(parameters),
-		//body: JSON.stringify(pharmReportingPeriods),
-		//contentType: "application/json; charset=utf-8",
-		//dataType: "json",
-		success: function(response) {
-			console.log("[Operation submitNewSchedule() successful]", response);
-		},
-		error: function(xhr, status, error) {
-			console.error("[Operation submitNewSchedule() failed]", error);
-		}
-	});*/
-	
-	
-	/*$.get(submitTo,parameters).done(function(data) {
-		//data = JSON.stringify(data);
-		console.log('[Server result for submitNewSchedule()]');
-		console.log("URL:"+submitTo);
-		console.log(data);
-		if(data==true){
-
-		}
-		else{
-			
-		}
-		window.location.reload();
-		
-	}).fail(function(response) {
-		console.log('[Operation submitNewSchedule() failed]');
-	});*/
-
 }
 
 function showFeedbackMessage(message, type, modalID) {
