@@ -440,13 +440,14 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		}
 
 		//enable cancel button
-		$("#deletePharmacyScheduleModal").find('.btn-default').prop('disabled', false);
+		//$("#deletePharmacyScheduleModal").find('.btn-default').prop('disabled', false);
 		//enable close button
-		$("#deletePharmacyScheduleModal").find('.close').prop('disabled', false);
+		//$("#deletePharmacyScheduleModal").find('.close').prop('disabled', false);
 		//display the right modal with the right message
-		modal.classList.add('show');
-		modal.style.display = 'block';
-		var selectModalbyId="#"+modal;
+		//modal.classList.add('show');
+		//modal.style.display = 'block';
+		modal.modal('show');
+		//var selectModalbyId="#"+modal;
 	
 	}
 }
