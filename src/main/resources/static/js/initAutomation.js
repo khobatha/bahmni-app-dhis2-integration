@@ -426,7 +426,7 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		}
 
 		//select the right message to display
-		if(isProgramScheduleSelected(programCategory)){
+		if(isProgramScheduleSelected(programCategory)==true){
 			console.log('[handleDeleteScheduleEvent] atleast one schedule selected!');
 			msg="Are you sure you want to delete these schedules?";
 			paragraph.textContent=msg;
@@ -447,7 +447,7 @@ function isProgramScheduleSelected(program_category){
 	$.each($(".selectSchedule:checked"), function(index,checkbox){   
 		console.log('[isProgramScheduleSelected] checkedbox id is '+checkbox.id);   
 		console.log('[isProgramScheduleSelected] checkbox id includes '+program_category+'? '+checkbox.id.includes(program_category));       
-		if(checkbox.id.includes(program_category))
+		if(checkbox.id.includes(program_category)==true)
 			return true;
 	});
 	return false;
