@@ -400,7 +400,7 @@ function removeAllRowsContainingCheckedCheckbox(table) {
 }
 
 function handleDeleteScheduleEvent(clicked_element_id){
-	console.log(clicked_element_id);
+	//console.log(clicked_element_id);
 	if(clicked_element_id!=null){
 		var modal;
 		var programCategory;
@@ -444,11 +444,12 @@ function handleDeleteScheduleEvent(clicked_element_id){
 }
 
 function isProgramScheduleSelected(program_category){
-	$.each($(".selectSchedule:checked"), function(){            
-		if($(this).id.includes(program_category))
-			return true;
+	$.each($(".selectSchedule:checked"), function(){   
+		console.log('[isProgramScheduleSelected] checkedbox is '+$(this).id);         
+		//if($(this).id.includes(program_category))
+		//	return true;
 	});
-	return false;
+	//return false;
 
 }
 
