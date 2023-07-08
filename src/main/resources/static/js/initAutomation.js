@@ -448,7 +448,7 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		//modal.style.display = 'block';
 		//modal.modal('show');
 		var selectModalbyId="#"+modal;
-		$(selectModalbyId).modal('show');
+		$(modal).modal('show');
 	
 	}
 }
