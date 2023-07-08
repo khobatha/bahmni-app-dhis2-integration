@@ -446,8 +446,9 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		//display the right modal with the right message
 		//modal.classList.add('show');
 		//modal.style.display = 'block';
-		modal.modal('show');
-		//var selectModalbyId="#"+modal;
+		//modal.modal('show');
+		var selectModalbyId="#"+modal;
+		$(selectModalbyId).modal('show');
 	
 	}
 }
