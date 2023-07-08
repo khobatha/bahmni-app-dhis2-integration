@@ -446,10 +446,10 @@ function handleDeleteScheduleEvent(clicked_element_id){
 function isProgramScheduleSelected(program_category){
 	$.each($(".selectSchedule:checked"), function(index,checkbox){   
 		console.log('[isProgramScheduleSelected] checkedbox id is '+checkbox.id);         
-		//if($(this).id.includes(program_category))
-		//	return true;
+		if(checkbox.id.includes(program_category))
+			return true;
 	});
-	//return false;
+	return false;
 
 }
 
