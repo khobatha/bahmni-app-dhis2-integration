@@ -451,7 +451,7 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		//$(modal).modal('show');
 		// Re-bind event handlers for cancel and close buttons
 		$("#deletePharmacyScheduleModal").find('.btn-default, .close').off('click').on('click', function() {
-			$(modal).modal('hide');
+			$("#deletePharmacyScheduleModal").modal('hide');
 		});
 	
 	}
