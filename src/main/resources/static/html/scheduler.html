@@ -213,7 +213,7 @@
 									</div>
 									<div class="col-sm-6">
 										<a href="#addPharmacyScheduleModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>New</span></a>
-										<a href="#deletePharmacyScheduleModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+										<a id="deletePharmacyScheduleLink" href="#deletePharmacyScheduleModal" class="btn btn-danger" data-toggle="modal" onclick="handleDeleteScheduleEvent(this.id)"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 									</div>
 								</div>
 							</div>
@@ -419,7 +419,7 @@
 								</div>
 							</form>
 						</div>
-						<script>
+						<!--script>
 							var clicked_element_id='deletePharmacyScheduleLink';
 							//console.log(clicked_element_id);
 							if(clicked_element_id!=null){
@@ -480,7 +480,7 @@
 								
 							
 							}
-						</script>
+						</script-->
 					</div>
 				</div>
 
