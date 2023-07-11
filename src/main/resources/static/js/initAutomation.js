@@ -444,8 +444,8 @@ function handleDeleteScheduleEvent(clicked_element_id){
 
 		$("#deletePharmacyScheduleModal").find('.btn-default, .close').off('click').on('click', function() {
 			//$("#deletePharmacyScheduleModal").modal('hide');
-			modal.classList.add('show');
-			modal.style.display = 'block';
+			modal.classList.add('hide');
+			//modal.style.display = 'block';
 			console.log('[handleDeleteScheduleEvent] onclick event handlder added for cancel and close buttons!');
 		});
 		//enable cancel button
