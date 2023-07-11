@@ -400,6 +400,11 @@ function removeAllRowsContainingCheckedCheckbox(table) {
 }
 
 function handleDeleteScheduleEvent(clicked_element_id){
+
+	$("#deletePharmacyScheduleModal").find('.btn-default, .close').off('click').on('click', function() {
+		$("#deletePharmacyScheduleModal").modal('hide');
+	});
+
 	//console.log(clicked_element_id);
 	if(clicked_element_id!=null){
 		var modal;
@@ -450,9 +455,7 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		//var selectModalbyId="#"+modal;
 		//$(modal).modal('show');
 		// Re-bind event handlers for cancel and close buttons
-		$("#deletePharmacyScheduleModal").find('.btn-default, .close').off('click').on('click', function() {
-			$("#deletePharmacyScheduleModal").modal('hide');
-		});
+		
 	
 	}
 }
