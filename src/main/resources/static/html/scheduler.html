@@ -197,68 +197,6 @@
 									</div>
 								</form>
 							</div>
-							<script>
-								var clicked_element_id='deletePharmacyScheduleLink';
-								//console.log(clicked_element_id);
-								if(clicked_element_id!=null){
-									var modal;
-									var programCategory;
-									var msg;
-									var paragraph;
-
-									//select the right modal to display and the paragraph element to update
-									if(clicked_element_id=='deletePharmacyScheduleLink'){
-										modal = document.getElementById('deletePharmacyScheduleModal');
-										programCategory="pharmacy";
-										paragraph = document.querySelector('#deletePharmacyScheduleModal .delete-schedule-msg');
-
-									}
-									else if(clicked_element_id=='deleteClinicalScheduleLink'){
-										modal = document.getElementById('deleteClinicalScheduleModal');
-										programCategory="clinical";
-										paragraph = document.querySelector('#deleteClinicalScheduleModal .delete-schedule-msg');
-									}
-									else if(clicked_element_id=='deleteLabScheduleLink'){
-										modal = document.getElementById('deleteLabScheduleModal');
-										programCategory="lab";
-										paragraph = document.querySelector('#deleteLabScheduleModal .delete-schedule-msg');
-									}
-
-									//select the right message to display
-									var flag = isProgramScheduleSelected(programCategory);
-									console.log('[handleDeleteScheduleEvent] flag='+flag);
-									if(flag){
-										console.log('[handleDeleteScheduleEvent] atleast one schedule selected!');
-										msg="Are you sure you want to delete these schedules?";
-										paragraph.textContent=msg;
-									}
-									else{
-										console.log('[handleDeleteScheduleEvent] No schedule selected!');
-										msg="No schedule selected for deletion. Select schedule(s) to delete using the checkboxes on the left.";
-										paragraph.textContent=msg;
-									}
-
-									$("#deletePharmacyScheduleModal").find('.btn-default, .close').off('click').on('click', function() {
-										//$("#deletePharmacyScheduleModal").modal('hide');
-										modal.classList.add('hide');
-										//modal.style.display = 'block';
-										console.log('[handleDeleteScheduleEvent] onclick event handlder added for cancel and close buttons!');
-									});
-									//enable cancel button
-									//$("#deletePharmacyScheduleModal").find('.btn-default').prop('disabled', false);
-									//enable close button
-									//$("#deletePharmacyScheduleModal").find('.close').prop('disabled', false);
-									//display the right modal with the right message
-									//modal.classList.add('show');
-									//modal.style.display = 'block';
-									//modal.modal('show');
-									//var selectModalbyId="#"+modal;
-									//$(modal).modal('show');
-									// Re-bind event handlers for cancel and close buttons
-									
-								
-								}
-							</script>
 						</div>
 					</div>
 
@@ -481,6 +419,68 @@
 								</div>
 							</form>
 						</div>
+						<script>
+							var clicked_element_id='deletePharmacyScheduleLink';
+							//console.log(clicked_element_id);
+							if(clicked_element_id!=null){
+								var modal;
+								var programCategory;
+								var msg;
+								var paragraph;
+
+								//select the right modal to display and the paragraph element to update
+								if(clicked_element_id=='deletePharmacyScheduleLink'){
+									modal = document.getElementById('deletePharmacyScheduleModal');
+									programCategory="pharmacy";
+									paragraph = document.querySelector('#deletePharmacyScheduleModal .delete-schedule-msg');
+
+								}
+								else if(clicked_element_id=='deleteClinicalScheduleLink'){
+									modal = document.getElementById('deleteClinicalScheduleModal');
+									programCategory="clinical";
+									paragraph = document.querySelector('#deleteClinicalScheduleModal .delete-schedule-msg');
+								}
+								else if(clicked_element_id=='deleteLabScheduleLink'){
+									modal = document.getElementById('deleteLabScheduleModal');
+									programCategory="lab";
+									paragraph = document.querySelector('#deleteLabScheduleModal .delete-schedule-msg');
+								}
+
+								//select the right message to display
+								var flag = isProgramScheduleSelected(programCategory);
+								console.log('[handleDeleteScheduleEvent] flag='+flag);
+								if(flag){
+									console.log('[handleDeleteScheduleEvent] atleast one schedule selected!');
+									msg="Are you sure you want to delete these schedules?";
+									paragraph.textContent=msg;
+								}
+								else{
+									console.log('[handleDeleteScheduleEvent] No schedule selected!');
+									msg="No schedule selected for deletion. Select schedule(s) to delete using the checkboxes on the left.";
+									paragraph.textContent=msg;
+								}
+
+								$("#deletePharmacyScheduleModal").find('.btn-default, .close').off('click').on('click', function() {
+									//$("#deletePharmacyScheduleModal").modal('hide');
+									modal.classList.add('hide');
+									//modal.style.display = 'block';
+									console.log('[handleDeleteScheduleEvent] onclick event handlder added for cancel and close buttons!');
+								});
+								//enable cancel button
+								//$("#deletePharmacyScheduleModal").find('.btn-default').prop('disabled', false);
+								//enable close button
+								//$("#deletePharmacyScheduleModal").find('.close').prop('disabled', false);
+								//display the right modal with the right message
+								//modal.classList.add('show');
+								//modal.style.display = 'block';
+								//modal.modal('show');
+								//var selectModalbyId="#"+modal;
+								//$(modal).modal('show');
+								// Re-bind event handlers for cancel and close buttons
+								
+							
+							}
+						</script>
 					</div>
 				</div>
 
