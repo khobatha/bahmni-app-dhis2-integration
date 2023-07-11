@@ -402,7 +402,7 @@ function removeAllRowsContainingCheckedCheckbox(table) {
 function handleDeleteScheduleEvent(clicked_element_id){
 
 	
-
+	var clicked_element_id='deletePharmacyScheduleLink';
 	//console.log(clicked_element_id);
 	if(clicked_element_id!=null){
 		var modal;
@@ -453,8 +453,8 @@ function handleDeleteScheduleEvent(clicked_element_id){
 		//enable close button
 		//$("#deletePharmacyScheduleModal").find('.close').prop('disabled', false);
 		//display the right modal with the right message
-		modal.classList.add('show');
-		modal.style.display = 'block';
+		//modal.classList.add('show');
+		//modal.style.display = 'block';
 		//modal.modal('show');
 		//var selectModalbyId="#"+modal;
 		//$(modal).modal('show');
