@@ -19,9 +19,6 @@ body{
     width: 100%;
 }
 
-textarea, select{
-    width: 100%;
-}
 .section-title{
 
     padding: 10px;
@@ -33,16 +30,19 @@ textarea, select{
     background: #669999;
     border-radius: 2px 2px 0 0;
 }
+
 .dhisWrapper{
     width: 1200px;
     margin: 75px auto 0;
 }
+
 .dhisContent{
     border: 1px #ccc solid;
     border-top: none;
     display: flex;
     width: 100%;
 }
+
 .programName{
     flex: 2.5;
     border-right: 1px #ccc solid;
@@ -51,9 +51,11 @@ textarea, select{
     justify-content: flex-start;
     align-items: center;
 }
+
 .tab-yearly .programName {
 	flex: 3;
 }
+
 .monthOption, .fiscal-year-option {
     flex: 1.4;
     border-right: 1px #ccc solid;
@@ -71,6 +73,7 @@ textarea, select{
     justify-content: center;
     align-items: center;
 }
+
 .comment{
     flex: 1.8;
     border-right: 1px #ccc solid;
@@ -79,6 +82,7 @@ textarea, select{
     justify-content: center;
     align-items: center;
 }
+
 .submit{
     flex: 1.2;
     border-right: 1px #ccc solid;
@@ -87,6 +91,7 @@ textarea, select{
     justify-content: center;
     align-items: center;
 }
+
 .status, .prevstatus{
     flex: 1;
     border-right: 1px #ccc solid;
@@ -94,17 +99,6 @@ textarea, select{
     display: flex;
     justify-content: left;
     align-items: center;
-}
-.prevstatus {
-    flex: 1;
-}
-.pstatus{
-    flex: 1.071;
-    padding: 5px 5px;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    /* display: none; */
 }
 
 input.btn{
@@ -121,21 +115,6 @@ input.btn{
     color: #fff;
     text-align: center;
 }
-.pbtn{
-    border-radius: 2px;
-    background: linear-gradient(to bottom, #A1D030, #88af28);
-    background-color: #88af28;
-    border: #779b23 1px solid;
-    padding: 5px 10px 5px;
-    display: inline-block;
-    line-height: 1.2em;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 12px;
-    color: #fff;
-    width: 100%;
-    text-align: center;
-}
 
 .btn:hover {
     opacity: 0.8;
@@ -149,17 +128,6 @@ input.btn{
 .select-style{
     padding: 0;
     margin: 2px;
-    border: 1px solid #cbced0;
-    border-radius: 3px;
-    overflow: hidden;
-    background: #cbced0;
-    position: relative;
-    display: flex;
-    width: 100%;
-}
-.select-style select{
-    padding: 0;
-    margin: 0;
     border: 1px solid #cbced0;
     border-radius: 3px;
     overflow: hidden;
@@ -202,52 +170,20 @@ a.header-link {
     margin-right: 8px;
 }
 
-
-
-a.header-link:hover {
-    opacity: 0.7;
-}
-.mandate-comment::before {
-    content: "*";
-    color: #ff4444;
-    font-size: 11px;
-}
 .status-success {
     color: #779b23;
 }
 .status-failure {
     color: #ff4444;
 }
-#loader {
-  z-index: 999999999;
-  width: 100%;
-  height: 20px;
-  margin: 20px auto;
-  background-image: url('../images/loader.gif');
-  background-repeat:no-repeat;
-  background-position:center;
-}
 
-#overlay {
-  display: none;
-  z-index: 9999999999999;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0px;
-  background: rgba(0,0,0,0.6) url('../images/spinner.gif') no-repeat center center;
-}
-
-#overlay div {
-	width:100%;
-    height: 100%;
-}
-
+/* TABS */
 #tabs ul li.ui-state-active {
     background: #669999; 
     border: 1px solid #669999;
 }
+
+/* TABLE */
 
 .table {
     font-size: 1em;
@@ -343,51 +279,20 @@ table.table td a.delete {
     color: #F44336;
 }
 table.table td i {
-    font-size: 19px;
+    font-size: 12px;
 }
 table.table .avatar {
     border-radius: 50%;
     vertical-align: middle;
     margin-right: 10px;
 }
-.pagination {
-    float: right;
-    margin: 0 0 5px;
+
+/* ICONS */
+.small-icon {
+    font-size: 12px; /* Adjust the font size to reduce the icon size */
 }
-.pagination li a {
-    border: none;
-    font-size: 13px;
-    min-width: 30px;
-    min-height: 30px;
-    color: #999;
-    margin: 0 2px;
-    line-height: 30px;
-    border-radius: 2px !important;
-    text-align: center;
-    padding: 0 6px;
-}
-.pagination li a:hover {
-    color: #666;
-}	
-.pagination li.active a, .pagination li.active a.page-link {
-    background: #03A9F4;
-}
-.pagination li.active a:hover {        
-    background: #0397d6;
-}
-.pagination li.disabled i {
-    color: #ccc;
-}
-.pagination li i {
-    font-size: 16px;
-    padding-top: 6px
-}
-.hint-text {
-    float: left;
-    margin-top: 10px;
-    font-size: 13px;
-}    
-/* Custom checkbox */
+
+/* CHECKBOX */
 .custom-checkbox {
     position: relative;
 }
@@ -438,32 +343,41 @@ table.table .avatar {
     box-shadow: none;
     background: #ddd;
 }
-/* Modal styles */
-.modal .modal-dialog {
-    max-width: 400px;
+
+/* MODAL STYLING */
+.modal {
+    display: none; /* Hide the modal by default */
+    position: fixed; /* Stay in place */
+    z-index: 9999; /* Sit on top */
+    top: 0;/* old: 50% */
+    left: 0; /* old: 30% */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(189, 11, 11, 0); /* Black with opacity */
+
 }
-.modal .modal-header, .modal .modal-body, .modal .modal-footer {
-    padding: 20px 30px;
-}
-.modal .modal-content {
+
+.modal-content {
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
     font-size: 14px;
-    left: 50px;
-    top: 150px;
-    position: absolute;
-}
-.modal .modal-footer {
-    /*background: #ecf0f1;*/
-    border-radius: 0 0 3px 3px;
+    /*left: 10px;*/
+    top: 30px;
+    /*background-color: rgb(8, 46, 129);*/
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 10px;
+    /*border: 1px solid #0f941aa1;*/
+    width:700px; /*Set the width of the modal here */
 }
 
-.modal .modal-footer{
+.modal-footer{
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 0 0 3px 3px;
 }
-.modal .modal-title {
+.modal-title {
     display: inline-block;
     font-family: Arial,Helvetica,sans-serif;
     font-size: 20;
@@ -473,22 +387,67 @@ table.table .avatar {
     box-shadow: none;
     border-color: #dddddd;
 }
-.modal textarea.form-control {
-    resize: vertical;
-}
+
 .modal .btn {
     border-radius: 2px;
     min-width: 100px;
 }	
 .modal form label {
     font-weight: normal;
+    margin: 10px;
 }	
 
 .modal-header{
     background: #669999;
     color: #fff;
 }
+
+.modal textarea.form-control {
+    resize: vertical;
+}
+
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+    padding: 20px 30px;
+}
+
+.select-style select{
+    padding: 0;
+    margin: 0;
+    border: 1px solid #cbced0;
+    border-radius: 3px;
+    overflow: hidden;
+    background: #cbced0;
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+/* CSS for success feedback */
+.feedback-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border: 1px solid #d6e9c6;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* CSS for failure feedback */
+  .feedback-failure {
+    background-color: #f2dede;
+    color: #a94442;
+    border: 1px solid #ebccd1;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
     
+/* SWITCH STYLING */
 .switch {
     position: relative;
     display: inline-block;
@@ -501,6 +460,8 @@ table.table .avatar {
     width: 0;
     height: 0;
 }
+
+/* SLIDER STYLING */
 
 .slider {
     position: absolute;
@@ -540,7 +501,6 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-/* Rounded sliders */
 .slider.round {
     border-radius: 34px;
 }
@@ -548,3 +508,52 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+
+/* PHARMACY DATETIME PICKERS TABLE*/
+.datetime-row label {
+    font-weight: bold;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .datetime-row input[type=datetime-local] {
+    width: 45%;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Datetime Row */
+  .datetime-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .datetime-row label {
+    font-weight: bold;
+  }
+  
+  .datetime-row input[type=datetime-local] {
+    width: 45%;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Adjustments for column alignment */
+  .datetime-row label:first-of-type {
+    flex-basis: 20%;
+    text-align: left;
+    margin-right: 10px;
+  }
+  
+  .datetime-row input[type=datetime-local] {
+    flex-basis: 45%;
+  }

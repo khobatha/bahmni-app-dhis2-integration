@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.json.JSONArray;
@@ -20,11 +21,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.Base64Utils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.possible.dhis2int.Properties;
 import com.possible.dhis2int.db.DatabaseDriver;
@@ -33,6 +36,7 @@ import com.possible.dhis2int.web.DHISIntegrator;
 import com.possible.dhis2int.web.DHISIntegratorException;
 import com.possible.dhis2int.web.Messages;
 import com.possible.dhis2int.scheduler.Schedule;
+import com.possible.dhis2int.scheduler.PharmacyPeriodReq;
 
 import org.apache.log4j.Logger;
 import org.apache.tomcat.jni.Local;
@@ -60,6 +64,7 @@ public class DHISIntegratorScheduler {
 	private final Logger logger = getLogger(DHISIntegratorScheduler.class);
 	private final Properties properties;
 	private final String SUBMISSION_ENDPOINT = "/dhis-integration/submit-to-dhis";
+	private final String SUBMISSION_ENDPOINT_PHARM = "/dhis-integration/submit-to-dhis-with-period";
 	private final String OPENMRS_LOGIN_ENDPOINT = "/session";
 
 	@Autowired
@@ -71,31 +76,54 @@ public class DHISIntegratorScheduler {
 	@RequestMapping(path = "/get-schedules")
 	public JSONArray getIntegrationSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException, DHISIntegratorException, Exception {
-		String sql = "SELECT id, report_name, frequency, enabled, last_run, status FROM dhis2_schedules;";
+
+		String sql0 = "SELECT id, name from dhis2_report_type WHERE name = 'MRSGeneric'";
+		String type = "MRSGeneric";
+		Results results0 = new Results();
+		String reportNameId = "";
+		try {
+			results0 = databaseDriver.executeQuery(sql0, type);
+
+			for (List<String> row : results0.getRows()) {
+				reportNameId = row.get(0);
+			}
+		} catch (DHISIntegratorException e) {
+		// logger.info("Inside loadIntegrationSchedules...");
+		logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+				
+		String sql = "SELECT id, report_name, report_id, frequency, enabled, last_run, target_time, status FROM dhis2_schedules WHERE report_id ='"+reportNameId+"';";
 		JSONArray jsonArray = new JSONArray();
 		ArrayList<Schedule> list = new ArrayList<Schedule>();
 		Results results = new Results();
-		String type = "MRSGeneric";
+		//String type = "MRSGeneric";
 		Schedule schedule;
 		ObjectMapper mapper;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
 		try {
 			results = databaseDriver.executeQuery(sql, type);
 
 			for (List<String> row : results.getRows()) {
+				
 				logger.info("Showing getIntegrationSChedules results...");
 				logger.info(row);
 				schedule = new Schedule();
 
 				schedule.setId(Integer.parseInt(row.get(0)));
 				schedule.setProgName(row.get(1));
-				schedule.setFrequency(row.get(2));
-				schedule.setEnabled(Integer.parseInt(row.get(3)) == 1 ? true : false);
-				schedule.setLastRun(row.get(4));
-				schedule.setStatus(row.get(5));
+				schedule.setReportId(Integer.parseInt(row.get(2)));
+				schedule.setFrequency(row.get(3));
+				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1 ? true : false);
+				schedule.setLastRun(row.get(5));
+				schedule.setTargetDate(row.get(6));
+				logger.info("Target date is "+LocalDate.parse(row.get(6),formatter));
+				schedule.setStatus(row.get(7));
 				list.add(schedule);
-
 			}
+		
 			mapper = new ObjectMapper();
 			String jsonstring = mapper.writeValueAsString(list);
 			jsonArray.put(jsonstring);
@@ -110,22 +138,162 @@ public class DHISIntegratorScheduler {
 		return jsonArray;
 	}
 
+	@RequestMapping(path = "/get-pharm-schedules")
+	public JSONArray getIntegrationPharmSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException, DHISIntegratorException, Exception {
+		
+		String sql0 = "SELECT id, name from dhis2_report_type WHERE name = 'ERPGeneric'";
+		String type = "MRSGeneric";
+		Results results0 = new Results();
+		String reportNameId = "";
+		try {
+			results0 = databaseDriver.executeQuery(sql0, type);
+
+			for (List<String> row : results0.getRows()) {
+				reportNameId = row.get(0);
+			}
+		} catch (DHISIntegratorException e) {
+		// logger.info("Inside loadIntegrationSchedules...");
+		logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+		
+		String sql = "SELECT id, report_name, report_id, frequency, enabled, last_run, target_time, status FROM dhis2_schedules WHERE report_id ='"+reportNameId+"';";
+		JSONArray jsonArray = new JSONArray();
+		ArrayList<PharmacySchedule> list = new ArrayList<PharmacySchedule>();
+		ArrayList<PharmacyPeriod> pharmacyPeriods = new ArrayList<PharmacyPeriod>();
+		Results results = new Results();
+		Results pharmacyPeriodResults = new Results();
+		//String type = "MRSGeneric";
+		//Schedule schedule;
+		PharmacySchedule schedule;
+		ObjectMapper mapper;
+
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+
+			for (List<String> row : results.getRows()) {
+				
+				logger.info("Showing getIntegrationSChedules results...");
+				logger.info(row);
+				schedule = new PharmacySchedule();
+
+				schedule.setId(Integer.parseInt(row.get(0)));
+				schedule.setProgName(row.get(1));
+				schedule.setReportId(Integer.parseInt(row.get(2)));
+				schedule.setFrequency(row.get(3));
+				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1 ? true : false);
+				schedule.setLastRun(row.get(5));
+				schedule.setTargetDate(row.get(6));
+				schedule.setStatus(row.get(7));
+								
+				list.add(schedule);
+			}
+			
+			mapper = new ObjectMapper();
+			String jsonstring = mapper.writeValueAsString(list);
+			jsonArray.put(jsonstring);
+			logger.info("Task loadIntegrationSchedules ran successfully...");
+		} catch (DHISIntegratorException | JSONException e) {
+			// logger.info("Inside loadIntegrationSchedules...");
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return jsonArray;
+	}
+
+	@RequestMapping(path = "/get-pharm-schedule-periods")
+	public JSONArray getIntegrationPharmSchedulePeriods(HttpServletRequest clientReq, 
+					HttpServletResponse clientRes, 
+					@RequestParam("pharmschedid") String pharmSchedId)
+			throws IOException, JSONException, DHISIntegratorException, Exception {
+		
+		String periodsSql = "SELECT id, dhis2_schedule_id, period, created_by, created_date, start_time, end_time, last_run, status, enabled FROM openmrs.dhis2_pharmacy_periods WHERE dhis2_schedule_id="+pharmSchedId+";";		
+		String type = "MRSGeneric";
+		JSONArray jsonArray = new JSONArray();
+		ArrayList<PharmacyPeriod> pharmacySchedPeriods = new ArrayList<PharmacyPeriod>();
+		Results pharmacyPeriodResults = new Results();
+		ObjectMapper mapper;
+		
+		try{
+			//Get Periods for this schedule
+			pharmacyPeriodResults = databaseDriver.executeQuery(periodsSql, type);
+				
+			for(List<String> rowList : pharmacyPeriodResults.getRows()){
+				PharmacyPeriod pharmacyPeriod = new PharmacyPeriod();
+				pharmacyPeriod.setId(Integer.parseInt(rowList.get(0)));
+				pharmacyPeriod.setDhis2ScheduleId(Integer.parseInt(rowList.get(1)));
+				pharmacyPeriod.setPeriod(Integer.parseInt(rowList.get(2)));
+				pharmacyPeriod.setCreatedBy(rowList.get(3));
+				// LocalDate dateNow = LocalDate.of(1995, 1, 20);
+				// pharmacyPeriod.setCreatedDate(dateNow);
+				// pharmacyPeriod.setCreatedDate(rowList.get(4));
+				pharmacyPeriod.setStartTime(rowList.get(5));
+				pharmacyPeriod.setEndTime(rowList.get(6));
+				pharmacyPeriod.setLastRun(rowList.get(7));
+				pharmacyPeriod.setStatus(rowList.get(8));
+				pharmacyPeriod.setEnabled(Integer.parseInt(rowList.get(9)) == 1 ? true : false);
+					
+				pharmacySchedPeriods.add(pharmacyPeriod);
+			}
+			
+			mapper = new ObjectMapper();
+			String jsonstring = mapper.writeValueAsString(pharmacySchedPeriods);
+			jsonArray.put(jsonstring);
+			logger.info("Task loadPharmSchedulePeriods ran successfully...");
+		} catch (DHISIntegratorException | JSONException e) {
+			// logger.info("Inside loadIntegrationSchedules...");
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return jsonArray;
+	}
+
+
 	@RequestMapping(path = "/create-schedule")
-	public Boolean createIntegrationSchedule(@RequestParam("programName") String progName,
+	public Boolean createIntegrationSchedule(@RequestParam("reportName") String reportName,
+			@RequestParam("reportTypeName") String reportTypeName,
 			@RequestParam("scheduleFrequency") String schedFrequency,
 			@RequestParam("scheduleTime") String schedTime, HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException {
 		Boolean created = true;
 		Schedule newschedule = new Schedule();
-		newschedule.setProgName(progName);
+		newschedule.setProgName(reportName);
 		newschedule.setFrequency(schedFrequency);
 		newschedule.setCreatedBy("Test");
 		newschedule.setEnabled(true);
+		newschedule.setStatus("Ready");
 
 		LocalDate created_date = LocalDate.now();
-		LocalDate target_date = getMonthlyTargetDate(created_date);
+		String target_date = getMonthlyTargetDate(created_date).toString();
 		newschedule.setCreatedDate(created_date);
 		newschedule.setTargetDate(target_date);
+
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypeName+"';";
+		String type = "MRSGeneric";
+		Results results = new Results();
+		logger.info("Inside create clinical schedules...");
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+			logger.info("Trying to find the report type ID...");
+			for (List<String> row : results.getRows()) {
+				newschedule.setReportId(Integer.parseInt(row.get(0)));
+				logger.info("Parameter report type name as "+reportTypeName);
+				logger.info("Parsed report type ID as "+Integer.parseInt(row.get(0)));
+				logger.info("Set report type ID as "+newschedule.getReportId() );
+			}
+		} catch (DHISIntegratorException e) {
+			logger.info("Failed to find the report type ID...");
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.info("Failed to find the report type ID...");
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
 
 		logger.info("Inside saveIntegrationSchedules...");
 		try {
@@ -137,6 +305,94 @@ public class DHISIntegratorScheduler {
 			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
 		} catch (Exception e) {
 			created = false;
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return created;
+	}
+
+	@RequestMapping(path = "/create-pharm-schedule")
+	public Boolean createIntegrationPharmSchedule(@RequestParam("reportName") String reportName,
+	        @RequestParam("reportTypeName") String reportTypeName,
+			@RequestParam("scheduleFrequency") String schedFrequency,
+			@RequestParam("scheduleTime") String schedTime, 
+			@RequestBody String pharmacyPeriodListRequest,
+			HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException {
+		Boolean created = false;
+		logger.info("[Creating new pharmacy schedule ...]");
+		ObjectMapper mapper=new ObjectMapper();
+		List<PharmacyPeriodReq> periods=mapper.readValue(pharmacyPeriodListRequest, new TypeReference<List<PharmacyPeriodReq>>() {});
+		
+		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
+		newPharmacySchedule.setProgName(reportName);
+		newPharmacySchedule.setFrequency(schedFrequency);
+		newPharmacySchedule.setCreatedBy("Test");
+		newPharmacySchedule.setEnabled(true);
+		newPharmacySchedule.setStatus("Ready");
+		
+		LocalDate created_date = LocalDate.now();
+		newPharmacySchedule.setCreatedDate(created_date);
+		logger.info("[Extracting periods from the request body ...]");
+		logger.info("[Request body argument - periods string is ...]"+pharmacyPeriodListRequest);
+		logger.info("[Start date of first deserialised period object is ...]"+periods.get(0).getStart());
+		
+		// convert from type PharmacyPeriodReq to PharmacyPeriod
+		List <PharmacyPeriod> pharmacyPeriods=new ArrayList <>();
+		int count=0;
+		for (PharmacyPeriodReq pharmacyPeriod : periods) {
+			if(!pharmacyPeriod.getStart().isEmpty()){
+				PharmacyPeriod temp=new PharmacyPeriod();
+				temp.setStartTime(pharmacyPeriod.getStart());
+				logger.info("[New schedule start date value is ...]"+temp.getStartTime());
+				temp.setEndTime(pharmacyPeriod.getEnd());
+				temp.setCreatedBy(newPharmacySchedule.getCreatedBy());
+				logger.info("[New schedule created by value is ...]"+temp.getCreatedBy());
+				temp.setCreatedDate(newPharmacySchedule.getCreatedDate());
+				logger.info("[New schedule created date value is ...]"+temp.getCreatedDate());
+				temp.setEnabled(true);
+				logger.info("[New schedule enabled value is ...]"+temp.getEnabled());
+				temp.setPeriod(count);
+				temp.setStatus("Ready");
+				count++;
+				pharmacyPeriods.add(temp);
+			}
+			
+		}
+
+		newPharmacySchedule.setPeriods(pharmacyPeriods);
+		logger.info("[Start date of first period of new schedule is...]"+newPharmacySchedule.getPeriods().get(0).getStartTime());
+		logger.info("[Number of periods for the new schedule is...]"+newPharmacySchedule.getPeriods().size());
+		newPharmacySchedule.determineAndSetTargetDate();
+		logger.info("[Target date of new schedule set...as...]"+newPharmacySchedule.getTargetDate());
+
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+reportTypeName+"';";
+		String type = "MRSGeneric";
+		Results results = new Results();
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+
+			for (List<String> row : results.getRows()) {
+				newPharmacySchedule.setReportId(Integer.parseInt(row.get(0)));
+				logger.info("Parsed report type ID as "+Integer.parseInt(row.get(0)));
+				logger.info("Set report type ID as "+newPharmacySchedule.getReportId() );
+			}
+		} catch (DHISIntegratorException e) {
+			// logger.info("Inside loadIntegrationSchedules...");
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		logger.info("Inside saveIntegrationSchedules...");
+		try {
+			databaseDriver.executeCreateQuery(newPharmacySchedule);
+			logger.info("Executed insert query successfully...");
+			created = true;
+
+		} catch (DHISIntegratorException | JSONException e) {
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
 			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
 		}
 
@@ -193,6 +449,28 @@ public class DHISIntegratorScheduler {
 		return results;
 	}
 
+	@RequestMapping(path = "/delete-pharm-schedule")
+	public Results deleteIntegrationPharmSchedule(@RequestParam(value = "scheduleIds[]") String scheduleIds[],
+			HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException {
+		Results results = new Results();
+		logger.info("Inside deleteIntegrationPharmSchedules..., schedule_id_0=" + scheduleIds[0]);
+		try {
+			for (String schedule_id : scheduleIds) {
+				databaseDriver.executeDeletePharmSchedQuery(Integer.parseInt(schedule_id));
+				logger.info("Executed delete pharmacy schedule query successfully...for pharmacy schedule id "+schedule_id);
+			}
+
+		} catch (DHISIntegratorException | JSONException e) {
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return results;
+	}
+
+
 	private String getAuthToken(String username, String password) {
 		Charset UTF_8 = Charset.forName("UTF-8");
 		String authToken = Base64Utils.encodeToString((username + ":" + password).getBytes(UTF_8));
@@ -208,6 +486,15 @@ public class DHISIntegratorScheduler {
 		DHISIntegratorRequestUrl.append("?name=").append(reportName).append("&month=").append(month).append("&year=")
 				.append(year)
 				.append("&isImam=false&isFamily=false").append("&comment=").append(comment);
+		return DHISIntegratorRequestUrl.toString();
+	}
+
+	private String buildDHISIntegratorUrlWithPeriod(String reportName, Integer month, Integer year, String comment, String startDate, String endDate) {
+		StringBuilder DHISIntegratorRequestUrl = new StringBuilder(
+				properties.dhisIntegratorRootUrl + SUBMISSION_ENDPOINT_PHARM);
+		DHISIntegratorRequestUrl.append("?name=").append(reportName).append("&month=").append(month).append("&year=")
+				.append(year)
+				.append("&isImam=false&isFamily=false").append("&comment=").append(comment).append("&startDate=").append(startDate).append("&endDate=").append(endDate);
 		return DHISIntegratorRequestUrl.toString();
 	}
 
@@ -278,7 +565,29 @@ public class DHISIntegratorScheduler {
 	}
 
 	private Boolean isDue(Schedule schedule) {
-		return schedule.getTargetDate().isBefore(LocalDate.now());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime scheduleTargetDate = LocalDateTime.parse(schedule.getTargetDate(), formatter);
+		return scheduleTargetDate.toLocalDate().isBefore(LocalDate.now());
+	}
+
+	private String getScheduleType(Schedule sched){
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = '"+sched.getReportId()+"'";
+		String type = "MRSGeneric";
+		Results results = new Results();
+		String reportName = "";
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+
+			for (List<String> row : results.getRows()) {
+				reportName = row.get(0);
+			}
+		} catch (DHISIntegratorException e) {
+		// logger.info("Inside loadIntegrationSchedules...");
+		logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+		return reportName;
 	}
 
 	private ArrayList<Schedule> getIntegrationSchedules()
@@ -301,7 +610,7 @@ public class DHISIntegratorScheduler {
 				schedule.setFrequency(row.get(2));
 				schedule.setLastRun(row.get(3));
 				schedule.setStatus(row.get(4));
-				schedule.setTargetDate(LocalDate.parse(row.get(5).substring(0, 10)));
+				schedule.setTargetDate(LocalDate.parse(row.get(5).substring(0, 10)).toString());
 				list.add(schedule);
 
 			}
@@ -355,7 +664,7 @@ public class DHISIntegratorScheduler {
 	}
     
 	// schedule submission at 9am from the 1st to 8th (assuming up to date data will have been entered on the 7th - last day) of every month
-	@Scheduled(cron = "0 0 9 1-8 * *")
+	@Scheduled(cron = "0 0 7 1-8 * *")
 	public void processSchedules() {
 		// get schedules
 		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
@@ -366,6 +675,9 @@ public class DHISIntegratorScheduler {
 			for (int i = 0; i < schedules.size(); i++) {
 				logger.info("Current item " + schedules.get(i).getProgramName());
 				Schedule currSchedule = schedules.get(i);
+				if(getScheduleType(currSchedule).equals("ERPGeneric")){
+					break; //skip this schedule i.e. this should process clinical schdeules only
+				}
 				switch (currSchedule.getFrequency()) {
 					case "daily":
 						// daily logic
@@ -388,10 +700,22 @@ public class DHISIntegratorScheduler {
 							// send report
 							logger.info("The following report is due " + currSchedule.getProgramName());
 							// extract period
-							Integer year = currSchedule.getTargetDate().getYear();
-							Integer month = currSchedule.getTargetDate().getMonthValue();
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        					LocalDateTime dateTime = LocalDateTime.parse(currSchedule.getTargetDate(), formatter);
+							Integer year = dateTime.getYear();
+							Integer month = dateTime.getMonthValue();
 							String comment = "DHISIntegratorScheduler submitted " + currSchedule.getProgramName()
 									+ " on " + LocalDate.now();
+
+
+							if(currSchedule.getProgramName().equals("PHARM-001 Pharmacy ARV Regimen") || currSchedule.getProgramName().equals("PHARM-003 Dispensing Summary Report")){
+								if(month == 12){
+									month = 1;
+								}else{
+									month = month + 1;
+								}
+							}		
+														
 							String DHISIntegratorUrl = buildDHISIntegratorUrl(currSchedule.getProgramName(), month,
 									year, comment);
 							AuthResponse authResponse = authenticate(
@@ -467,6 +791,110 @@ public class DHISIntegratorScheduler {
 		 * // logout when done
 		 * getSchedules();
 		 */
+	}
+
+	@Scheduled(cron = "0 0/5 * * * *")
+	public void processPharmSchedules() {
+		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+		try {
+			schedules = getIntegrationSchedules();
+			// for each item, is this report due
+			// if due => call submitToDHIS(x,y,z)
+			for (int i = 0; i < schedules.size(); i++) {
+				logger.info("Current item " + schedules.get(i).getProgramName());
+				Schedule currSchedule = schedules.get(i);
+				if(getScheduleType(currSchedule).equals("MRSGeneric")){
+					break; //skip this schedule i.e. this should process pharmacy schdeules only
+				}
+				switch (currSchedule.getFrequency()) {
+					case "daily":
+						// daily logic
+						logger.info("Processing a daily schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						break;
+					case "weekly":
+						// weekly logic
+						logger.info("Processing a weekly schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						break;
+					case "monthly":
+						// monthly logic
+						logger.info("Processing a montly schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						if (isDue(currSchedule)) {
+							logger.info("The following report is due " + currSchedule.getProgramName());
+							// extract period
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        					LocalDateTime dateTime = LocalDateTime.parse(currSchedule.getTargetDate(), formatter);
+							Integer year = dateTime.getYear();
+							Integer month = dateTime.getMonthValue();
+							String comment = "DHISIntegratorScheduler submitted " + currSchedule.getProgramName()
+									+ " on " + LocalDate.now();
+
+							//Period to run report
+							String startDate = "2022-01-22";
+							String endDate = "2022-02-15";		
+
+
+							if(currSchedule.getProgramName().equals("PHARM-001 Pharmacy ARV Regimen") || currSchedule.getProgramName().equals("PHARM-003 Dispensing Summary Report")){
+								if(month == 12){
+									month = 1;
+								}else{
+									month = month + 1;
+								}
+							}		
+														
+							String DHISIntegratorUrl = buildDHISIntegratorUrlWithPeriod(currSchedule.getProgramName(), month,
+									year, comment, startDate, endDate);
+							AuthResponse authResponse = authenticate(
+									properties.openmrsRootUrl + OPENMRS_LOGIN_ENDPOINT);
+							ResponseEntity<String> responseEntity = null;
+							if (authResponse.getSessionId() != "") {
+								responseEntity = submitToDHISIntegrator(DHISIntegratorUrl, authResponse);
+							}
+							logout(properties.openmrsRootUrl + OPENMRS_LOGIN_ENDPOINT);
+
+							// if submitted successfully, set new target, else leave it to be retried.
+							if (isSubmissionSuccessful(responseEntity)) {
+								// determine & set new target date
+								LocalDate newTatgetDate = getMonthlyTargetDate(LocalDate.now());
+								String status = "Success";
+								updateSchedule(currSchedule.getId(), newTatgetDate, status);
+								logger.info("Submission went through ... :-)");
+								logger.info("Response body: " + responseEntity.getBody());
+
+							} else {
+								LocalDate newTatgetDate = null;
+								String status = "Failure";
+								updateSchedule(currSchedule.getId(), newTatgetDate, status);
+								logger.info("Submission did not go through ... :-(");
+								logger.info("Response body: " + responseEntity.getBody());
+							}
+
+						}else {
+							logger.info("The following report is NOT due " + currSchedule.getProgramName());
+						}
+						break;
+					case "quarterly":
+						// quarterly logic
+						logger.info("Processing a quarterly schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						break;
+					case "yearly":
+						// yearly logic
+						logger.info("Processing a yearly schedule at " + LocalDate.now() + "for report "
+								+ currSchedule.getProgramName());
+						break;
+					default:
+						// Ache banna, how did we get here?? .. do nothing
+				}
+
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	@Scheduled(cron = "0 0/5 * * * *")

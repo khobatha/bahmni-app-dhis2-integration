@@ -215,6 +215,47 @@ public class DHISIntegrator {
 		return submission.getInfo();
 	}
 
+	@RequestMapping(path = "/submit-to-dhis-with-period")
+	public String submitToDHISWithPeriod(@RequestParam("name") String program, @RequestParam("year") Integer year,
+			@RequestParam("month") Integer month, @RequestParam("comment") String comment,
+			@RequestParam("isImam") Boolean isImam, @RequestParam("isFamily") Boolean isFamily,
+			@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+			HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException {
+		String userName = new Cookies(clientReq).getValue(BAHMNI_USER);
+		Submission submission = new Submission();
+		String filePath = submittedDataStore.getAbsolutePath(submission);
+		Status status;
+		try {
+			if (isImam != null && isImam) {
+				prepareImamReport(year, month);
+			}
+			if (isFamily != null && isFamily) {
+				prepareFamilyPlanningReport(year, month);
+			}
+
+			submitToDHISWithPeriod(submission, program, year, month, startDate, endDate);
+			status = submission.getStatus();
+
+			if (isImam != null && isImam)
+				databaseDriver.dropImamTable();
+		} catch (DHISIntegratorException | JSONException e) {
+			status = Failure;
+			submission.setException(e);
+			logger.error(DHIS_SUBMISSION_FAILED, e);
+		} catch (Exception e) {
+			status = Failure;
+			submission.setException(e);
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		submittedDataStore.write(submission);
+		submissionLog.log(program, userName, comment, status, filePath);
+		recordLog(userName, program, year, month, submission.getInfo(), status, comment);
+
+		return submission.getInfo();
+	}
+
 	@RequestMapping(path = "/submit-to-dhis_report_status")
 	public String submitToDHISLOG(@RequestParam("name") String program, @RequestParam("year") Integer year,
 			@RequestParam("month") Integer month, @RequestParam("comment") String comment, HttpServletRequest clientReq,
@@ -445,6 +486,54 @@ public class DHISIntegrator {
 		logger.error("Last day of "+month+" is "+lastDay);
 		DateTime startDate = new DateTime(year, month, 1, 0, 0);
 		DateTime endDate = new DateTime(year, month, lastDay, 0, 0);
+		ReportDateRange dateRange = new ReportDateRange(startDate, endDate);// DateConverter().getDateRange(year,
+																			// month);
+		List<Object> programDataValue = getProgramDataValues(childReports, dhisConfig.getJSONObject("reports"),
+				dateRange);
+
+		JSONObject programDataValueSet = new JSONObject();
+		programDataValueSet.put("orgUnit", dhisConfig.getString("orgUnit"));
+		programDataValueSet.put("dataValues", programDataValue);
+		programDataValueSet.put("period", format("%d%02d", year, month));
+
+		ResponseEntity<String> responseEntity = dHISClient.post(SUBMISSION_ENDPOINT, programDataValueSet);
+		submission.setPostedData(programDataValueSet);
+		submission.setResponse(responseEntity);
+		return submission;
+	}
+
+	private Submission submitToDHISWithPeriod(Submission submission, String name, Integer year, Integer month, String startDate, String endDate)
+			throws DHISIntegratorException, JSONException, IOException {
+		JSONObject reportConfig = getConfig(properties.reportsJson);
+
+		List<JSONObject> childReports = new ArrayList<JSONObject>();
+
+		if ("ElisGeneric".equalsIgnoreCase(reportConfig.getJSONObject(name).getString("type"))) {
+			JSONObject reportObj = new JSONObject();
+			reportObj.put("name", reportConfig.getJSONObject(name).getString("name"));
+			reportObj.put("type", reportConfig.getJSONObject(name).getString("type"));
+
+			JSONObject configObj = new JSONObject();
+			configObj.put("sqlPath", reportConfig.getJSONObject(name).getJSONObject("config").get("sqlPath"));
+
+			reportObj.put("config", configObj);
+			childReports.add(reportObj);
+
+		} else {
+			childReports = jsonArrayToList(
+					reportConfig.getJSONObject(name).getJSONObject("config").getJSONArray("reports"));
+		}
+
+		JSONObject dhisConfig = getDHISConfig(name);
+		// ReportDateRange dateRange = new DateConverter().getDateRange(year, month);
+		//int lastDay = 30;// TODO: Generalise
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month-1, 1);
+		int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);// TODO: Generalise
+		logger.error("Last day of "+month+" is "+lastDay);
+		//DateTime startDate = new DateTime(year, month, 1, 0, 0);
+		//DateTime endDate = new DateTime(year, month, lastDay, 0, 0);
+
 		ReportDateRange dateRange = new ReportDateRange(startDate, endDate);// DateConverter().getDateRange(year,
 																			// month);
 		List<Object> programDataValue = getProgramDataValues(childReports, dhisConfig.getJSONObject("reports"),

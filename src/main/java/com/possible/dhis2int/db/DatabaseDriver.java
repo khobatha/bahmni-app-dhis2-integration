@@ -22,6 +22,9 @@ import org.springframework.stereotype.Service;
 
 import com.possible.dhis2int.Properties;
 import com.possible.dhis2int.audit.Recordlog;
+import com.possible.dhis2int.scheduler.PharmacyPeriod;
+import com.possible.dhis2int.scheduler.PharmacyPeriodReq;
+import com.possible.dhis2int.scheduler.PharmacySchedule;
 import com.possible.dhis2int.scheduler.Schedule;
 import com.possible.dhis2int.web.DHISIntegratorException;
 import com.possible.dhis2int.web.Messages;
@@ -94,15 +97,77 @@ public class DatabaseDriver {
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,frequency,enabled,created_by,created_date,target_time) VALUES (?, ?, ?, ?, ?, ?)");
+					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date,target_time,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
 			ps.setString(1, record.getProgramName());
-			ps.setString(2, record.getFrequency());
-			ps.setBoolean(3, record.getEnabled());
-			ps.setString(4, record.getCreatedBy());
-			ps.setString(5, record.getCreatedDate().toString());
-			ps.setString(6, record.getTargetDate().toString());
+			ps.setInt(2, record.getReportId());
+			ps.setString(3, record.getFrequency());
+			ps.setBoolean(4, record.getEnabled());
+			ps.setString(5, record.getCreatedBy());
+			ps.setString(6, record.getCreatedDate().toString());
+			ps.setString(7, record.getTargetDate().toString());
+			ps.setString(8, record.getStatus());
 			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException ignored) {
+				}
+			}
+		}
+	}
+
+	public void executeCreateQuery(PharmacySchedule record)
+			throws DHISIntegratorException {
+		logger.debug("Inside executeUpdateQuery method -- create pharmacy schedule");
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection(properties.openmrsDBUrl);
+			PreparedStatement ps = connection.prepareStatement(
+					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date,target_time,status) VALUES (?, ?, ?, ?, ?, ?,?, ?)",Statement.RETURN_GENERATED_KEYS);
+
+			ps.setString(1, record.getProgramName());
+			ps.setInt(2, record.getReportId());
+			ps.setString(3, record.getFrequency());
+			ps.setBoolean(4, record.getEnabled());
+			ps.setString(5, record.getCreatedBy());
+			ps.setString(6, record.getCreatedDate().toString());
+			ps.setString(7, record.getTargetDate().toString());
+			ps.setString(8, record.getStatus());
+			ps.executeUpdate();
+
+			//Get id of schedule just inserted
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+			
+			if (generatedKeys.next()) {
+    			int scheduleId = generatedKeys.getInt(1);
+				logger.info("ID of the recent schedule insert is "+scheduleId);
+
+				//Now insert in periods table
+				for (PharmacyPeriod period : record.getPeriods()){
+					PreparedStatement ps1 = connection.prepareStatement(
+						"INSERT INTO dhis2_pharmacy_periods (dhis2_schedule_id, period, enabled,created_by,created_date,start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+
+					ps1.setInt(1, scheduleId);	
+					ps1.setInt(2, period.getPeriod());
+					ps1.setBoolean(3, period.isEnabled());
+					ps1.setString(4, period.getCreatedBy());
+					ps1.setString(5, period.getCreatedDate().toString());
+					ps1.setString(6, period.getStartTime());
+					ps1.setString(7, period.getEndTime());
+					ps1.setString(8, period.getStatus());
+
+					ps1.executeUpdate();
+				}
+			}
+			else{
+				logger.info("Failed to retrieve ID of recently inserted schedule...");
+
+			}
+            
 		} catch (SQLException e) {
 			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
 		} finally {
@@ -184,6 +249,45 @@ public class DatabaseDriver {
 		} catch (SQLException e) {
 			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
 		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException ignored) {
+				}
+			}
+		}
+	}
+
+	public void executeDeletePharmSchedQuery(Integer scheduleId)
+			throws DHISIntegratorException {
+		logger.debug("Inside executeDeletePharmSchedQuery method");
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection(properties.openmrsDBUrl);
+            //Execute the two SQLs as a transaction
+			//delete from pharmacy periods first, then from schedules
+			connection.setAutoCommit(false);
+			try (PreparedStatement stmt1 = connection.prepareStatement("DELETE FROM dhis2_pharmacy_periods WHERE dhis2_schedule_id=?")) { // Automatic close.
+				stmt1.setInt(1, scheduleId);
+            	stmt1.executeUpdate();
+				try (PreparedStatement stmt2 = connection.prepareStatement("DELETE FROM dhis2_schedules WHERE id=?") ){
+					stmt2.setInt(1, scheduleId);
+                	stmt2.executeUpdate();
+					connection.commit();
+					logger.info("Executed both DELETE statements");
+				}catch (SQLException ex){
+					throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), ex);
+				}
+			} catch (SQLException ex) {
+				connection.rollback();
+				throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), ex);
+
+			}
+		}  catch (SQLException ex) {
+			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), ex);
+
+		}
+		finally {
 			if (connection != null) {
 				try {
 					connection.close();
