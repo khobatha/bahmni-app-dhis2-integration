@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -47,9 +48,9 @@ public class DatabaseDriver {
 		try {
 
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
-			if ("ElisGeneric".equalsIgnoreCase(type)) {
-				connection = DriverManager.getConnection(properties.openelisDBUrl);
-			}
+			//if ("ElisGeneric".equalsIgnoreCase(type)) {
+			//	connection = DriverManager.getConnection(properties.openelisDBUrl);
+			//}
 			if ("ERPGeneric".equalsIgnoreCase(type)) {
 				connection = DriverManager.getConnection(properties.odooDBUrl);
 			}
@@ -105,7 +106,10 @@ public class DatabaseDriver {
 			ps.setBoolean(4, record.getEnabled());
 			ps.setString(5, record.getCreatedBy());
 			ps.setString(6, record.getCreatedDate().toString());
-			ps.setString(7, record.getTargetDate().toString());
+            //LocalDateTime targetDateTime = record.getTargetDate();
+            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSS]");
+            //String formattedDateTime = targetDateTime.format(formatter);
+            ps.setTimestamp(7, Timestamp.valueOf(record.getTargetDate()));
 			ps.setString(8, record.getStatus());
 			ps.executeUpdate();
 		} catch (SQLException e) {

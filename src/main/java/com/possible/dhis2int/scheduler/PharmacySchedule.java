@@ -4,13 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import static org.apache.log4j.Logger.getLogger;
 
 public class PharmacySchedule extends Schedule {
     private final Logger logger = getLogger(PharmacySchedule.class);
-    private List <PharmacyPeriod> periods;
+    private List<PharmacyPeriod> periods;
     private int id;
     private int dhis2ScheduleId;
     private int period;
@@ -19,48 +18,53 @@ public class PharmacySchedule extends Schedule {
     private String lastRun;
     private String status;
     private boolean enabled;
-    private String targetDate;
+    private LocalDateTime targetDate;
 
     public List<PharmacyPeriod> getPeriods() {
         return periods;
     }
 
-    public void setTargetDate(String date){
-        targetDate=date;
+    public void setTargetDate(LocalDateTime targetDate) {
+        this.targetDate = targetDate;
     }
 
-    public void determineAndSetTargetDate(){
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+    public void determineAndSetTargetDate() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
         LocalDate currentDate = LocalDate.now();
         int currYear = currentDate.getYear();
         int currMonth = currentDate.getMonthValue();
         int currDay = currentDate.getDayOfMonth();
-        Boolean found=false;
-        for(int i=0;i<periods.size();i++){
-            LocalDate period = LocalDate.parse(periods.get(i).getStartTime(), formatter);
-            if(!periods.get(i).getStartTime().isEmpty() && !found){ 
-                if(currYear==period.getYear()){
-                    if(currMonth==period.getMonthValue() && currDay<period.getDayOfMonth()){
-                        targetDate=periods.get(i).getStartTime();
-                        logger.info("[Found the next date in line ...]"+period.format(formatter));
-                        found=true;
-                    }else if(currMonth<period.getMonthValue()){
-                        targetDate=periods.get(i).getStartTime();
-                        logger.info("[Found the next date in line ...]"+period.format(formatter));
-                        found=true;
+        boolean found = false;
+
+        for (PharmacyPeriod period : periods) {
+            if (!period.getStartTime().isEmpty() && !found) {
+                LocalDateTime periodStartTime = LocalDateTime.parse(period.getStartTime(), dateTimeFormatter);
+
+                if (currYear == periodStartTime.getYear()) {
+                    if (currMonth == periodStartTime.getMonthValue() && currDay < periodStartTime.getDayOfMonth()) {
+                        targetDate = periodStartTime;
+                        logger.info("[Found the next date in line ...]" + periodStartTime.format(dateTimeFormatter));
+                        found = true;
+                    } else if (currMonth < periodStartTime.getMonthValue()) {
+                        targetDate = periodStartTime;
+                        logger.info("[Found the next date in line ...]" + periodStartTime.format(dateTimeFormatter));
+                        found = true;
                     }
-                }else if(currYear < period.getYear()){
-                    targetDate=periods.get(i).getStartTime();
-                    logger.info("[Found the next date in line ...]"+period.format(formatter));
-                    found=true;
+                } else if (currYear < periodStartTime.getYear()) {
+                    targetDate = periodStartTime;
+                    logger.info("[Found the next date in line ...]" + periodStartTime.format(dateTimeFormatter));
+                    found = true;
                 }
             }
-        }        
+        }
     }
 
-    public String getTargetDate(){
-        return this.targetDate;
+    public LocalDateTime getTargetDate() {
+        return targetDate;
     }
+
     public void setPeriods(List<PharmacyPeriod> periods) {
         this.periods = periods;
     }
@@ -92,7 +96,6 @@ public class PharmacySchedule extends Schedule {
     public String getCreatedBy() {
         return createdBy;
     }
-    
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
@@ -111,7 +114,7 @@ public class PharmacySchedule extends Schedule {
     }
 
     public void setLastRun(String lastRun) {
-        this.lastRun = lastRun == null ? "-": lastRun;
+        this.lastRun = lastRun == null ? "-" : lastRun;
     }
 
     public String getStatus() {
@@ -126,13 +129,11 @@ public class PharmacySchedule extends Schedule {
         return enabled;
     }
 
-    public Boolean getEnabled(){
+    public Boolean getEnabled() {
         return enabled;
     }
-
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-    
 }

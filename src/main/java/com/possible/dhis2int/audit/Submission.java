@@ -7,7 +7,14 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.springframework.http.ResponseEntity;
 
+import static org.apache.log4j.Logger.getLogger;
+import org.apache.log4j.Logger;
+import com.possible.dhis2int.web.DHISIntegrator;
+import com.possible.dhis2int.web.DHISIntegratorException;
+
 public class Submission {
+
+	private final Logger logger = getLogger(DHISIntegrator.class);
 
 	public static final String FILE_NAME = "'data_submitted_on_'yyyyMMddHHmmss'.json'";
 
@@ -64,6 +71,7 @@ public class Submission {
 	}
 
 	public Status getStatus() throws JSONException {
+		logger.info("Response string is "+response.getBody());
 		if (response == null || response.getStatusCodeValue() != 200) {
 			return Status.Failure;
 		}
@@ -92,17 +100,35 @@ public class Submission {
 	}
 
 	private boolean hasConflicts(JSONObject responseBody) {
-		// return responseBody.has("conflicts");
-		return responseBody.getJSONArray("conflicts").length() > 0;
+		try {
+			// Navigate to the nested "conflicts" array within "response"
+			if (responseBody.has("response")) {
+				JSONObject response = responseBody.getJSONObject("response");
+				if (response.has("conflicts")) {
+					return response.getJSONArray("conflicts").length() > 0;
+				}
+			}
+		} catch (JSONException e) {
+			logger.error("Error checking conflicts", e);
+		}
+		return false;
 	}
+	
 
 	private boolean isIgnored(JSONObject responseBody) throws JSONException {
-		return responseBody.getJSONObject("importCount").getInt("ignored") > 0;
+		JSONObject importCount = responseBody.getJSONObject("response").getJSONObject("importCount");
+		return importCount.getInt("ignored") > 0;
 	}
-
-	private boolean isServerError(JSONObject responseBody) throws JSONException {
-		return "ERROR".equals(responseBody.getString("status"));
+	
+	private boolean isServerError(JSONObject responseBody) {
+		try {
+			return "ERROR".equals(responseBody.getString("status"));
+		} catch (JSONException e) {
+			logger.error("Error checking server error status", e);
+			return false;
+		}
 	}
+	
 
 	public enum Status {
 		Success,

@@ -238,7 +238,9 @@ async function renderDHISSchedules(url){
 	const LabSchedulesTableBody = document.createElement('tbody');
 
 
-	var schedules=JSON.parse(data);
+	//var schedules=JSON.parse(data);
+	var schedules=data;
+	
 	var tempHTML;
 	schedules.forEach(function(object) {
 		console.log('[renderDHISSchedules] Processing schedule '+object.id);
@@ -246,6 +248,13 @@ async function renderDHISSchedules(url){
 		var cellId="schedule-"+object.id;
 		var rowId="schedule-"+object.id+"-row";
 		tr.setAttribute("id", rowId);
+
+		// prepare targetdate for rendering
+		const targetDateObject = object.targetDate;
+		const targetDate = new Date(targetDateObject.year, targetDateObject.monthValue - 1, targetDateObject.dayOfMonth, targetDateObject.hour, targetDateObject.minute, targetDateObject.second);
+		const targetDateStr=targetDate.toLocaleString();
+
+
 		var mainScheduleCheckBoxId="main-"+((object.reportId==1)?"clinical":(object.reportId==2)?"pharmacy":"lab")+"-schedule-checkbox-"+object.id;
 		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
 		tempHTML ="<td>"+"<span class='custom-checkbox'>"+
@@ -255,7 +264,7 @@ async function renderDHISSchedules(url){
 					'<td>' + object.frequency + '</td>' +
 					'<td>' + object.lastRun + '</td>' +
 					'<td>' + object.status + '</td>' +
-					'<td>' + object.targetDate + '</td>';
+					'<td>' + targetDateStr + '</td>';
 		if(object.reportId==1){
 			tr.innerHTML =tempHTML+
 						"<td>"+
@@ -344,7 +353,7 @@ function initDHISProgramNameDropdowns(){
 								else if(entry.config.reports[0].type=="ERPGeneric"){
 									pharmacy_dropdown.append($('<option></option>').attr('value', entry.name).text(entry.name));
 								}
-								else if(entry.config.reports[0].type=="LISGeneric"){
+								else if(entry.config.reports[0].type=="ELISGeneric"){
 									lab_dropdown.append($('<option></option>').attr('value', entry.name).text(entry.name));
 								}
 							}
@@ -651,6 +660,9 @@ function createDHISSchedule(clicked_id, frequency){
 						"</td>";
 		LabSchedulesTable.appendChild(tr);
 	}
+
+	//change scheduled time to HH:mm:ss
+	scheduleTime+=":00";
 
 	// Define the request parameters
 	const params = new URLSearchParams();

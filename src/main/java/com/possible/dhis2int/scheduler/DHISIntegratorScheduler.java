@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 import org.json.JSONArray;
@@ -39,6 +42,7 @@ import com.possible.dhis2int.scheduler.Schedule;
 import com.possible.dhis2int.scheduler.PharmacyPeriodReq;
 
 import org.apache.log4j.Logger;
+import java.util.logging.Level;
 import org.apache.tomcat.jni.Local;
 import org.joda.time.Months;
 
@@ -73,6 +77,73 @@ public class DHISIntegratorScheduler {
 		this.properties = properties;
 	}
 
+	@RequestMapping(path = "/get-schedules")
+    public String getIntegrationSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
+            throws IOException, JSONException, DHISIntegratorException, Exception {
+
+        String[] reportTypes = {"MRSGeneric", "ELISGeneric"};
+        List<String> reportNameIds = new ArrayList<>();
+
+        for (String type : reportTypes) {
+            String sql0 = "SELECT id, name FROM dhis2_report_type WHERE name = '" + type + "'";
+            Results results0 = new Results();
+            try {
+                results0 = databaseDriver.executeQuery(sql0, type);
+                for (List<String> row : results0.getRows()) {
+                    reportNameIds.add(row.get(0));
+                }
+            } catch (DHISIntegratorException e) {
+                logger.error("SQL Execution Exception", e);
+            } catch (Exception e) {
+                logger.error("Internal Server Error", e);
+            }
+        }
+
+        List<Schedule> scheduleList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+
+        for (String reportNameId : reportNameIds) {
+            String sql = "SELECT id, report_name, report_id, frequency, enabled, last_run, target_time, status FROM dhis2_schedules WHERE report_id ='" + reportNameId + "'";
+            Results results = new Results();
+            try {
+                results = databaseDriver.executeQuery(sql, "");
+                for (List<String> row : results.getRows()) {
+                    Schedule schedule = new Schedule();
+                    schedule.setId(Integer.parseInt(row.get(0)));
+                    schedule.setProgramName(row.get(1));
+                    schedule.setReportId(Integer.parseInt(row.get(2)));
+                    schedule.setFrequency(row.get(3));
+                    schedule.setEnabled(Integer.parseInt(row.get(4)) == 1);
+                    schedule.setLastRun(row.get(5));
+
+                    try {
+                        LocalDateTime targetDateTime = LocalDateTime.parse(row.get(6), formatter);
+                        schedule.setTargetDate(targetDateTime);
+                        logger.info("Target date is " + targetDateTime);
+                    } catch (Exception e) {
+                        logger.warn("Failed to parse target date: " + row.get(6));
+                        e.printStackTrace();
+                    }
+
+                    schedule.setStatus(row.get(7));
+                    scheduleList.add(schedule);
+                }
+            } catch (DHISIntegratorException | JSONException e) {
+                logger.error("SQL Execution Exception", e);
+            } catch (Exception e) {
+                logger.error("Internal Server Error", e);
+            }
+        }
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(scheduleList);
+        } catch (Exception e) {
+            logger.error("Internal Server Error", e);
+            throw new IOException("Failed to serialize schedules to JSON", e);
+        }
+    }
+/* 
 	@RequestMapping(path = "/get-schedules")
 	public JSONArray getIntegrationSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException, DHISIntegratorException, Exception {
@@ -113,13 +184,25 @@ public class DHISIntegratorScheduler {
 				schedule = new Schedule();
 
 				schedule.setId(Integer.parseInt(row.get(0)));
-				schedule.setProgName(row.get(1));
+				schedule.setProgramName(row.get(1));
 				schedule.setReportId(Integer.parseInt(row.get(2)));
 				schedule.setFrequency(row.get(3));
 				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1 ? true : false);
 				schedule.setLastRun(row.get(5));
-				schedule.setTargetDate(row.get(6));
-				logger.info("Target date is "+LocalDate.parse(row.get(6),formatter));
+				//schedule.setTargetDate(row.get(6));
+				//logger.info("Target date is "+LocalDateTime.parse(row.get(6),formatter));
+
+				// Parse and set the target date as LocalDateTime
+				try {
+					LocalDateTime targetDateTime = LocalDateTime.parse(row.get(6), formatter);
+					schedule.setTargetDate(targetDateTime);
+					logger.info("Target date is " + targetDateTime);
+				} catch (Exception e) {
+					logger.warn("Failed to parse target date: " + row.get(6));
+					e.printStackTrace();
+				}
+
+
 				schedule.setStatus(row.get(7));
 				list.add(schedule);
 			}
@@ -136,7 +219,7 @@ public class DHISIntegratorScheduler {
 		}
 
 		return jsonArray;
-	}
+	} */
 
 	@RequestMapping(path = "/get-pharm-schedules")
 	public JSONArray getIntegrationPharmSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
@@ -169,6 +252,7 @@ public class DHISIntegratorScheduler {
 		//Schedule schedule;
 		PharmacySchedule schedule;
 		ObjectMapper mapper;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
 		try {
 			results = databaseDriver.executeQuery(sql, type);
@@ -180,12 +264,27 @@ public class DHISIntegratorScheduler {
 				schedule = new PharmacySchedule();
 
 				schedule.setId(Integer.parseInt(row.get(0)));
-				schedule.setProgName(row.get(1));
+				schedule.setProgramName(row.get(1));
 				schedule.setReportId(Integer.parseInt(row.get(2)));
 				schedule.setFrequency(row.get(3));
 				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1 ? true : false);
 				schedule.setLastRun(row.get(5));
-				schedule.setTargetDate(row.get(6));
+				//schedule.setTargetDate(row.get(6));
+
+				// Parse and set the target date as LocalDateTime
+				try {
+					LocalDateTime targetDateTime = LocalDateTime.parse(row.get(6), formatter);
+					schedule.setTargetDate(targetDateTime);
+					logger.info("Target date is " + targetDateTime);
+				} catch (Exception e) {
+					logger.warn("Failed to parse target date: " + row.get(6));
+					e.printStackTrace();
+				}
+
+
+				schedule.setStatus(row.get(7));
+				list.add(schedule);
+
 				schedule.setStatus(row.get(7));
 								
 				list.add(schedule);
@@ -263,14 +362,15 @@ public class DHISIntegratorScheduler {
 			throws IOException, JSONException {
 		Boolean created = true;
 		Schedule newschedule = new Schedule();
-		newschedule.setProgName(reportName);
+		newschedule.setProgramName(reportName);
 		newschedule.setFrequency(schedFrequency);
 		newschedule.setCreatedBy("Test");
 		newschedule.setEnabled(true);
 		newschedule.setStatus("Ready");
 
 		LocalDate created_date = LocalDate.now();
-		String target_date = getMonthlyTargetDate(created_date).toString();
+		LocalDateTime target_date=generateMonthlyTargetTime(created_date,schedTime);
+		//String target_date = getMonthlyTargetDate(created_date).toString();
 		newschedule.setCreatedDate(created_date);
 		newschedule.setTargetDate(target_date);
 
@@ -311,6 +411,32 @@ public class DHISIntegratorScheduler {
 		return created;
 	}
 
+	public LocalDateTime generateMonthlyTargetTime(LocalDate created_date, String schedTime) {
+        // Define the formatter for parsing the time component
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss[.SSS]");
+        // Define the formatter for formatting the LocalDateTime
+        DateTimeFormatter targetTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        
+        try {
+            // Parse the schedTime string to a LocalTime object
+            LocalTime time = LocalTime.parse(schedTime, timeFormatter);
+            
+            // Get the last day of the month from created_date
+            YearMonth yearMonth = YearMonth.of(created_date.getYear(), created_date.getMonth());
+            LocalDate lastDayOfMonth = yearMonth.atEndOfMonth();
+            
+            // Combine the last day of the month with the parsed time to form LocalDateTime
+            LocalDateTime target_time = LocalDateTime.of(lastDayOfMonth, time);
+            String formattedTargetTime = target_time.format(targetTimeFormatter);
+            logger.info("[SUCCESS] Generated monthly target date with time " + formattedTargetTime);
+            
+            return target_time;
+        } catch (DateTimeParseException e) {
+            logger.error("Invalid time format: " + schedTime, e);
+            return null;
+        }
+    }
+
 	@RequestMapping(path = "/create-pharm-schedule")
 	public Boolean createIntegrationPharmSchedule(@RequestParam("reportName") String reportName,
 	        @RequestParam("reportTypeName") String reportTypeName,
@@ -325,7 +451,7 @@ public class DHISIntegratorScheduler {
 		List<PharmacyPeriodReq> periods=mapper.readValue(pharmacyPeriodListRequest, new TypeReference<List<PharmacyPeriodReq>>() {});
 		
 		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
-		newPharmacySchedule.setProgName(reportName);
+		newPharmacySchedule.setProgramName(reportName);
 		newPharmacySchedule.setFrequency(schedFrequency);
 		newPharmacySchedule.setCreatedBy("Test");
 		newPharmacySchedule.setEnabled(true);
@@ -565,8 +691,9 @@ public class DHISIntegratorScheduler {
 	}
 
 	private Boolean isDue(Schedule schedule) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime scheduleTargetDate = LocalDateTime.parse(schedule.getTargetDate(), formatter);
+		//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        //LocalDateTime scheduleTargetDate = LocalDateTime.parse(schedule.getTargetDate(), formatter);
+		LocalDateTime scheduleTargetDate = schedule.getTargetDate();
 		return scheduleTargetDate.toLocalDate().isBefore(LocalDate.now());
 	}
 
@@ -597,6 +724,7 @@ public class DHISIntegratorScheduler {
 		Results results = new Results();
 		String type = "MRSGeneric";
 		Schedule schedule;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
 		try {
 			results = databaseDriver.executeQuery(sql, type);
@@ -606,11 +734,22 @@ public class DHISIntegratorScheduler {
 				schedule = new Schedule();
 
 				schedule.setId(Integer.parseInt(row.get(0)));
-				schedule.setProgName(row.get(1));
+				schedule.setProgramName(row.get(1));
 				schedule.setFrequency(row.get(2));
 				schedule.setLastRun(row.get(3));
 				schedule.setStatus(row.get(4));
-				schedule.setTargetDate(LocalDate.parse(row.get(5).substring(0, 10)).toString());
+				//schedule.setTargetDate(LocalDate.parse(row.get(5).substring(0, 10)).toString());
+
+				// Parse and set the target date as LocalDateTime
+				try {
+					LocalDateTime targetDateTime = LocalDateTime.parse(row.get(5), formatter);
+					schedule.setTargetDate(targetDateTime);
+					logger.info("Target date is " + targetDateTime);
+				} catch (Exception e) {
+					logger.warn("Failed to parse target date: " + row.get(6));
+					e.printStackTrace();
+				}
+
 				list.add(schedule);
 
 			}
@@ -700,8 +839,9 @@ public class DHISIntegratorScheduler {
 							// send report
 							logger.info("The following report is due " + currSchedule.getProgramName());
 							// extract period
-							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        					LocalDateTime dateTime = LocalDateTime.parse(currSchedule.getTargetDate(), formatter);
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        					//LocalDateTime dateTime = LocalDateTime.parse(currSchedule.getTargetDate(), formatter);
+							LocalDateTime dateTime = currSchedule.getTargetDate();
 							Integer year = dateTime.getYear();
 							Integer month = dateTime.getMonthValue();
 							String comment = "DHISIntegratorScheduler submitted " + currSchedule.getProgramName()
@@ -824,8 +964,9 @@ public class DHISIntegratorScheduler {
 						if (isDue(currSchedule)) {
 							logger.info("The following report is due " + currSchedule.getProgramName());
 							// extract period
-							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        					LocalDateTime dateTime = LocalDateTime.parse(currSchedule.getTargetDate(), formatter);
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        					//LocalDateTime dateTime = LocalDateTime.parse(currSchedule.getTargetDate(), formatter);
+							LocalDateTime dateTime = currSchedule.getTargetDate();
 							Integer year = dateTime.getYear();
 							Integer month = dateTime.getMonthValue();
 							String comment = "DHISIntegratorScheduler submitted " + currSchedule.getProgramName()
@@ -943,7 +1084,7 @@ public class DHISIntegratorScheduler {
 	 * schedule=new Schedules();
 	 * 
 	 * schedule.setId(Integer.parseInt(row.get(0)));
-	 * schedule.setProgName(row.get(1));
+	 * schedule.setProgramName(row.get(1));
 	 * list.add(schedule);
 	 * 
 	 * }
