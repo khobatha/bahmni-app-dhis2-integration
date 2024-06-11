@@ -71,7 +71,8 @@ public class Submission {
 	}
 
 	public Status getStatus() throws JSONException {
-		logger.info("Response string is "+response.getBody());
+		logger.info("[DEBUG] Response string is "+response.getBody());
+		logger.info("[DEBUG] Response string value code is "+response.getStatusCodeValue());
 		if (response == null || response.getStatusCodeValue() != 200) {
 			return Status.Failure;
 		}
@@ -79,9 +80,11 @@ public class Submission {
 		try {
 			responseBody = new JSONObject(new JSONTokener(response.getBody()));
 		} catch (JSONException e) {
+			logger.info("[DEBUG] Exception trying to retrieve responseBody!");
 			return Status.Failure;
 		}
 		if (isServerError(responseBody) || isIgnored(responseBody) || hasConflicts(responseBody)) {
+			logger.info("[DEBUG] Either server error, ignored and/or has conflicts!");
 			return Status.Failure;
 		}
 		return Status.Success;

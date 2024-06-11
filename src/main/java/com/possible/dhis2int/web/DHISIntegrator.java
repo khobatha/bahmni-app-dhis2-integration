@@ -276,7 +276,7 @@ public class DHISIntegrator {
 			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
 		}
 		submittedDataStore.write(submission);
-
+		logger.info("[DEBUG] Current post DHIS submission status is "+status);
 		recordLog(userName, program, year, month, submission.getInfo(), status, comment);
 		return submission.getInfo();
 	}
