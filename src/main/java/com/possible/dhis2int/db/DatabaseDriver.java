@@ -318,6 +318,7 @@ public class DatabaseDriver {
 			ps.setString(6, record.getComment());
 			ps.setInt(7, month);
 			ps.setInt(8, year);
+			logger.info("[DEBUG] The post DHIS submission comment is "+record.getComment());
 
 			ps.executeUpdate();
 		} catch (SQLException e) {

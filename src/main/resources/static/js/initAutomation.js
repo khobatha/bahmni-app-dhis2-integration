@@ -257,14 +257,15 @@ async function renderDHISSchedules(url){
 
 		var mainScheduleCheckBoxId="main-"+((object.reportId==1)?"clinical":(object.reportId==2)?"pharmacy":"lab")+"-schedule-checkbox-"+object.id;
 		console.log('[renderDHISSchedules] Processing a single-period schedule '+object.id);
-		tempHTML ="<td>"+"<span class='custom-checkbox'>"+
-					"<input class='selectSchedule' type='checkbox' id='"+mainScheduleCheckBoxId+"' name='options[]' value='"+object.id+"'/>"+
-					"<label for='checkbox1'></label>"+"</span></td>" +
-					'<td id=' + cellId + ">" + object.programName + '</td>' +
-					'<td>' + object.frequency + '</td>' +
-					'<td>' + object.lastRun + '</td>' +
-					'<td>' + object.status + '</td>' +
-					'<td>' + targetDateStr + '</td>';
+		tempHTML = "<td><span class='custom-checkbox'>" +
+           "<input class='selectSchedule' type='checkbox' id='" + mainScheduleCheckBoxId + "' name='options[]' value='" + object.id + "'/>" +
+           "<label for='checkbox1'></label></span></td>" +
+           '<td id=' + cellId + ">" + object.programName + '</td>' +
+           '<td>' + object.frequency + '</td>' +
+           '<td>' + object.lastRun + '</td>' +
+           '<td style="color:' + (object.status === 'Success' ? 'green' : 'red') + ';font-weight: bold;">' + object.status + '</td>' +
+           '<td>' + targetDateStr + '</td>';
+
 		if(object.reportId==1){
 			tr.innerHTML =tempHTML+
 						"<td>"+
