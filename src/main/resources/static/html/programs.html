@@ -3,39 +3,60 @@
 	<div id="program-name-{{index}}" class="programName">{{name}}</div>
 	
 	<div class="monthOption">
-		{{^isYearlyReport}}
+		{{#isWeeklyReport}}
 			<div class="select-style">
-				<select class="month-selector" id="month-{{index}}"
+				<select class="week-selector" id="week-{{index}}"
 					onchange="getStatus({{index}})"> 
-					{{#months}}
+					{{#weeks}}
 						<option value="{{number}}">{{name}}</option> 
-					{{/months}}
+					{{/weeks}}
 				</select>
 			</div>
+	
+			<div class="select-style">
+				<select class="year-selector" id="year-{{index}}"
+					onchange="getStatus({{index}})"> 
+					{{#years}}
+						<option value="{{.}}">{{.}}</option> 
+					{{/years}}
+				</select>
+			</div>
+		{{/isWeeklyReport}}
 		
-		<div class="select-style">
-			<select class="year-selector" id="year-{{index}}"
-				onchange="getStatus({{index}})"> 
-				{{#years}}
-					<option value="{{.}}">{{.}}</option> 
-				{{/years}}
-			</select>
-		</div>
+		{{^isYearlyReport}}
+			{{^isWeeklyReport}}
+				<div class="select-style">
+					<select class="month-selector" id="month-{{index}}"
+						onchange="getStatus({{index}})"> 
+						{{#months}}
+							<option value="{{number}}">{{name}}</option> 
+						{{/months}}
+					</select>
+				</div>
+		
+				<div class="select-style">
+					<select class="year-selector" id="year-{{index}}"
+						onchange="getStatus({{index}})"> 
+						{{#years}}
+							<option value="{{.}}">{{.}}</option> 
+						{{/years}}
+					</select>
+				</div>
+			{{/isWeeklyReport}}
 		{{/isYearlyReport}}
 		
 		{{#isYearlyReport}}
 			<div class="select-style">
-			<select class="year-selector" id="fiscal-year-{{index}}"> 
-				{{#years}}
-					<option value="{{.}}">{{.}}</option> 
-				{{/years}}
-			</select>
-		</div>
+				<select class="year-selector" id="fiscal-year-{{index}}"> 
+					{{#years}}
+						<option value="{{.}}">{{.}}</option> 
+					{{/years}}
+				</select>
+			</div>
 		{{/isYearlyReport}}
-		
 	</div>
 	
-		{{^isYearlyReport}}
+	{{^isYearlyReport}}
 		<div class="downloadButton">
 			<input type="button" class="btn" onclick="download({{index}})"
 				value="Download">
@@ -47,20 +68,19 @@
 		{{#canSubmitReport}}
 			<div class="submit">
 				<input id="submit-{{index}}" type="button" class="btn"
-						onclick="confirmAndSubmit({{index}},{{attribute}})"
-						value="Submit to DHIS2">
+					onclick="confirmAndSubmit({{index}},{{attribute}})"
+					value="Submit to DHIS2">
 			</div>
 		{{/canSubmitReport}}
 		
 		<div class="status" id="status-{{index}}" index="{{index}}"></div>
-		{{/isYearlyReport}}
+	{{/isYearlyReport}}
 	
-		{{#isYearlyReport}}
+	{{#isYearlyReport}}
 		<div class="downloadButton">
 			<input type="button" class="btn" onclick="downloadFiscalYearReport({{index}})"
 				value="Download">
 		</div>
-		{{/isYearlyReport}}
-	
+	{{/isYearlyReport}}
 </div>
 {{/programs}}

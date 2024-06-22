@@ -12,6 +12,218 @@ var supportedEndDate = 2008;
 var approximateNepaliYear = (new Date()).getFullYear() + 56;
 var spinner = spinner || {};
 
+var weeks = [
+	{
+	  "number": 1,
+	  "name": "Week 1"
+	},
+	{
+	  "number": 2,
+	  "name": "Week 2"
+	},
+	{
+	  "number": 3,
+	  "name": "Week 3"
+	},
+	{
+	  "number": 4,
+	  "name": "Week 4"
+	},
+	{
+	  "number": 5,
+	  "name": "Week 5"
+	},
+	{
+	  "number": 6,
+	  "name": "Week 6"
+	},
+	{
+	  "number": 7,
+	  "name": "Week 7"
+	},
+	{
+	  "number": 8,
+	  "name": "Week 8"
+	},
+	{
+	  "number": 9,
+	  "name": "Week 9"
+	},
+	{
+	  "number": 10,
+	  "name": "Week 10"
+	},
+	{
+	  "number": 11,
+	  "name": "Week 11"
+	},
+	{
+	  "number": 12,
+	  "name": "Week 12"
+	},
+	{
+	  "number": 13,
+	  "name": "Week 13"
+	},
+	{
+	  "number": 14,
+	  "name": "Week 14"
+	},
+	{
+	  "number": 15,
+	  "name": "Week 15"
+	},
+	{
+	  "number": 16,
+	  "name": "Week 16"
+	},
+	{
+	  "number": 17,
+	  "name": "Week 17"
+	},
+	{
+	  "number": 18,
+	  "name": "Week 18"
+	},
+	{
+	  "number": 19,
+	  "name": "Week 19"
+	},
+	{
+	  "number": 20,
+	  "name": "Week 20"
+	},
+	{
+	  "number": 21,
+	  "name": "Week 21"
+	},
+	{
+	  "number": 22,
+	  "name": "Week 22"
+	},
+	{
+	  "number": 23,
+	  "name": "Week 23"
+	},
+	{
+	  "number": 24,
+	  "name": "Week 24"
+	},
+	{
+	  "number": 25,
+	  "name": "Week 25"
+	},
+	{
+	  "number": 26,
+	  "name": "Week 26"
+	},
+	{
+	  "number": 27,
+	  "name": "Week 27"
+	},
+	{
+	  "number": 28,
+	  "name": "Week 28"
+	},
+	{
+	  "number": 29,
+	  "name": "Week 29"
+	},
+	{
+	  "number": 30,
+	  "name": "Week 30"
+	},
+	{
+	  "number": 31,
+	  "name": "Week 31"
+	},
+	{
+	  "number": 32,
+	  "name": "Week 32"
+	},
+	{
+	  "number": 33,
+	  "name": "Week 33"
+	},
+	{
+	  "number": 34,
+	  "name": "Week 34"
+	},
+	{
+	  "number": 35,
+	  "name": "Week 35"
+	},
+	{
+	  "number": 36,
+	  "name": "Week 36"
+	},
+	{
+	  "number": 37,
+	  "name": "Week 37"
+	},
+	{
+	  "number": 38,
+	  "name": "Week 38"
+	},
+	{
+	  "number": 39,
+	  "name": "Week 39"
+	},
+	{
+	  "number": 40,
+	  "name": "Week 40"
+	},
+	{
+	  "number": 41,
+	  "name": "Week 41"
+	},
+	{
+	  "number": 42,
+	  "name": "Week 42"
+	},
+	{
+	  "number": 43,
+	  "name": "Week 43"
+	},
+	{
+	  "number": 44,
+	  "name": "Week 44"
+	},
+	{
+	  "number": 45,
+	  "name": "Week 45"
+	},
+	{
+	  "number": 46,
+	  "name": "Week 46"
+	},
+	{
+	  "number": 47,
+	  "name": "Week 47"
+	},
+	{
+	  "number": 48,
+	  "name": "Week 48"
+	},
+	{
+	  "number": 49,
+	  "name": "Week 49"
+	},
+	{
+	  "number": 50,
+	  "name": "Week 50"
+	},
+	{
+	  "number": 51,
+	  "name": "Week 51"
+	},
+	{
+	  "number": 52,
+	  "name": "Week 52"
+	}
+  ];
+  
+
 var months = [ {
 	number : 12,
 	name : "December"
@@ -79,7 +291,7 @@ $(document).ready(
 				}
 			});
 
-			isAuthenticated().then(isSubmitAuthorized).then(initTabs).then(
+			isAuthenticated().then(isSubmitAuthorized).then(initTabs).then(renderWeeklyReport).then(
 				renderPrograms).then(renderYearlyReport).then(
 				selectApproxLatestGregorianYear).then(
 				registerOnchangeOnComment).then(getLogStatus);
@@ -153,8 +365,9 @@ function renderPrograms() {
 	return $.get('html/programs.html').then(
 			function(template) {
 				var isYearlyReport = false;
+				var isWeeklyReport = false;
 				var canSubmitReport = hasReportingPrivilege;
-				return getContent(isYearlyReport, canSubmitReport).then(
+				return getContent(isWeeklyReport,isYearlyReport, canSubmitReport).then(
 						function(content) {
 							//console.log(content.programs);
 							$("#programs").html(
@@ -164,7 +377,7 @@ function renderPrograms() {
 }
 
 function listPrograms() {
-	getContent(isYearlyReport, canSubmitReport).then(
+	getContent(isWeeklyReport,isYearlyReport, canSubmitReport).then(
 						function(content) {
 							alert(content);
 						});
@@ -174,18 +387,41 @@ function listPrograms() {
 function renderYearlyReport() {
 	return $.get('html/programs.html').then(function(template) {
 		var isYearlyReport = true;
-		return getContent(isYearlyReport).then(function(content) {
+		var isWeeklyReport = false;
+		return getContent(isWeeklyReport,isYearlyReport).then(function(content) {
 			$("#programs-yearly").html(Mustache.render(template, content));
 		});
 	});
 }
 
-function getContent(isYearlyReport, canSubmitReport) {
+function renderWeeklyReport() {
+	return $.get('html/programs.html').then(function(template) {
+		var isWeeklyReport = true;
+		var isYearlyReport = false;
+		return getContent(isWeeklyReport,isYearlyReport).then(function(content) {
+			$("#programs-weekly").html(Mustache.render(template, content));
+		});
+	});
+}
+
+
+function getContent(isWeeklyReport,isYearlyReport, canSubmitReport) {
 	return getDHISPrograms().then(function(programs) {
-		if (isYearlyReport) {
+		if(isWeeklyReport){
+			return {
+				weeks : weeks,
+				years : years,
+				programs : programs,
+				isWeeklyReport: isWeeklyReport,
+				isYearlyReport : isYearlyReport,
+				canSubmitReport : canSubmitReport
+			};
+		}
+		else if (isYearlyReport) {
 			return {
 				years : fiscalYears,
 				programs : programs,
+				isWeeklyReport: isWeeklyReport,
 				isYearlyReport : isYearlyReport,
 				canSubmitReport : canSubmitReport
 			};
@@ -194,6 +430,7 @@ function getContent(isYearlyReport, canSubmitReport) {
 				months : months,
 				years : years,
 				programs : programs,
+				isWeeklyReport: isWeeklyReport,
 				isYearlyReport : isYearlyReport,
 				canSubmitReport : canSubmitReport
 			};
