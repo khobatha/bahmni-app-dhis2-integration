@@ -398,7 +398,8 @@ function renderWeeklyReport() {
 	return $.get('html/programs.html').then(function(template) {
 		var isWeeklyReport = true;
 		var isYearlyReport = false;
-		return getContent(isWeeklyReport,isYearlyReport).then(function(content) {
+		var canSubmitReport = hasReportingPrivilege;
+		return getContent(isWeeklyReport,isYearlyReport,canSubmitReport).then(function(content) {
 			$("#programs-weekly").html(Mustache.render(template, content));
 		});
 	});
