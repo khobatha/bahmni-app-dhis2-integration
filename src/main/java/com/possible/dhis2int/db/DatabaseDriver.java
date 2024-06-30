@@ -301,14 +301,21 @@ public class DatabaseDriver {
 		}
 	}
 
-	public void recordQueryLog(Recordlog record, Integer month, Integer year) throws DHISIntegratorException {
+	public void recordQueryLog(Recordlog record, Boolean isWeekly, Integer week, Integer month, Integer year) throws DHISIntegratorException {
 		logger.debug("Inside recordQueryLog method");
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
-			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_log (report_name, submitted_date, submitted_by, report_log ,status, comment, report_month, report_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-
+			PreparedStatement ps;
+			
+			if (isWeekly != null && isWeekly) {
+				ps = connection.prepareStatement(
+						"INSERT INTO dhis2_log (report_name, submitted_date, submitted_by, report_log, status, comment, report_month, report_year, report_week, is_weekly_report) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			} else {
+				ps = connection.prepareStatement(
+						"INSERT INTO dhis2_log (report_name, submitted_date, submitted_by, report_log, status, comment, report_month, report_year, is_weekly_report) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			}
+			
 			Timestamp time = new Timestamp(record.getTime().getTime());
 			ps.setString(1, record.getEvent());
 			ps.setTimestamp(2, time);
@@ -318,8 +325,16 @@ public class DatabaseDriver {
 			ps.setString(6, record.getComment());
 			ps.setInt(7, month);
 			ps.setInt(8, year);
-			logger.info("[DEBUG] The post DHIS submission comment is "+record.getComment());
-
+			
+			if (isWeekly != null && isWeekly) {
+				ps.setInt(9, week);
+				ps.setBoolean(10, true);
+			} else {
+				ps.setBoolean(9, false);
+			}
+			
+			logger.info("[DEBUG] The post DHIS submission comment is " + record.getComment());
+	
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
@@ -332,26 +347,37 @@ public class DatabaseDriver {
 			}
 		}
 	}
-
-	public String getQuerylog(String programName, Integer month, Integer year) throws DHISIntegratorException {
+	
+	public String getQuerylog(String programName, Integer month, Integer year, Boolean isWeekly, Integer week) throws DHISIntegratorException {
 		logger.info("Inside getQueryLog method");
 		ResultSet resultSet = null;
 		Connection connection = null;
 		String log = null;
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
-			PreparedStatement ps = connection.prepareStatement(
-
-					"SELECT * FROM  dhis2_log WHERE report_name = ? AND report_month = ? AND report_year = ? ORDER BY submitted_date DESC LIMIT 1");
-			ps.setString(1, programName);
-			ps.setInt(2, month);
-			ps.setInt(3, year);
+			PreparedStatement ps;
+			
+			if (isWeekly != null && isWeekly) {
+				ps = connection.prepareStatement(
+						"SELECT * FROM dhis2_log WHERE report_name = ? AND report_month = ? AND report_year = ? AND report_week = ? AND is_weekly_report = 1 ORDER BY submitted_date DESC LIMIT 1");
+				ps.setString(1, programName);
+				ps.setInt(2, month);
+				ps.setInt(3, year);
+				ps.setInt(4, week);
+			} else {
+				ps = connection.prepareStatement(
+						"SELECT * FROM dhis2_log WHERE report_name = ? AND report_month = ? AND report_year = ? AND is_weekly_report = 0 ORDER BY submitted_date DESC LIMIT 1");
+				ps.setString(1, programName);
+				ps.setInt(2, month);
+				ps.setInt(3, year);
+			}
+			
 			resultSet = ps.executeQuery();
 			JSONObject jsonObject = new JSONObject();
 			while (resultSet.next()) {
-				jsonObject.put("status", resultSet.getString(5));
-				jsonObject.put("comment", resultSet.getString(6));
-				jsonObject.put("response", resultSet.getString(7));
+				jsonObject.put("status", resultSet.getString("status"));
+				jsonObject.put("comment", resultSet.getString("comment"));
+				jsonObject.put("response", resultSet.getString("report_log"));
 			}
 			log = jsonObject.toString(INDENT_FACTOR);
 		} catch (SQLException e) {
@@ -367,9 +393,9 @@ public class DatabaseDriver {
 				}
 			}
 		}
-
 		return log;
 	}
+	
 
 	public void createTempTable(Integer numberOfMaleLessThanSix, Integer numberOfFemalesLessThanSix,
 			Integer numberOfMalesMoreThanSix, Integer numberOfFemalesMoreThanSix) throws DHISIntegratorException {

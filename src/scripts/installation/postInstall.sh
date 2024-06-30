@@ -21,16 +21,19 @@ db_user=$(echo "$query_string" | sed -n 's/.*[?&]user=\([^&]*\).*/\1/p');
 db_password=$(echo "$query_string" | sed -n 's/.*[?&]password=\([^&]*\).*/\1/p');
 
 
-mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="CREATE table dhis2_log ( 
-																		id INT(6) unsigned auto_increment primary key, 
-																		report_name varchar(100) not null, 
-																		submitted_date timestamp, 
-																		submitted_by varchar(30) not null, 
-																		report_log varchar(4000) not null, 
-																		status varchar(30) not null,
-																		comment varchar(500) not null, 
-																		report_month integer, 
-																		report_year integer);"
+mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="CREATE TABLE dhis2_log (
+																			id int(6) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+																			report_name varchar(100) NOT NULL,
+																			submitted_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+																			submitted_by varchar(30) NOT NULL,
+																			report_log varchar(4000) NOT NULL,
+																			status varchar(30) NOT NULL,
+																			comment varchar(500) DEFAULT NULL,
+																			report_month int(11) DEFAULT NULL,
+																			report_year int(11) DEFAULT NULL,
+																			report_week int(11) DEFAULT NULL,
+																			is_weekly_report tinyint(1) NOT NULL DEFAULT 0
+																		);"
 
 mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_report_type (id int not null auto_increment, name varchar(255) unique not null, primary key(id));"
 
