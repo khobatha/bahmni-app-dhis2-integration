@@ -91,26 +91,29 @@ public class DatabaseDriver {
 		}
 	}
 
-	public void executeCreateQuery(Schedule record)
-			throws DHISIntegratorException {
-		logger.debug("Inside executeUpdateQuery method");
+	public void executeCreateQuery(Schedule record) throws DHISIntegratorException {
+		logger.debug("Inside executeCreateQuery method");
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date,target_time,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-
+					"INSERT INTO dhis2_schedules (report_name, report_id, frequency, enabled, created_by, created_date, target_time, status, week_start_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	
 			ps.setString(1, record.getProgramName());
 			ps.setInt(2, record.getReportId());
 			ps.setString(3, record.getFrequency());
 			ps.setBoolean(4, record.getEnabled());
 			ps.setString(5, record.getCreatedBy());
 			ps.setString(6, record.getCreatedDate().toString());
-            //LocalDateTime targetDateTime = record.getTargetDate();
-            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSS]");
-            //String formattedDateTime = targetDateTime.format(formatter);
-            ps.setTimestamp(7, Timestamp.valueOf(record.getTargetDate()));
+			ps.setTimestamp(7, Timestamp.valueOf(record.getTargetDate()));
 			ps.setString(8, record.getStatus());
+	
+			if ("weekly".equalsIgnoreCase(record.getFrequency()) && record.getWeekStartDay() != null) {
+				ps.setInt(9, record.getWeekStartDay());
+			} else {
+				ps.setNull(9, java.sql.Types.TINYINT);
+			}
+	
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
@@ -123,39 +126,46 @@ public class DatabaseDriver {
 			}
 		}
 	}
-
-	public void executeCreateQuery(PharmacySchedule record)
-			throws DHISIntegratorException {
+	
+	public void executeCreateQuery(PharmacySchedule record) throws DHISIntegratorException {
 		logger.debug("Inside executeUpdateQuery method -- create pharmacy schedule");
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO dhis2_schedules (report_name,report_id,frequency,enabled,created_by,created_date,target_time,status) VALUES (?, ?, ?, ?, ?, ?,?, ?)",Statement.RETURN_GENERATED_KEYS);
-
+					"INSERT INTO dhis2_schedules (report_name, report_id, frequency, enabled, created_by, created_date, target_time, status, week_start_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+					Statement.RETURN_GENERATED_KEYS);
+	
 			ps.setString(1, record.getProgramName());
 			ps.setInt(2, record.getReportId());
 			ps.setString(3, record.getFrequency());
 			ps.setBoolean(4, record.getEnabled());
 			ps.setString(5, record.getCreatedBy());
 			ps.setString(6, record.getCreatedDate().toString());
-			ps.setString(7, record.getTargetDate().toString());
+			ps.setTimestamp(7, Timestamp.valueOf(record.getTargetDate()));
 			ps.setString(8, record.getStatus());
+	
+			if ("weekly".equalsIgnoreCase(record.getFrequency()) && record.getWeekStartDay() != null) {
+				ps.setInt(9, record.getWeekStartDay());
+			} else {
+				ps.setNull(9, java.sql.Types.TINYINT);
+			}
+	
 			ps.executeUpdate();
-
-			//Get id of schedule just inserted
-            ResultSet generatedKeys = ps.getGeneratedKeys();
-			
+	
+			// Get id of schedule just inserted
+			ResultSet generatedKeys = ps.getGeneratedKeys();
+	
 			if (generatedKeys.next()) {
-    			int scheduleId = generatedKeys.getInt(1);
-				logger.info("ID of the recent schedule insert is "+scheduleId);
-
-				//Now insert in periods table
-				for (PharmacyPeriod period : record.getPeriods()){
+				int scheduleId = generatedKeys.getInt(1);
+				logger.info("ID of the recent schedule insert is " + scheduleId);
+	
+				// Now insert in periods table
+				for (PharmacyPeriod period : record.getPeriods()) {
 					PreparedStatement ps1 = connection.prepareStatement(
-						"INSERT INTO dhis2_pharmacy_periods (dhis2_schedule_id, period, enabled,created_by,created_date,start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-
-					ps1.setInt(1, scheduleId);	
+						"INSERT INTO dhis2_pharmacy_periods (dhis2_schedule_id, period, enabled, created_by, created_date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+	
+					ps1.setInt(1, scheduleId);
 					ps1.setInt(2, period.getPeriod());
 					ps1.setBoolean(3, period.isEnabled());
 					ps1.setString(4, period.getCreatedBy());
@@ -163,15 +173,13 @@ public class DatabaseDriver {
 					ps1.setString(6, period.getStartTime());
 					ps1.setString(7, period.getEndTime());
 					ps1.setString(8, period.getStatus());
-
+	
 					ps1.executeUpdate();
 				}
-			}
-			else{
+			} else {
 				logger.info("Failed to retrieve ID of recently inserted schedule...");
-
 			}
-            
+			
 		} catch (SQLException e) {
 			throw new DHISIntegratorException(String.format(Messages.JSON_EXECUTION_EXCEPTION), e);
 		} finally {
@@ -183,6 +191,7 @@ public class DatabaseDriver {
 			}
 		}
 	}
+	
 
 	public void executeUpdateQuery(Integer scheduleId, Boolean enabled)
 			throws DHISIntegratorException {
@@ -301,21 +310,26 @@ public class DatabaseDriver {
 		}
 	}
 
-	public void recordQueryLog(Recordlog record, Boolean isWeekly, Integer week, Integer month, Integer year) throws DHISIntegratorException {
+	public void recordQueryLog(Recordlog record, Boolean isWeekly, Integer week, Integer month, Integer year, Integer weekStartDay) throws DHISIntegratorException {
 		logger.debug("Inside recordQueryLog method");
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps;
-			
+	
 			if (isWeekly != null && isWeekly) {
+				// For weekly logs, ignore the month
+				month = null;
 				ps = connection.prepareStatement(
-						"INSERT INTO dhis2_log (report_name, submitted_date, submitted_by, report_log, status, comment, report_month, report_year, report_week, is_weekly_report) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					"INSERT INTO dhis2_log (report_name, submitted_date, submitted_by, report_log, status, comment, report_month, report_year, report_week, is_weekly_report, week_start_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			} else {
+				// For monthly logs, ignore the week and weekStartDay
+				week = null;
+				weekStartDay = null;
 				ps = connection.prepareStatement(
-						"INSERT INTO dhis2_log (report_name, submitted_date, submitted_by, report_log, status, comment, report_month, report_year, is_weekly_report) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					"INSERT INTO dhis2_log (report_name, submitted_date, submitted_by, report_log, status, comment, report_month, report_year, is_weekly_report) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			}
-			
+	
 			Timestamp time = new Timestamp(record.getTime().getTime());
 			ps.setString(1, record.getEvent());
 			ps.setTimestamp(2, time);
@@ -323,16 +337,17 @@ public class DatabaseDriver {
 			ps.setString(4, record.getLog());
 			ps.setString(5, record.getStatus().toString());
 			ps.setString(6, record.getComment());
-			ps.setInt(7, month);
+			ps.setObject(7, month);  // Use setObject to handle null
 			ps.setInt(8, year);
-			
+	
 			if (isWeekly != null && isWeekly) {
 				ps.setInt(9, week);
 				ps.setBoolean(10, true);
+				ps.setInt(11, weekStartDay); // New parameter for the start of the week
 			} else {
 				ps.setBoolean(9, false);
 			}
-			
+	
 			logger.info("[DEBUG] The post DHIS submission comment is " + record.getComment());
 	
 			ps.executeUpdate();
@@ -348,7 +363,8 @@ public class DatabaseDriver {
 		}
 	}
 	
-	public String getQuerylog(String programName, Integer month, Integer year, Boolean isWeekly, Integer week) throws DHISIntegratorException {
+
+	public String getQuerylog(String programName, Integer month, Integer year, Boolean isWeekly, Integer week, Integer weekStartDay) throws DHISIntegratorException {
 		logger.info("Inside getQueryLog method");
 		ResultSet resultSet = null;
 		Connection connection = null;
@@ -356,30 +372,39 @@ public class DatabaseDriver {
 		try {
 			connection = DriverManager.getConnection(properties.openmrsDBUrl);
 			PreparedStatement ps;
-			
+			String sqlQuery;
+	
 			if (isWeekly != null && isWeekly) {
-				ps = connection.prepareStatement(
-						"SELECT * FROM dhis2_log WHERE report_name = ? AND report_month = ? AND report_year = ? AND report_week = ? AND is_weekly_report = 1 ORDER BY submitted_date DESC LIMIT 1");
+				sqlQuery = "SELECT * FROM dhis2_log WHERE report_name = ? AND report_year = ? AND report_week = ? AND week_start_day = ? AND is_weekly_report = 1 ORDER BY submitted_date DESC LIMIT 1";
+				ps = connection.prepareStatement(sqlQuery);
 				ps.setString(1, programName);
-				ps.setInt(2, month);
-				ps.setInt(3, year);
-				ps.setInt(4, week);
+				ps.setInt(2, year);
+				ps.setInt(3, week);
+				ps.setInt(4, weekStartDay);
 			} else {
-				ps = connection.prepareStatement(
-						"SELECT * FROM dhis2_log WHERE report_name = ? AND report_month = ? AND report_year = ? AND is_weekly_report = 0 ORDER BY submitted_date DESC LIMIT 1");
+				sqlQuery = "SELECT * FROM dhis2_log WHERE report_name = ? AND report_month = ? AND report_year = ? AND is_weekly_report = 0 ORDER BY submitted_date DESC LIMIT 1";
+				ps = connection.prepareStatement(sqlQuery);
 				ps.setString(1, programName);
 				ps.setInt(2, month);
 				ps.setInt(3, year);
 			}
-			
+	
+			logger.info("Executing SQL query: " + ps.toString());
+	
 			resultSet = ps.executeQuery();
 			JSONObject jsonObject = new JSONObject();
-			while (resultSet.next()) {
+			if (resultSet.next()) {
 				jsonObject.put("status", resultSet.getString("status"));
 				jsonObject.put("comment", resultSet.getString("comment"));
 				jsonObject.put("response", resultSet.getString("report_log"));
+	
+				if (isWeekly != null && isWeekly) {
+					jsonObject.put("week_start_day", resultSet.getInt("week_start_day")); // Add week_start_day to the JSON object
+				}
+				log = jsonObject.toString(INDENT_FACTOR);
+			} else {
+				logger.info("No results found for the given query parameters.");
 			}
-			log = jsonObject.toString(INDENT_FACTOR);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DHISIntegratorException("DB Exception occurred " + e.getMessage(), e);
@@ -395,7 +420,6 @@ public class DatabaseDriver {
 		}
 		return log;
 	}
-	
 
 	public void createTempTable(Integer numberOfMaleLessThanSix, Integer numberOfFemalesLessThanSix,
 			Integer numberOfMalesMoreThanSix, Integer numberOfFemalesMoreThanSix) throws DHISIntegratorException {

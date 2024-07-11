@@ -77,7 +77,7 @@ public class DHISIntegratorScheduler {
 		this.properties = properties;
 	}
 
-	@RequestMapping(path = "/get-schedules")
+	/*@RequestMapping(path = "/get-schedules")
     public String getIntegrationSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
             throws IOException, JSONException, DHISIntegratorException, Exception {
 
@@ -142,7 +142,57 @@ public class DHISIntegratorScheduler {
             logger.error("Internal Server Error", e);
             throw new IOException("Failed to serialize schedules to JSON", e);
         }
-    }
+    }*/
+	/*private ArrayList<Schedule> getIntegrationSchedules() throws IOException, DHISIntegratorException, Exception {
+		String sql = "SELECT id, report_name, frequency, last_run, status, target_time, week_start_day FROM dhis2_schedules WHERE enabled;"; // Include week_start_day in the query
+		ArrayList<Schedule> list = new ArrayList<Schedule>();
+		Results results = new Results();
+		String type = "MRSGeneric";
+		Schedule schedule;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+	
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+	
+			for (List<String> row : results.getRows()) {
+				logger.info(row);
+				schedule = new Schedule();
+	
+				schedule.setId(Integer.parseInt(row.get(0)));
+				schedule.setProgramName(row.get(1));
+				schedule.setFrequency(row.get(2));
+				schedule.setLastRun(row.get(3));
+				schedule.setStatus(row.get(4));
+	
+				// Parse and set the target date as LocalDateTime
+				try {
+					LocalDateTime targetDateTime = LocalDateTime.parse(row.get(5), formatter);
+					schedule.setTargetDate(targetDateTime);
+					logger.info("Target date is " + targetDateTime);
+				} catch (Exception e) {
+					logger.warn("Failed to parse target date: " + row.get(5));
+					e.printStackTrace();
+				}
+	
+				// Set the weekStartDay if it is not null
+				if (row.get(6) != null) {
+					schedule.setWeekStartDay(Integer.parseInt(row.get(6)));
+					logger.info("Week start day is " + row.get(6));
+				}
+	
+				list.add(schedule);
+			}
+			logger.info("Inside loadIntegrationSchedules...");
+		} catch (DHISIntegratorException | JSONException e) {
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+		return list;
+	}*/
+	
+
+
 /* 
 	@RequestMapping(path = "/get-schedules")
 	public JSONArray getIntegrationSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
@@ -221,7 +271,7 @@ public class DHISIntegratorScheduler {
 		return jsonArray;
 	} */
 
-	@RequestMapping(path = "/get-pharm-schedules")
+	/*@RequestMapping(path = "/get-pharm-schedules")
 	public JSONArray getIntegrationPharmSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
 			throws IOException, JSONException, DHISIntegratorException, Exception {
 		
@@ -302,7 +352,82 @@ public class DHISIntegratorScheduler {
 		}
 
 		return jsonArray;
+	}*/
+	@RequestMapping(path = "/get-pharm-schedules")
+	public JSONArray getIntegrationPharmSchedules(HttpServletRequest clientReq, HttpServletResponse clientRes)
+			throws IOException, JSONException, DHISIntegratorException, Exception {
+
+		String sql0 = "SELECT id, name from dhis2_report_type WHERE name = 'ERPGeneric'";
+		String type = "MRSGeneric";
+		Results results0 = new Results();
+		String reportNameId = "";
+		try {
+			results0 = databaseDriver.executeQuery(sql0, type);
+
+			for (List<String> row : results0.getRows()) {
+				reportNameId = row.get(0);
+			}
+		} catch (DHISIntegratorException e) {
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		String sql = "SELECT id, report_name, report_id, frequency, enabled, last_run, target_time, status, week_start_day FROM dhis2_schedules WHERE report_id ='" + reportNameId + "';";
+		JSONArray jsonArray = new JSONArray();
+		ArrayList<PharmacySchedule> list = new ArrayList<>();
+		Results results = new Results();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+
+			for (List<String> row : results.getRows()) {
+				logger.info("Showing getIntegrationSchedules results...");
+				logger.info(row);
+				PharmacySchedule schedule = new PharmacySchedule();
+
+				schedule.setId(Integer.parseInt(row.get(0)));
+				schedule.setProgramName(row.get(1));
+				schedule.setReportId(Integer.parseInt(row.get(2)));
+				schedule.setFrequency(row.get(3));
+				schedule.setEnabled(Integer.parseInt(row.get(4)) == 1);
+				schedule.setLastRun(row.get(5));
+
+				// Parse and set the target date as LocalDateTime
+				try {
+					LocalDateTime targetDateTime = LocalDateTime.parse(row.get(6), formatter);
+					schedule.setTargetDate(targetDateTime);
+					logger.info("Target date is " + targetDateTime);
+				} catch (Exception e) {
+					logger.warn("Failed to parse target date: " + row.get(6));
+					e.printStackTrace();
+				}
+
+				schedule.setStatus(row.get(7));
+
+				// Set the weekStartDay if it is not null
+				if (row.get(8) != null) {
+					schedule.setWeekStartDay(Integer.parseInt(row.get(8)));
+					logger.info("Week start day is " + row.get(8));
+				}
+
+				list.add(schedule);
+			}
+
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonstring = mapper.writeValueAsString(list);
+			jsonArray.put(new JSONObject(jsonstring));
+			logger.info("Task loadIntegrationSchedules ran successfully...");
+		} catch (DHISIntegratorException | JSONException e) {
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return jsonArray;
 	}
+
 
 	@RequestMapping(path = "/get-pharm-schedule-periods")
 	public JSONArray getIntegrationPharmSchedulePeriods(HttpServletRequest clientReq, 
@@ -354,7 +479,7 @@ public class DHISIntegratorScheduler {
 	}
 
 
-	@RequestMapping(path = "/create-schedule")
+	/*@RequestMapping(path = "/create-schedule")
 	public Boolean createIntegrationSchedule(@RequestParam("reportName") String reportName,
 			@RequestParam("reportTypeName") String reportTypeName,
 			@RequestParam("scheduleFrequency") String schedFrequency,
@@ -409,7 +534,69 @@ public class DHISIntegratorScheduler {
 		}
 
 		return created;
+	}*/
+	@RequestMapping(path = "/create-schedule")
+public Boolean createIntegrationSchedule(@RequestParam("reportName") String reportName,
+                                         @RequestParam("reportTypeName") String reportTypeName,
+                                         @RequestParam("scheduleFrequency") String schedFrequency,
+                                         @RequestParam("scheduleTime") String schedTime,
+                                         @RequestParam(value = "weekStartDay", required = false) Integer weekStartDay, // New parameter
+                                         HttpServletRequest clientReq, HttpServletResponse clientRes)
+        throws IOException, JSONException {
+		Boolean created = true;
+		Schedule newschedule = new Schedule();
+		newschedule.setProgramName(reportName);
+		newschedule.setFrequency(schedFrequency);
+		newschedule.setCreatedBy("Test");
+		newschedule.setEnabled(true);
+		newschedule.setStatus("Ready");
+
+		LocalDate createdDate = LocalDate.now();
+		LocalDateTime targetDate = generateMonthlyTargetTime(createdDate, schedTime);
+		newschedule.setCreatedDate(createdDate);
+		newschedule.setTargetDate(targetDate);
+
+		// Set week start day if frequency is weekly
+		if ("weekly".equalsIgnoreCase(schedFrequency) && weekStartDay != null) {
+			newschedule.setWeekStartDay(weekStartDay);
+		}
+
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = '" + reportTypeName + "';";
+		String type = "MRSGeneric";
+		Results results = new Results();
+		logger.info("Inside create clinical schedules...");
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+			logger.info("Trying to find the report type ID...");
+			for (List<String> row : results.getRows()) {
+				newschedule.setReportId(Integer.parseInt(row.get(0)));
+				logger.info("Parameter report type name as " + reportTypeName);
+				logger.info("Parsed report type ID as " + Integer.parseInt(row.get(0)));
+				logger.info("Set report type ID as " + newschedule.getReportId());
+			}
+		} catch (DHISIntegratorException e) {
+			logger.info("Failed to find the report type ID...");
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.info("Failed to find the report type ID...");
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		logger.info("Inside saveIntegrationSchedules...");
+		try {
+			databaseDriver.executeCreateQuery(newschedule);
+			logger.info("Executed insert query successfully...");
+		} catch (DHISIntegratorException | JSONException e) {
+			created = false;
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			created = false;
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return created;
 	}
+
 
 	public LocalDateTime generateMonthlyTargetTime(LocalDate created_date, String schedTime) {
         // Define the formatter for parsing the time component
@@ -437,7 +624,7 @@ public class DHISIntegratorScheduler {
         }
     }
 
-	@RequestMapping(path = "/create-pharm-schedule")
+	/*@RequestMapping(path = "/create-pharm-schedule")
 	public Boolean createIntegrationPharmSchedule(@RequestParam("reportName") String reportName,
 	        @RequestParam("reportTypeName") String reportTypeName,
 			@RequestParam("scheduleFrequency") String schedFrequency,
@@ -523,7 +710,99 @@ public class DHISIntegratorScheduler {
 		}
 
 		return created;
+	}*/
+	@RequestMapping(path = "/create-pharm-schedule")
+public Boolean createIntegrationPharmSchedule(@RequestParam("reportName") String reportName,
+                                              @RequestParam("reportTypeName") String reportTypeName,
+                                              @RequestParam("scheduleFrequency") String schedFrequency,
+                                              @RequestParam("scheduleTime") String schedTime, 
+                                              @RequestParam(value = "weekStartDay", required = false) Integer weekStartDay, // New parameter
+                                              @RequestBody String pharmacyPeriodListRequest,
+                                              HttpServletRequest clientReq, HttpServletResponse clientRes)
+        throws IOException, JSONException {
+		Boolean created = false;
+		logger.info("[Creating new pharmacy schedule ...]");
+		ObjectMapper mapper = new ObjectMapper();
+		List<PharmacyPeriodReq> periods = mapper.readValue(pharmacyPeriodListRequest, new TypeReference<List<PharmacyPeriodReq>>() {});
+
+		PharmacySchedule newPharmacySchedule = new PharmacySchedule();
+		newPharmacySchedule.setProgramName(reportName);
+		newPharmacySchedule.setFrequency(schedFrequency);
+		newPharmacySchedule.setCreatedBy("Test");
+		newPharmacySchedule.setEnabled(true);
+		newPharmacySchedule.setStatus("Ready");
+
+		LocalDate createdDate = LocalDate.now();
+		newPharmacySchedule.setCreatedDate(createdDate);
+		logger.info("[Extracting periods from the request body ...]");
+		logger.info("[Request body argument - periods string is ...]" + pharmacyPeriodListRequest);
+		logger.info("[Start date of first deserialised period object is ...]" + periods.get(0).getStart());
+
+		// Set week start day if frequency is weekly
+		if ("weekly".equalsIgnoreCase(schedFrequency) && weekStartDay != null) {
+			newPharmacySchedule.setWeekStartDay(weekStartDay);
+		}
+
+		// convert from type PharmacyPeriodReq to PharmacyPeriod
+		List<PharmacyPeriod> pharmacyPeriods = new ArrayList<>();
+		int count = 0;
+		for (PharmacyPeriodReq pharmacyPeriod : periods) {
+			if (!pharmacyPeriod.getStart().isEmpty()) {
+				PharmacyPeriod temp = new PharmacyPeriod();
+				temp.setStartTime(pharmacyPeriod.getStart());
+				logger.info("[New schedule start date value is ...]" + temp.getStartTime());
+				temp.setEndTime(pharmacyPeriod.getEnd());
+				temp.setCreatedBy(newPharmacySchedule.getCreatedBy());
+				logger.info("[New schedule created by value is ...]" + temp.getCreatedBy());
+				temp.setCreatedDate(newPharmacySchedule.getCreatedDate());
+				logger.info("[New schedule created date value is ...]" + temp.getCreatedDate());
+				temp.setEnabled(true);
+				logger.info("[New schedule enabled value is ...]" + temp.getEnabled());
+				temp.setPeriod(count);
+				temp.setStatus("Ready");
+				count++;
+				pharmacyPeriods.add(temp);
+			}
+		}
+
+		newPharmacySchedule.setPeriods(pharmacyPeriods);
+		logger.info("[Start date of first period of new schedule is...]" + newPharmacySchedule.getPeriods().get(0).getStartTime());
+		logger.info("[Number of periods for the new schedule is...]" + newPharmacySchedule.getPeriods().size());
+		newPharmacySchedule.determineAndSetTargetDate();
+		logger.info("[Target date of new schedule set...as...]" + newPharmacySchedule.getTargetDate());
+
+		String sql = "SELECT id, name from dhis2_report_type WHERE name = '" + reportTypeName + "';";
+		String type = "MRSGeneric";
+		Results results = new Results();
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+
+			for (List<String> row : results.getRows()) {
+				newPharmacySchedule.setReportId(Integer.parseInt(row.get(0)));
+				logger.info("Parsed report type ID as " + Integer.parseInt(row.get(0)));
+				logger.info("Set report type ID as " + newPharmacySchedule.getReportId());
+			}
+		} catch (DHISIntegratorException e) {
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		logger.info("Inside saveIntegrationSchedules...");
+		try {
+			databaseDriver.executeCreateQuery(newPharmacySchedule);
+			logger.info("Executed insert query successfully...");
+			created = true;
+
+		} catch (DHISIntegratorException | JSONException e) {
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+
+		return created;
 	}
+
 
 	@RequestMapping(path = "/disable-enable-schedule")
 	public Results disenIntegrationSchedule(@RequestParam("scheduleId") String scheduleId,
@@ -717,7 +996,7 @@ public class DHISIntegratorScheduler {
 		return reportName;
 	}
 
-	private ArrayList<Schedule> getIntegrationSchedules()
+	/*private ArrayList<Schedule> getIntegrationSchedules()
 			throws IOException, DHISIntegratorException, Exception {
 		String sql = "SELECT id, report_name, frequency, last_run, status, target_time FROM dhis2_schedules WHERE enabled;";
 		ArrayList<Schedule> list = new ArrayList<Schedule>();
@@ -761,7 +1040,55 @@ public class DHISIntegratorScheduler {
 			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
 		}
 		return list;
+	}*/
+	private ArrayList<Schedule> getIntegrationSchedules() throws IOException, DHISIntegratorException, Exception {
+		String sql = "SELECT id, report_name, frequency, last_run, status, target_time, week_start_day FROM dhis2_schedules WHERE enabled;"; // Include week_start_day in the query
+		ArrayList<Schedule> list = new ArrayList<Schedule>();
+		Results results = new Results();
+		String type = "MRSGeneric";
+		Schedule schedule;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+	
+		try {
+			results = databaseDriver.executeQuery(sql, type);
+	
+			for (List<String> row : results.getRows()) {
+				logger.info(row);
+				schedule = new Schedule();
+	
+				schedule.setId(Integer.parseInt(row.get(0)));
+				schedule.setProgramName(row.get(1));
+				schedule.setFrequency(row.get(2));
+				schedule.setLastRun(row.get(3));
+				schedule.setStatus(row.get(4));
+	
+				// Parse and set the target date as LocalDateTime
+				try {
+					LocalDateTime targetDateTime = LocalDateTime.parse(row.get(5), formatter);
+					schedule.setTargetDate(targetDateTime);
+					logger.info("Target date is " + targetDateTime);
+				} catch (Exception e) {
+					logger.warn("Failed to parse target date: " + row.get(5));
+					e.printStackTrace();
+				}
+	
+				// Set the weekStartDay if it is not null
+				if (row.get(6) != null) {
+					schedule.setWeekStartDay(Integer.parseInt(row.get(6)));
+					logger.info("Week start day is " + row.get(6));
+				}
+	
+				list.add(schedule);
+			}
+			logger.info("Inside loadIntegrationSchedules...");
+		} catch (DHISIntegratorException | JSONException e) {
+			logger.error(Messages.SQL_EXECUTION_EXCEPTION, e);
+		} catch (Exception e) {
+			logger.error(Messages.INTERNAL_SERVER_ERROR, e);
+		}
+		return list;
 	}
+	
 
 	private void updateSchedule(Integer scheduleId, LocalDate targetDate, String status) {
 		/*

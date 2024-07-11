@@ -9,11 +9,12 @@ public class Schedule {
     private int reportId;
     private String lastRun;
     private String status;
-    private LocalDate created_date;
-    private LocalDateTime target_date;
-    private String created_by;
+    private LocalDate createdDate;
+    private LocalDateTime targetDate;
+    private String createdBy;
     private String frequency;
     private Boolean enabled;
+    private Integer weekStartDay;  // New field
 
     // Getters and Setters
     public int getId() {
@@ -65,27 +66,27 @@ public class Schedule {
     }
 
     public String getCreatedBy() {
-        return created_by;
+        return createdBy;
     }
 
-    public void setCreatedBy(String created_by) {
-        this.created_by = created_by;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     public LocalDate getCreatedDate() {
-        return created_date;
+        return createdDate;
     }
 
-    public void setCreatedDate(LocalDate created_date) {
-        this.created_date = created_date;
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
     }
 
     public LocalDateTime getTargetDate() {
-        return target_date;
+        return targetDate;
     }
 
-    public void setTargetDate(LocalDateTime target_date) {
-        this.target_date = target_date;
+    public void setTargetDate(LocalDateTime targetDate) {
+        this.targetDate = targetDate;
     }
 
     public Boolean getEnabled() {
@@ -96,6 +97,14 @@ public class Schedule {
         this.enabled = enabled;
     }
 
+    public Integer getWeekStartDay() {  // New getter
+        return weekStartDay;
+    }
+
+    public void setWeekStartDay(Integer weekStartDay) {  // New setter
+        this.weekStartDay = weekStartDay;
+    }
+
     @Override
     public String toString() {
         return "Schedule{" +
@@ -104,11 +113,12 @@ public class Schedule {
                 ", reportId=" + reportId +
                 ", lastRun='" + lastRun + '\'' +
                 ", status='" + status + '\'' +
-                ", created_date=" + created_date +
-                ", target_date=" + target_date +
-                ", created_by='" + created_by + '\'' +
+                ", createdDate=" + createdDate +
+                ", targetDate=" + targetDate +
+                ", createdBy='" + createdBy + '\'' +
                 ", frequency='" + frequency + '\'' +
                 ", enabled=" + enabled +
+                ", weekStartDay=" + weekStartDay +  // Include in toString
                 '}';
     }
 }

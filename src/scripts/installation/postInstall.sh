@@ -32,8 +32,10 @@ mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="CREATE
 																			report_month int(11) DEFAULT NULL,
 																			report_year int(11) DEFAULT NULL,
 																			report_week int(11) DEFAULT NULL,
-																			is_weekly_report tinyint(1) NOT NULL DEFAULT 0
-																		);"
+																			is_weekly_report tinyint(1) NOT NULL DEFAULT 0,
+																			week_start_day tinyint(1) NOT NULL DEFAULT 1
+																			);
+																			"
 
 mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_report_type (id int not null auto_increment, name varchar(255) unique not null, primary key(id));"
 
@@ -43,7 +45,23 @@ mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="insert
 																		  ('ERPGeneric'),
 																		  ('ELISGeneric');"
 
-mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_schedules (id int not null auto_increment, report_name varchar(255), report_id int, frequency varchar(255), created_by varchar(255), created_date date, target_time datetime,last_run datetime, status varchar(255), enabled boolean, primary key(id), foreign key (report_id) references dhis2_report_type(id),CONSTRAINT unique_reportname_frequency UNIQUE (report_name, frequency));"
+mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="CREATE TABLE dhis2_schedules (
+																			id int NOT NULL AUTO_INCREMENT,
+																			report_name varchar(255),
+																			report_id int,
+																			frequency varchar(255),
+																			created_by varchar(255),
+																			created_date date,
+																			target_time datetime,
+																			last_run datetime,
+																			status varchar(255),
+																			enabled boolean,
+																			week_start_day TINYINT(1) DEFAULT NULL,
+																			PRIMARY KEY(id),
+																			FOREIGN KEY (report_id) REFERENCES dhis2_report_type(id),
+																			CONSTRAINT unique_reportname_frequency UNIQUE (report_name, frequency)
+																		);
+																		"
 
 mysql --user="root" --password="P@ssw0rd" --database="openmrs" --execute="create table dhis2_pharmacy_periods (id int not null auto_increment, dhis2_schedule_id int , period int, created_by varchar(255), created_date date, start_time datetime, end_time datetime, last_run datetime, status varchar(255), enabled boolean, primary key(id), foreign key (dhis2_schedule_id) references dhis2_schedules(id));"
 
